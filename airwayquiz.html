@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAMP Community College - Airway Management Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #1f2937;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: #6b7280;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .header h3 {
+            color: #9ca3af;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+        }
+
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-green {
+            background-color: #16a34a;
+        }
+
+        .btn-green:hover {
+            background-color: #15803d;
+        }
+
+        .btn-gray {
+            background-color: #6b7280;
+        }
+
+        .btn-gray:hover {
+            background-color: #4b5563;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .question-type {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .question-counter {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .option {
+            display: block;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #9ca3af;
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+
+        .option input {
+            margin-right: 12px;
+        }
+
+        .ordering-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+
+        .ordering-number {
+            font-weight: bold;
+            color: #3b82f6;
+            margin-right: 16px;
+            min-width: 30px;
+        }
+
+        .ordering-text {
+            flex: 1;
+        }
+
+        .ordering-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .arrow-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+            color: #6b7280;
+        }
+
+        .arrow-btn:hover {
+            color: #374151;
+        }
+
+        .arrow-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .matching-column h4 {
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .matching-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            background: #eff6ff;
+        }
+
+        .matching-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .answer-count {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .result-cell {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .result-correct {
+            background-color: #16a34a;
+        }
+
+        .result-incorrect {
+            background-color: #dc2626;
+        }
+
+        .results-info {
+            background-color: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .results-info h3 {
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .score-large {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .score-pass {
+            color: #16a34a;
+        }
+
+        .score-fail {
+            color: #dc2626;
+        }
+
+        .question-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .question-types ul {
+            list-style: none;
+        }
+
+        .question-types li {
+            margin-bottom: 8px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .matching-container {
+                grid-template-columns: 1fr;
+            }
+
+            .question-types {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <canvas id="pdfCanvas" style="display: none;"></canvas>
+
+    <script>
+        // Quiz state
+        let state = {
+            currentQuestion: 0,
+            answers: {},
+            showResults: false,
+            studentName: '',
+            showNamePrompt: true
+        };
+
+        const questions = [
+            // Multiple Choice Questions (1-15)
+            {
+                id: 1,
+                type: "multiple-choice",
+                question: "What are the two main divisions of the respiratory system?",
+                options: ["Upper and lower airway", "Anterior and posterior airway", "Left and right airway", "Primary and secondary airway"],
+                correct: 0
+            },
+            {
+                id: 2,
+                type: "multiple-choice",
+                question: "What structure serves as the dividing line between the upper and lower airways?",
+                options: ["Epiglottis", "Larynx", "Trachea", "Pharynx"],
+                correct: 1
+            },
+            {
+                id: 3,
+                type: "multiple-choice",
+                question: "What is the main laryngeal structure?",
+                options: ["Cricoid cartilage", "Arytenoid cartilage", "Thyroid cartilage", "Hyoid bone"],
+                correct: 2
+            },
+            {
+                id: 4,
+                type: "multiple-choice",
+                question: "What is the narrowest portion of the adult trachea?",
+                options: ["Cricoid ring", "Glottic opening", "Epiglottis", "Vocal cords"],
+                correct: 1
+            },
+            {
+                id: 5,
+                type: "multiple-choice",
+                question: "What is the primary muscle of respiration?",
+                options: ["Intercostal muscles", "Diaphragm", "Abdominal muscles", "Pectoralis major"],
+                correct: 1
+            },
+            {
+                id: 6,
+                type: "multiple-choice",
+                question: "What is normal respiratory rate for adults?",
+                options: ["8-12 breaths/min", "12-20 breaths/min", "20-28 breaths/min", "28-36 breaths/min"],
+                correct: 1
+            },
+            {
+                id: 7,
+                type: "multiple-choice",
+                question: "What is the normal tidal volume for an adult?",
+                options: ["300-400 mL", "500-600 mL", "700-800 mL", "900-1000 mL"],
+                correct: 1
+            },
+            {
+                id: 8,
+                type: "multiple-choice",
+                question: "What technique should be used to open the airway in a trauma patient?",
+                options: ["Head-tilt, chin-lift", "Jaw-thrust maneuver", "Neck extension", "Head rotation"],
+                correct: 1
+            },
+            {
+                id: 9,
+                type: "multiple-choice",
+                question: "What is the recommended oxygen flow rate for a nonrebreathing mask?",
+                options: ["2-6 L/min", "6-10 L/min", "10-15 L/min", "15-20 L/min"],
+                correct: 2
+            },
+            {
+                id: 10,
+                type: "multiple-choice",
+                question: "What oxygen concentration can a nonrebreathing mask deliver?",
+                options: ["60-80%", "80-90%", "90-100%", "40-60%"],
+                correct: 2
+            },
+            {
+                id: 11,
+                type: "multiple-choice",
+                question: "What is the flow rate range for a nasal cannula?",
+                options: ["1-6 L/min", "6-10 L/min", "10-15 L/min", "15-20 L/min"],
+                correct: 0
+            },
+            {
+                id: 12,
+                type: "multiple-choice",
+                question: "What is the recommended suction time for adults?",
+                options: ["5-10 seconds", "10-15 seconds", "15-20 seconds", "20-25 seconds"],
+                correct: 1
+            },
+            {
+                id: 13,
+                type: "multiple-choice",
+                question: "How is the correct size OPA (oropharyngeal airway) determined?",
+                options: ["Patient's height", "From corner of mouth to earlobe", "Patient's weight", "From nose to chin"],
+                correct: 1
+            },
+            {
+                id: 14,
+                type: "multiple-choice",
+                question: "What lubricant should be used with a nasopharyngeal airway?",
+                options: ["Petroleum jelly", "Water-soluble lubricant", "Oil-based lubricant", "No lubricant needed"],
+                correct: 1
+            },
+            {
+                id: 15,
+                type: "multiple-choice",
+                question: "What is the recommended tidal volume when using a bag-mask device?",
+                options: ["400-500 mL", "500-600 mL", "600-700 mL", "700-800 mL"],
+                correct: 1
+            },
+
+            // Multiple Answer Questions (16-20)
+            {
+                id: 16,
+                type: "multiple-answer",
+                question: "Which of the following are functions of the upper airway? (Select all that apply)",
+                options: ["Warm incoming air", "Filter incoming air", "Humidify incoming air", "Exchange gases"],
+                correct: [0, 1, 2]
+            },
+            {
+                id: 17,
+                type: "multiple-answer",
+                question: "The pharynx consists of which parts? (Select all that apply)",
+                options: ["Nasopharynx", "Oropharynx", "Laryngopharynx", "Tracheopharynx"],
+                correct: [0, 1, 2]
+            },
+            {
+                id: 18,
+                type: "multiple-answer",
+                question: "Which are signs of inadequate breathing? (Select all that apply)",
+                options: ["Use of accessory muscles", "Cyanosis", "Irregular respiratory pattern", "Normal skin color"],
+                correct: [0, 1, 2]
+            },
+            {
+                id: 19,
+                type: "multiple-answer",
+                question: "What are the three types of respiration? (Select all that apply)",
+                options: ["External respiration", "Internal respiration", "Cellular respiration", "Artificial respiration"],
+                correct: [0, 1, 2]
+            },
+            {
+                id: 20,
+                type: "multiple-answer",
+                question: "Which are contraindications for using an oropharyngeal airway? (Select all that apply)",
+                options: ["Present gag reflex", "Conscious patient", "Trauma to the mouth", "Cardiac arrest"],
+                correct: [0, 1, 2]
+            },
+
+            // Ordering Questions (21-25)
+            {
+                id: 21,
+                type: "ordering",
+                question: "Place the structures in order from upper to lower airway:",
+                options: ["Trachea", "Nasopharynx", "Larynx", "Bronchi", "Oropharynx"],
+                correct: [1, 4, 2, 0, 3]
+            },
+            {
+                id: 22,
+                type: "ordering",
+                question: "Order the steps of inspiration (breathing in):",
+                options: ["Air flows into lungs", "Diaphragm contracts", "Thoracic cavity expands", "Pressure decreases in chest"],
+                correct: [1, 2, 3, 0]
+            },
+            {
+                id: 23,
+                type: "ordering",
+                question: "Order the BE MAGIC mnemonic steps:",
+                options: ["Attempt first-pass intubation", "Bag-mask preoxygenation", "Evaluate for difficulties", "Manipulate patient", "GI - use supraglottic airway", "Confirm intubation"],
+                correct: [1, 2, 3, 0, 4, 5]
+            },
+            {
+                id: 24,
+                type: "ordering",
+                question: "Order the proper sequence for suctioning:",
+                options: ["Insert catheter without suction", "Apply suction while withdrawing", "Preoxygenate patient", "Limit to 15 seconds"],
+                correct: [2, 0, 1, 3]
+            },
+            {
+                id: 25,
+                type: "ordering",
+                question: "Order the airway assessment priorities:",
+                options: ["Check for foreign body obstruction", "Assess breathing adequacy", "Open the airway", "Position patient appropriately"],
+                correct: [3, 2, 0, 1]
+            },
+
+            // Matching Questions (26-30)
+            {
+                id: 26,
+                type: "matching",
+                question: "Match the oxygen delivery device with its appropriate flow rate:",
+                leftColumn: ["Nasal cannula", "Simple face mask", "Nonrebreathing mask", "Bag-mask device"],
+                rightColumn: ["15 L/min", "6-10 L/min", "1-6 L/min", "10-15 L/min"],
+                correct: [2, 1, 3, 0]
+            },
+            {
+                id: 27,
+                type: "matching",
+                question: "Match the airway structure with its description:",
+                leftColumn: ["Epiglottis", "Carina", "Glottis", "Turbinates"],
+                rightColumn: ["Increase nasal surface area", "Opening between vocal cords", "Leaf-shaped cartilage", "Tracheal bifurcation"],
+                correct: [2, 3, 1, 0]
+            },
+            {
+                id: 28,
+                type: "matching",
+                question: "Match the suction catheter with its use:",
+                leftColumn: ["Yankauer catheter", "French catheter", "Whistle-tip catheter", "Rigid catheter"],
+                rightColumn: ["Oropharyngeal suctioning", "Endotracheal suctioning", "Same as French", "Same as Yankauer"],
+                correct: [0, 1, 2, 3]
+            },
+            {
+                id: 29,
+                type: "matching",
+                question: "Match the breathing assessment finding with its significance:",
+                leftColumn: ["Accessory muscle use", "Central cyanosis", "Tripod position", "Nasal flaring"],
+                rightColumn: ["Poor oxygenation", "Respiratory distress", "Increased work of breathing", "Difficulty breathing"],
+                correct: [2, 0, 3, 1]
+            },
+            {
+                id: 30,
+                type: "matching",
+                question: "Match the advanced airway with its primary indication:",
+                leftColumn: ["King LT", "Combitube", "LMA", "Endotracheal tube"],
+                rightColumn: ["Failed intubation backup", "Definitive airway", "Routine airway management", "Multilumen blind insertion"],
+                correct: [2, 3, 0, 1]
+            },
+
+            // True/False Questions (31-40)
+            {
+                id: 31,
+                type: "true-false",
+                question: "The larynx is considered part of the upper airway.",
+                correct: true
+            },
+            {
+                id: 32,
+                type: "true-false",
+                question: "Minute ventilation equals tidal volume multiplied by respiratory rate.",
+                correct: true
+            },
+            {
+                id: 33,
+                type: "true-false",
+                question: "An oropharyngeal airway can be used in conscious patients.",
+                correct: false
+            },
+            {
+                id: 34,
+                type: "true-false",
+                question: "Hyperventilation can decrease cardiac output.",
+                correct: true
+            },
+            {
+                id: 35,
+                type: "true-false",
+                question: "Central cyanosis appears first in the fingernails.",
+                correct: false
+            },
+            {
+                id: 36,
+                type: "true-false",
+                question: "The jaw-thrust maneuver is preferred for trauma patients.",
+                correct: true
+            },
+            {
+                id: 37,
+                type: "true-false",
+                question: "Anatomic dead space participates in gas exchange.",
+                correct: false
+            },
+            {
+                id: 38,
+                type: "true-false",
+                question: "PEEP helps prevent alveolar collapse.",
+                correct: true
+            },
+            {
+                id: 39,
+                type: "true-false",
+                question: "A nasopharyngeal airway requires complete unconsciousness.",
+                correct: false
+            },
+            {
+                id: 40,
+                type: "true-false",
+                question: "Waveform capnography confirms endotracheal tube placement.",
+                correct: true
+            },
+
+            // Fill in the blank Questions (41-45)
+            {
+                id: 41,
+                type: "fill-blank",
+                question: "The _______ is a leaf-shaped cartilaginous flap that prevents aspiration.",
+                correct: ["epiglottis"],
+                caseSensitive: false
+            },
+            {
+                id: 42,
+                type: "fill-blank",
+                question: "Normal adult tidal volume is approximately _______ mL.",
+                correct: ["500", "500-600", "500 to 600"],
+                caseSensitive: false
+            },
+            {
+                id: 43,
+                type: "fill-blank",
+                question: "The _______ cartilage is the main structure of the larynx.",
+                correct: ["thyroid"],
+                caseSensitive: false
+            },
+            {
+                id: 44,
+                type: "fill-blank",
+                question: "The mnemonic _______ helps remember advanced airway procedure steps.",
+                correct: ["be magic", "bemagic"],
+                caseSensitive: false
+            },
+            {
+                id: 45,
+                type: "fill-blank",
+                question: "The recommended CPR compression to ventilation ratio for adults is _______.",
+                correct: ["30:2", "30 to 2", "30/2"],
+                caseSensitive: false
+            },
+
+            // Scenario-based questions (46-50)
+            {
+                id: 46,
+                type: "multiple-choice",
+                question: "A 45-year-old unconscious patient has no gag reflex. What is the most appropriate initial airway adjunct?",
+                options: ["Nasopharyngeal airway", "Oropharyngeal airway", "Endotracheal tube", "King LT airway"],
+                correct: 1
+            },
+            {
+                id: 47,
+                type: "multiple-choice",
+                question: "You arrive at a scene where a patient is in tripod position with accessory muscle use. This indicates:",
+                options: ["Normal breathing", "Respiratory distress", "Cardiac arrest", "Neurological emergency"],
+                correct: 1
+            },
+            {
+                id: 48,
+                type: "multiple-choice",
+                question: "During bag-mask ventilation, you notice the stomach is rising instead of the chest. You should:",
+                options: ["Continue ventilating with more force", "Reposition the airway and reduce ventilation pressure", "Switch to a different mask size", "Increase oxygen flow rate"],
+                correct: 1
+            },
+            {
+                id: 49,
+                type: "multiple-choice",
+                question: "A patient requires suctioning but has thick secretions. The maximum suction time should be:",
+                options: ["5 seconds", "15 seconds", "30 seconds", "45 seconds"],
+                correct: 1
+            },
+            {
+                id: 50,
+                type: "multiple-choice",
+                question: "You are assisting with an intubation attempt. The paramedic is unable to visualize the vocal cords. According to BE MAGIC, what should happen next?",
+                options: ["Attempt again immediately", "Use a supraglottic airway", "Continue bag-mask ventilation only", "Perform surgical airway"],
+                correct: 1
+            }
+        ];
+
+        // Helper functions
+        function handleAnswer(questionIndex, answer) {
+            state.answers[questionIndex] = answer;
+        }
+
+        function handleMultipleAnswer(questionIndex, optionIndex) {
+            if (!state.answers[questionIndex]) {
+                state.answers[questionIndex] = [];
+            }
+            const currentAnswers = state.answers[questionIndex];
+            const index = currentAnswers.indexOf(optionIndex);
+            if (index > -1) {
+                currentAnswers.splice(index, 1);
+            } else {
+                currentAnswers.push(optionIndex);
+            }
+        }
+
+        function handleOrdering(questionIndex, fromIndex, toIndex) {
+            if (!state.answers[questionIndex]) {
+                state.answers[questionIndex] = [...Array(questions[questionIndex].options.length).keys()];
+            }
+            const currentOrder = state.answers[questionIndex];
+            const item = currentOrder.splice(fromIndex, 1)[0];
+            currentOrder.splice(toIndex, 0, item);
+            render();
+        }
+
+        function handleMatching(questionIndex, leftIndex, rightIndex) {
+            if (!state.answers[questionIndex]) {
+                state.answers[questionIndex] = [];
+            }
+            state.answers[questionIndex][leftIndex] = parseInt(rightIndex);
+        }
+
+        function calculateScore() {
+            let correct = 0;
+            questions.forEach((q, index) => {
+                const userAnswer = state.answers[index];
+                
+                switch (q.type) {
+                    case "multiple-choice":
+                    case "true-false":
+                        if (userAnswer === q.correct) correct++;
+                        break;
+                    case "multiple-answer":
+                        if (Array.isArray(userAnswer) && Array.isArray(q.correct)) {
+                            const sortedUser = [...userAnswer].sort();
+                            const sortedCorrect = [...q.correct].sort();
+                            if (sortedUser.length === sortedCorrect.length && 
+                                sortedUser.every((val, i) => val === sortedCorrect[i])) {
+                                correct++;
+                            }
+                        }
+                        break;
+                    case "ordering":
+                    case "matching":
+                        if (Array.isArray(userAnswer) && Array.isArray(q.correct)) {
+                            if (userAnswer.length === q.correct.length && 
+                                userAnswer.every((val, i) => val === q.correct[i])) {
+                                correct++;
+                            }
+                        }
+                        break;
+                    case "fill-blank":
+                        if (typeof userAnswer === 'string' && Array.isArray(q.correct)) {
+                            const normalizedAnswer = q.caseSensitive ? userAnswer : userAnswer.toLowerCase();
+                            if (q.correct.some(correctAnswer => {
+                                const normalizedCorrect = q.caseSensitive ? correctAnswer : correctAnswer.toLowerCase();
+                                return normalizedAnswer.trim() === normalizedCorrect.trim();
+                            })) {
+                                correct++;
+                            }
+                        }
+                        break;
+                }
+            });
+            return correct;
+        }
+
+        function generatePDF() {
+            const canvas = document.getElementById('pdfCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = 816;
+            canvas.height = 1056;
+            
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Header
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('CAMP Community College', canvas.width / 2, 60);
+            
+            ctx.font = 'bold 20px Arial';
+            ctx.fillText('EMS 181 - Airway and Shock Management', canvas.width / 2, 90);
+            
+            ctx.font = 'bold 18px Arial';
+            ctx.fillText('Comprehensive Airway Management Quiz Results', canvas.width / 2, 120);
+            
+            // Student info
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Student Name: ${state.studentName}`, 50, 170);
+            ctx.fillText(`Date: ${new Date().toLocaleDateString()}`, 50, 200);
+            ctx.fillText(`Time: ${new Date().toLocaleTimeString()}`, 50, 230);
+            
+            // Score
+            const score = calculateScore();
+            const percentage = ((score / questions.length) * 100).toFixed(1);
+            ctx.font = 'bold 18px Arial';
+            ctx.fillStyle = score >= 35 ? '#16a34a' : '#dc2626';
+            ctx.fillText(`Score: ${score}/${questions.length} (${percentage}%)`, 50, 280);
+            
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText(`Status: ${score >= 35 ? 'PASS' : 'FAIL'}`, 50, 310);
+            ctx.fillText('Passing Score: 35/50 (70%)', 50, 340);
+            
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${state.studentName.replace(/\s+/g, '_')}_Airway_Quiz_Results.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        // Navigation functions
+        function startQuiz() {
+            const nameInput = document.getElementById('studentNameInput');
+            if (nameInput && nameInput.value.trim()) {
+                state.studentName = nameInput.value.trim();
+                state.showNamePrompt = false;
+                render();
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentQuestion < questions.length - 1) {
+                state.currentQuestion++;
+                render();
+            }
+        }
+
+        function prevQuestion() {
+            if (state.currentQuestion > 0) {
+                state.currentQuestion--;
+                render();
+            }
+        }
+
+        function finishQuiz() {
+            state.showResults = true;
+            render();
+        }
+
+        function resetQuiz() {
+            state = {
+                currentQuestion: 0,
+                answers: {},
+                showResults: false,
+                studentName: '',
+                showNamePrompt: true
+            };
+            render();
+        }
+
+        // Render functions
+        function renderNamePrompt() {
+            return `
+                <div class="container">
+                    <div class="header">
+                        <h1>CAMP Community College</h1>
+                        <h2>EMS 181 - Airway and Shock Management</h2>
+                        <h3>Comprehensive Airway Management Quiz</h3>
+                        <p style="margin-top: 10px; color: #9ca3af;">50 questions with varied formats</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentNameInput">Student Name:</label>
+                        <input type="text" id="studentNameInput" placeholder="Enter your full name">
+                    </div>
+                    <button class="btn btn-full" onclick="startQuiz()">Start Quiz</button>
+                </div>
+            `;
+        }
+
+        function renderQuestion(q, index) {
+            switch (q.type) {
+                case "multiple-choice":
+                    return q.options.map((option, optionIndex) => `
+                        <div class="option ${state.answers[index] === optionIndex ? 'selected' : ''}" 
+                             onclick="handleAnswer(${index}, ${optionIndex}); render();">
+                            <input type="radio" name="question-${index}" value="${optionIndex}" 
+                                   ${state.answers[index] === optionIndex ? 'checked' : ''}>
+                            ${option}
+                        </div>
+                    `).join('');
+
+                case "multiple-answer":
+                    return `
+                        <p style="margin-bottom: 16px; color: #6b7280;">Select all correct answers:</p>
+                        ${q.options.map((option, optionIndex) => `
+                            <div class="option ${(state.answers[index] || []).includes(optionIndex) ? 'selected' : ''}" 
+                                 onclick="handleMultipleAnswer(${index}, ${optionIndex}); render();">
+                                <input type="checkbox" ${(state.answers[index] || []).includes(optionIndex) ? 'checked' : ''}>
+                                ${option}
+                            </div>
+                        `).join('')}
+                    `;
+
+                case "ordering":
+                    const currentOrder = state.answers[index] || [...Array(q.options.length).keys()];
+                    return `
+                        <p style="margin-bottom: 16px; color: #6b7280;">Use the arrow buttons to reorder the items correctly:</p>
+                        ${currentOrder.map((optionIndex, position) => `
+                            <div class="ordering-item">
+                                <div class="ordering-number">${position + 1}.</div>
+                                <div class="ordering-text">${q.options[optionIndex]}</div>
+                                <div class="ordering-controls">
+                                    <button class="arrow-btn" onclick="handleOrdering(${index}, ${position}, ${position - 1})" 
+                                            ${position === 0 ? 'disabled' : ''}>↑</button>
+                                    <button class="arrow-btn" onclick="handleOrdering(${index}, ${position}, ${position + 1})" 
+                                            ${position === currentOrder.length - 1 ? 'disabled' : ''}>↓</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+
+                case "matching":
+                    const currentMatches = state.answers[index] || [];
+                    return `
+                        <p style="margin-bottom: 16px; color: #6b7280;">Match items from the left column with the right column:</p>
+                        <div class="matching-container">
+                            <div class="matching-column">
+                                <h4>Column A:</h4>
+                                ${q.leftColumn.map((item, leftIndex) => `
+                                    <div class="matching-item">
+                                        <strong>${leftIndex + 1}.</strong> ${item}
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="matching-column">
+                                <h4>Column B:</h4>
+                                ${q.leftColumn.map((_, leftIndex) => `
+                                    <select class="matching-select" 
+                                            onchange="handleMatching(${index}, ${leftIndex}, this.value); render();">
+                                        <option value="">Select match for ${leftIndex + 1}</option>
+                                        ${q.rightColumn.map((item, rightIndex) => `
+                                            <option value="${rightIndex}" ${currentMatches[leftIndex] === rightIndex ? 'selected' : ''}>
+                                                ${String.fromCharCode(65 + rightIndex)}. ${item}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+
+                case "true-false":
+                    return ['True', 'False'].map((option, optionIndex) => `
+                        <div class="option ${state.answers[index] === (optionIndex === 0) ? 'selected' : ''}" 
+                             onclick="handleAnswer(${index}, ${optionIndex === 0}); render();">
+                            <input type="radio" name="question-${index}" value="${optionIndex === 0}" 
+                                   ${state.answers[index] === (optionIndex === 0) ? 'checked' : ''}>
+                            ${option}
+                        </div>
+                    `).join('');
+
+                case "fill-blank":
+                    return `
+                        <input type="text" 
+                               value="${state.answers[index] || ''}"
+                               oninput="handleAnswer(${index}, this.value);"
+                               placeholder="Type your answer here..."
+                               style="width: 100%; padding: 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px;">
+                    `;
+
+                default:
+                    return '';
+            }
+        }
+
+        function renderResults() {
+            const score = calculateScore();
+            const percentage = ((score / questions.length) * 100).toFixed(1);
+            const passed = score >= 35;
+
+            return `
+                <div class="container">
+                    <div class="header">
+                        <h1>Quiz Complete!</h1>
+                        <h2>CAMP Community College - EMS 181</h2>
+                    </div>
+                    
+                    <div class="results-info">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <p><strong>Student:</strong> ${state.studentName}</p>
+                                <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                                <p><strong>Time:</strong> ${new Date().toLocaleTimeString()}</p>
+                            </div>
+                            <div>
+                                <div class="score-large ${passed ? 'score-pass' : 'score-fail'}">
+                                    Score: ${score}/${questions.length} (${percentage}%)
+                                </div>
+                                <div style="font-size: 18px; font-weight: bold;" class="${passed ? 'score-pass' : 'score-fail'}">
+                                    ${passed ? 'PASS' : 'FAIL'}
+                                </div>
+                                <p style="color: #6b7280;">Passing Score: 35/50 (70%)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-info">
+                        <h3>Question Types Covered:</h3>
+                        <div class="question-types">
+                            <ul>
+                                <li>• Multiple Choice (15 questions)</li>
+                                <li>• Multiple Answer (5 questions)</li>
+                                <li>• Ordering/Sequencing (5 questions)</li>
+                                <li>• Matching (5 questions)</li>
+                            </ul>
+                            <ul>
+                                <li>• True/False (10 questions)</li>
+                                <li>• Fill-in-the-Blank (5 questions)</li>
+                                <li>• Scenario-Based (5 questions)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="results-info">
+                        <h3>Results Grid:</h3>
+                        <div class="results-grid">
+                            ${questions.map((q, index) => {
+                                let isCorrect = false;
+                                const userAnswer = state.answers[index];
+                                
+                                switch (q.type) {
+                                    case "multiple-choice":
+                                    case "true-false":
+                                        isCorrect = userAnswer === q.correct;
+                                        break;
+                                    case "multiple-answer":
+                                        if (Array.isArray(userAnswer) && Array.isArray(q.correct)) {
+                                            const sortedUser = [...userAnswer].sort();
+                                            const sortedCorrect = [...q.correct].sort();
+                                            isCorrect = sortedUser.length === sortedCorrect.length && 
+                                                       sortedUser.every((val, i) => val === sortedCorrect[i]);
+                                        }
+                                        break;
+                                    case "ordering":
+                                    case "matching":
+                                        if (Array.isArray(userAnswer) && Array.isArray(q.correct)) {
+                                            isCorrect = userAnswer.length === q.correct.length && 
+                                                       userAnswer.every((val, i) => val === q.correct[i]);
+                                        }
+                                        break;
+                                    case "fill-blank":
+                                        if (typeof userAnswer === 'string' && Array.isArray(q.correct)) {
+                                            const normalizedAnswer = q.caseSensitive ? userAnswer : userAnswer.toLowerCase();
+                                            isCorrect = q.correct.some(correctAnswer => {
+                                                const normalizedCorrect = q.caseSensitive ? correctAnswer : correctAnswer.toLowerCase();
+                                                return normalizedAnswer.trim() === normalizedCorrect.trim();
+                                            });
+                                        }
+                                        break;
+                                }
+                                
+                                return `
+                                    <div class="result-cell ${isCorrect ? 'result-correct' : 'result-incorrect'}">
+                                        ${index + 1}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-green" onclick="generatePDF()">
+                            📄 Download Results
+                        </button>
+                        <button class="btn" onclick="resetQuiz()">
+                            🔄 Take Quiz Again
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderQuizQuestion() {
+            const currentQ = questions[state.currentQuestion];
+            const progress = ((state.currentQuestion + 1) / questions.length) * 100;
+
+            return `
+                <div class="container">
+                    <div class="question-header">
+                        <div>
+                            <div class="question-title">Comprehensive Airway Quiz</div>
+                            <div class="question-type">Question Type: ${currentQ.type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                        </div>
+                        <div class="question-counter">
+                            Question ${state.currentQuestion + 1} of ${questions.length}
+                        </div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+
+                    <div class="question-text">${currentQ.question}</div>
+                    
+                    ${renderQuestion(currentQ, state.currentQuestion)}
+
+                    <div class="navigation">
+                        <button class="btn btn-gray" onclick="prevQuestion()" ${state.currentQuestion === 0 ? 'disabled' : ''}>
+                            Previous
+                        </button>
+                        
+                        <div class="answer-count">
+                            ${Object.keys(state.answers).length}/${questions.length} answered
+                        </div>
+
+                        ${state.currentQuestion === questions.length - 1 ? 
+                            `<button class="btn btn-green" onclick="finishQuiz()">Finish Quiz</button>` :
+                            `<button class="btn" onclick="nextQuestion()">Next</button>`
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        // Main render function
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (state.showNamePrompt) {
+                app.innerHTML = renderNamePrompt();
+            } else if (state.showResults) {
+                app.innerHTML = renderResults();
+            } else {
+                app.innerHTML = renderQuizQuestion();
+            }
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            render();
+        });
+    </script>
+</body>
+</html>
