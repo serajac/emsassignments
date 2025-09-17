@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced EMT Shock Evaluation - Camp Community College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #eff6ff 0%, #ddd6fe 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 56rem;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            text-align: center;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+        }
+        
+        .name-section {
+            background-color: #eff6ff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .name-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-text {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        
+        .progress-percentage {
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background-color: #2563eb;
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+        
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .choice-button {
+            width: 100%;
+            padding: 1rem;
+            text-align: left;
+            border-radius: 0.5rem;
+            border: 2px solid #d1d5db;
+            background: white;
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+            font-size: 1rem;
+            display: block;
+        }
+        
+        .choice-button:hover {
+            border-color: #9ca3af;
+            background-color: #f9fafb;
+        }
+        
+        .choice-button.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            color: #1e40af;
+            font-weight: 500;
+        }
+        
+        .choice-letter {
+            font-weight: bold;
+            color: #374151;
+            margin-right: 0.5rem;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+        
+        .btn-success {
+            background-color: #059669;
+            color: white;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            background-color: #047857;
+        }
+        
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .btn-secondary {
+            color: #4b5563;
+            background-color: #f3f4f6;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #e5e7eb;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .results-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .score-pass {
+            color: #059669;
+        }
+        
+        .score-fail {
+            color: #dc2626;
+        }
+        
+        .question-result {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+        
+        .question-correct {
+            border-left-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        
+        .question-incorrect {
+            border-left-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        
+        .certificate {
+            border: 4px solid #1e40af;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .certificate-inner {
+            border: 2px solid #3b82f6;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        
+        .certificate-title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .certificate-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin: 1rem 0;
+        }
+        
+        .certificate-score {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #059669;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div id="main-content">
+                <div class="title">Advanced EMT Shock Evaluation</div>
+                <p class="subtitle">Based on National Educational Standards</p>
+                
+                <!-- Name Input Section -->
+                <div id="name-section" class="name-section">
+                    <label class="name-label">Enter your full name to begin:</label>
+                    <input type="text" id="student-name" class="name-input" placeholder="Your Full Name">
+                    <button id="start-btn" class="btn btn-primary">Start Evaluation</button>
+                </div>
+                
+                <!-- Evaluation Content -->
+                <div id="evaluation-content" class="hidden">
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span id="question-counter" class="progress-text">Question 1 of 50</span>
+                            <span id="progress-percentage" class="progress-percentage">2% Complete</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill" style="width: 2%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="question-content">
+                        <h3 id="question-title" class="question-title"></h3>
+                        <div id="question-options"></div>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button id="prev-btn" class="btn btn-secondary">Previous</button>
+                        <button id="next-btn" class="btn btn-primary">Next →</button>
+                        <button id="submit-btn" class="btn btn-success hidden">Submit Evaluation</button>
+                    </div>
+                </div>
+                
+                <!-- Results Section -->
+                <div id="results-section" class="hidden">
+                    <h2 style="font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 1.5rem;">Evaluation Results</h2>
+                    
+                    <div class="results-container">
+                        <div id="score-display" class="score-display">0%</div>
+                        <p id="score-text" style="color: #4b5563;">You answered 0 out of 50 questions correctly</p>
+                        <p id="pass-status" style="font-weight: 600;"></p>
+                    </div>
+                    
+                    <div id="results-details"></div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button id="certificate-btn" class="btn btn-success hidden" style="margin-right: 1rem;">🏆 Get Certificate</button>
+                        <button id="retake-btn" class="btn btn-primary">🔄 Retake Evaluation</button>
+                    </div>
+                </div>
+                
+                <!-- Certificate Section -->
+                <div id="certificate-section" class="hidden">
+                    <div class="certificate">
+                        <div class="certificate-inner">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                            <h1 class="certificate-title">CERTIFICATE OF COMPLETION</h1>
+                            <h2 style="font-size: 1.25rem; color: #4b5563; margin-bottom: 1.5rem;">Advanced EMT - Shock Module Evaluation</h2>
+                            
+                            <p style="font-size: 1.125rem; color: #374151; margin-bottom: 0.5rem;">This certifies that</p>
+                            <h3 id="certificate-name" class="certificate-name"></h3>
+                            
+                            <p style="font-size: 1.125rem; color: #374151; margin-bottom: 0.5rem;">has successfully completed the Advanced EMT</p>
+                            <p style="font-size: 1.125rem; color: #374151; margin-bottom: 0.5rem;">Shock Module Evaluation with a score of</p>
+                            <p id="certificate-score" class="certificate-score"></p>
+                            
+                            <h4 style="font-size: 1.5rem; font-weight: bold; color: #1e40af; margin: 1rem 0;">Camp Community College</h4>
+                            <p style="color: #4b5563;" id="certificate-date"></p>
+                        </div>
+                        
+                        <div style="margin-top: 2rem; text-align: center;">
+                            <button id="download-btn" class="btn btn-success" style="margin-right: 1rem;">📥 Download Certificate</button>
+                            <button id="new-evaluation-btn" class="btn btn-secondary">🔄 Take Another Evaluation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // All 50 comprehensive shock evaluation questions
+        const questions = [
+            {
+                id: 1,
+                question: 'What is the primary mechanism of shock?',
+                options: [
+                    'Inadequate tissue perfusion',
+                    'High blood pressure',
+                    'Rapid heart rate',
+                    'Excessive oxygen delivery'
+                ],
+                correct: 0,
+                explanation: 'Shock is fundamentally defined as inadequate tissue perfusion, leading to cellular hypoxia and organ dysfunction.'
+            },
+            {
+                id: 2,
+                question: 'Which compensatory mechanism occurs FIRST in shock?',
+                options: [
+                    'Decreased urine output',
+                    'Increased heart rate',
+                    'Altered mental status',
+                    'Decreased blood pressure'
+                ],
+                correct: 1,
+                explanation: 'Tachycardia is typically the first compensatory response as the body attempts to maintain cardiac output despite reduced stroke volume.'
+            },
+            {
+                id: 3,
+                question: 'What is the most appropriate initial fluid for treating hypovolemic shock in adults?',
+                options: [
+                    'D5W',
+                    '0.9% Normal Saline',
+                    'Lactated Ringers',
+                    'D5 1/2 Normal Saline'
+                ],
+                correct: 2,
+                explanation: 'Lactated Ringers is preferred for trauma-related hypovolemic shock as it more closely matches plasma electrolyte composition.'
+            },
+            {
+                id: 4,
+                question: 'What is the target systolic blood pressure for a trauma patient in shock?',
+                options: [
+                    '90 mmHg',
+                    '100 mmHg',
+                    '110 mmHg',
+                    '120 mmHg'
+                ],
+                correct: 0,
+                explanation: 'Permissive hypotension with target SBP of 90 mmHg helps maintain perfusion while minimizing bleeding in trauma patients.'
+            },
+            {
+                id: 5,
+                question: 'What is the most common cause of hypovolemic shock in trauma patients?',
+                options: [
+                    'Internal bleeding',
+                    'External bleeding',
+                    'Dehydration',
+                    'Burns'
+                ],
+                correct: 0,
+                explanation: 'Internal bleeding from organ injury or fractures is the leading cause of hypovolemic shock in trauma, often being occult initially.'
+            },
+            {
+                id: 6,
+                question: 'What is the initial fluid bolus recommendation for pediatric hypovolemic shock?',
+                options: [
+                    '10 mL/kg',
+                    '20 mL/kg',
+                    '30 mL/kg',
+                    '40 mL/kg'
+                ],
+                correct: 1,
+                explanation: 'Pediatric patients should receive 20 mL/kg of isotonic crystalloid as the initial bolus, which can be repeated based on response.'
+            },
+            {
+                id: 7,
+                question: 'Which position is most appropriate for a conscious patient in shock?',
+                options: [
+                    'Trendelenburg (head down)',
+                    'Supine with legs elevated',
+                    'Semi-Fowlers (head elevated)',
+                    'Left lateral recumbent'
+                ],
+                correct: 1,
+                explanation: 'Supine with legs elevated 12-18 inches helps venous return without compromising airway or breathing in conscious patients.'
+            },
+            {
+                id: 8,
+                question: 'What is the mechanism of action for dopamine at low doses (2-5 mcg/kg/min)?',
+                options: [
+                    'Alpha-1 receptor stimulation',
+                    'Beta-1 receptor stimulation',
+                    'Dopaminergic receptor stimulation',
+                    'Beta-2 receptor stimulation'
+                ],
+                correct: 2,
+                explanation: 'At low doses, dopamine primarily stimulates dopaminergic receptors, promoting renal and splanchnic vasodilation.'
+            },
+            {
+                id: 9,
+                question: 'Which lab value is most indicative of tissue hypoperfusion in shock?',
+                options: [
+                    'Elevated white blood cell count',
+                    'Decreased hemoglobin',
+                    'Elevated lactate',
+                    'Decreased platelets'
+                ],
+                correct: 2,
+                explanation: 'Elevated serum lactate indicates anaerobic metabolism due to tissue hypoxia, making it a key marker of shock severity.'
+            },
+            {
+                id: 10,
+                question: 'What is the most reliable early indicator of shock in children?',
+                options: [
+                    'Hypotension',
+                    'Tachycardia',
+                    'Altered mental status',
+                    'Decreased capillary refill'
+                ],
+                correct: 1,
+                explanation: 'Tachycardia is the most sensitive early indicator of shock in children, as they can maintain blood pressure longer than adults.'
+            },
+            {
+                id: 11,
+                question: 'Which type of shock is characterized by warm, dry skin and bradycardia?',
+                options: [
+                    'Hypovolemic shock',
+                    'Cardiogenic shock',
+                    'Neurogenic shock',
+                    'Septic shock'
+                ],
+                correct: 2,
+                explanation: 'Neurogenic shock presents with the classic triad of hypotension, bradycardia, and warm/dry skin due to loss of sympathetic tone.'
+            },
+            {
+                id: 12,
+                question: 'What are the classic signs of cardiogenic shock?',
+                options: [
+                    'Warm extremities and bradycardia',
+                    'JVD, pulmonary edema, and hypotension',
+                    'Fever and altered mental status',
+                    'Hives and wheezing'
+                ],
+                correct: 1,
+                explanation: 'Cardiogenic shock presents with signs of pump failure: JVD, pulmonary edema, S3 gallop, and hypotension.'
+            },
+            {
+                id: 13,
+                question: 'Which condition can cause obstructive shock?',
+                options: [
+                    'Myocardial infarction',
+                    'Tension pneumothorax',
+                    'Severe infection',
+                    'Hemorrhage'
+                ],
+                correct: 1,
+                explanation: 'Obstructive shock results from physical impediment to venous return or cardiac filling, such as tension pneumothorax or cardiac tamponade.'
+            },
+            {
+                id: 14,
+                question: 'What is the preferred route for epinephrine administration in anaphylactic shock?',
+                options: [
+                    'Intravenous',
+                    'Intramuscular (anterolateral thigh)',
+                    'Subcutaneous',
+                    'Intraosseous'
+                ],
+                correct: 1,
+                explanation: 'Intramuscular epinephrine in the anterolateral thigh provides rapid, reliable absorption and is the preferred initial route.'
+            },
+            {
+                id: 15,
+                question: 'In distributive shock, what happens to systemic vascular resistance?',
+                options: [
+                    'Markedly increased',
+                    'Slightly increased',
+                    'Normal',
+                    'Markedly decreased'
+                ],
+                correct: 3,
+                explanation: 'Distributive shock is characterized by widespread vasodilation, leading to markedly decreased systemic vascular resistance.'
+            },
+            {
+                id: 16,
+                question: 'What is the recommended crystalloid to blood loss replacement ratio?',
+                options: [
+                    '1:1',
+                    '2:1',
+                    '3:1',
+                    '4:1'
+                ],
+                correct: 2,
+                explanation: 'The 3:1 rule suggests giving 3 mL of crystalloid for every 1 mL of estimated blood loss to account for fluid distribution.'
+            },
+            {
+                id: 17,
+                question: 'Which parameter is most important for monitoring fluid resuscitation effectiveness?',
+                options: [
+                    'Blood pressure',
+                    'Heart rate',
+                    'Urine output',
+                    'Mental status'
+                ],
+                correct: 2,
+                explanation: 'Urine output >0.5 mL/kg/hr indicates adequate renal perfusion and is the best indicator of successful resuscitation.'
+            },
+            {
+                id: 18,
+                question: 'What are the components of Beck\'s triad in cardiac tamponade?',
+                options: [
+                    'JVD, muffled heart sounds, and hypotension',
+                    'Chest pain, dyspnea, and syncope',
+                    'Fever, hypotension, and altered mental status',
+                    'Tachycardia, hypertension, and JVD'
+                ],
+                correct: 0,
+                explanation: 'Beck\'s triad consists of JVD, muffled heart sounds, and hypotension. Pulsus paradoxus and tachycardia are additional findings.'
+            },
+            {
+                id: 19,
+                question: 'What is the maximum total dose of epinephrine that can be given IM for anaphylaxis?',
+                options: [
+                    '0.3 mg',
+                    '0.5 mg',
+                    '1.0 mg',
+                    'No maximum limit'
+                ],
+                correct: 3,
+                explanation: 'There is no maximum dose limit for epinephrine in life-threatening anaphylaxis; doses can be repeated every 5-15 minutes as needed.'
+            },
+            {
+                id: 20,
+                question: 'Which finding is most specific for neurogenic shock?',
+                options: [
+                    'Hypotension',
+                    'Bradycardia with hypotension',
+                    'Altered mental status',
+                    'Warm, dry skin below level of injury'
+                ],
+                correct: 3,
+                explanation: 'Warm, dry skin below the level of spinal injury is pathognomonic for neurogenic shock due to loss of sympathetic innervation.'
+            },
+            {
+                id: 21,
+                question: 'In pediatric patients, what percentage of blood volume loss typically causes obvious shock signs?',
+                options: [
+                    '15-20%',
+                    '25-30%',
+                    '35-40%',
+                    '45-50%'
+                ],
+                correct: 1,
+                explanation: 'Children can compensate well initially, with obvious shock signs typically not appearing until 25-30% blood volume loss.'
+            },
+            {
+                id: 22,
+                question: 'What is the most appropriate initial management for suspected anaphylactic shock?',
+                options: [
+                    'High-flow oxygen and IV fluids',
+                    'Epinephrine IM and remove allergen',
+                    'Corticosteroids and antihistamines',
+                    'Intubation and mechanical ventilation'
+                ],
+                correct: 1,
+                explanation: 'Immediate epinephrine IM and allergen removal are the priorities in anaphylactic shock, as delay can be fatal.'
+            },
+            {
+                id: 23,
+                question: 'Which medication should be avoided in cardiogenic shock?',
+                options: [
+                    'Dopamine',
+                    'Dobutamine',
+                    'Furosemide',
+                    'Nitroglycerin'
+                ],
+                correct: 2,
+                explanation: 'Diuretics like furosemide can worsen hypotension and reduce preload excessively in cardiogenic shock patients.'
+            },
+            {
+                id: 24,
+                question: 'What is the primary concern with massive fluid resuscitation?',
+                options: [
+                    'Electrolyte imbalance',
+                    'Dilutional coagulopathy',
+                    'Pulmonary edema',
+                    'Hypothermia'
+                ],
+                correct: 1,
+                explanation: 'Dilutional coagulopathy from massive crystalloid infusion can worsen bleeding and is a major concern in trauma resuscitation.'
+            },
+            {
+                id: 25,
+                question: 'Which are early signs of shock?',
+                options: [
+                    'Hypotension and decreased urine output',
+                    'Tachycardia and cool, clammy skin',
+                    'Altered mental status and bradycardia',
+                    'Fever and warm skin'
+                ],
+                correct: 1,
+                explanation: 'Early shock presents with compensatory mechanisms: tachycardia and cool, clammy skin. Hypotension and decreased urine output are late signs.'
+            },
+            {
+                id: 26,
+                question: 'What is a contraindication to fluid resuscitation?',
+                options: [
+                    'Traumatic brain injury',
+                    'Burns covering >20% BSA',
+                    'Cardiogenic shock with pulmonary edema',
+                    'Suspected pneumothorax'
+                ],
+                correct: 2,
+                explanation: 'Fluid overload can worsen cardiogenic shock and heart failure. TBI, burns, and pneumothorax are not absolute contraindications.'
+            },
+            {
+                id: 27,
+                question: 'Which factors suggest the need for blood transfusion in shock?',
+                options: [
+                    'Hemoglobin >10 g/dL',
+                    'Stable vital signs',
+                    'Ongoing hemorrhage and failure to respond to crystalloids',
+                    'Normal mental status'
+                ],
+                correct: 2,
+                explanation: 'Multiple factors indicate need for blood products: ongoing bleeding, hemoglobin <7-10 g/dL, signs of inadequate oxygen delivery, and failure to respond to crystalloids.'
+            },
+            {
+                id: 28,
+                question: 'Which are indications for immediate surgical intervention in shock?',
+                options: [
+                    'Stable pelvic fracture',
+                    'Penetrating abdominal trauma with instability',
+                    'Minor external bleeding',
+                    'Mild dehydration'
+                ],
+                correct: 1,
+                explanation: 'Several conditions require immediate surgical control: penetrating abdominal trauma with instability, ruptured AAA, massive hemothorax, and pelvic fractures with ongoing bleeding.'
+            },
+            {
+                id: 29,
+                question: 'Which are complications of untreated shock?',
+                options: [
+                    'Improved kidney function',
+                    'Enhanced cognitive function',
+                    'ARDS and multi-organ dysfunction',
+                    'Decreased infection risk'
+                ],
+                correct: 2,
+                explanation: 'Prolonged shock leads to systemic complications: acute kidney injury, ARDS, DIC, MODS, and ultimately death if untreated.'
+            },
+            {
+                id: 30,
+                question: 'Which signs suggest impending cardiovascular collapse?',
+                options: [
+                    'Normal pulse pressure and warm skin',
+                    'Narrowing pulse pressure and mottled skin',
+                    'Bradycardia and hypertension',
+                    'Strong pulse and normal mental status'
+                ],
+                correct: 1,
+                explanation: 'Signs of impending collapse include narrowing pulse pressure, weak thready pulse, mottled skin, confusion, and cold extremities.'
+            },
+            {
+                id: 31,
+                question: 'Which are appropriate treatments for septic shock?',
+                options: [
+                    'Fluid restriction and bed rest',
+                    'Antibiotics, fluid resuscitation, and vasopressors',
+                    'Aspirin and rest',
+                    'Diuretics and sedation'
+                ],
+                correct: 1,
+                explanation: 'Septic shock requires comprehensive management: broad-spectrum antibiotics, source control, fluid resuscitation, vasopressors, and supportive care.'
+            },
+            {
+                id: 32,
+                question: 'What is the normal systolic BP lower limit for a 5-year-old child?',
+                options: [
+                    '60 mmHg',
+                    '70 mmHg',
+                    '80 mmHg',
+                    '90 mmHg'
+                ],
+                correct: 2,
+                explanation: 'For children 2-10 years: 70 + (2 x age in years). For a 5-year-old: 70 + (2 x 5) = 80 mmHg minimum systolic pressure.'
+            },
+            {
+                id: 33,
+                question: 'Which factors increase the risk of developing shock?',
+                options: [
+                    'Young age and good health',
+                    'Advanced age and chronic medical conditions',
+                    'Regular exercise and good nutrition',
+                    'Normal blood pressure'
+                ],
+                correct: 1,
+                explanation: 'Risk factors include: advanced age, chronic medical conditions, medications (beta-blockers), pregnancy, malnutrition, and recent surgery.'
+            },
+            {
+                id: 34,
+                question: 'Which are signs of fluid overload during resuscitation?',
+                options: [
+                    'Decreased respiratory rate and clear lungs',
+                    'JVD, pulmonary crackles, and peripheral edema',
+                    'Warm, dry skin and normal heart sounds',
+                    'Decreased blood pressure'
+                ],
+                correct: 1,
+                explanation: 'Fluid overload signs include: JVD, pulmonary crackles, peripheral edema, increased respiratory rate, S3 gallop, and hepatomegaly.'
+            },
+            {
+                id: 35,
+                question: 'What is the primary mechanism of norepinephrine?',
+                options: [
+                    'Beta effects only',
+                    'Alpha effects > Beta effects',
+                    'Equal alpha and beta effects',
+                    'Dopaminergic effects only'
+                ],
+                correct: 1,
+                explanation: 'Norepinephrine has predominantly alpha-adrenergic effects with minimal beta effects, making it ideal for vasodilation in distributive shock.'
+            },
+            {
+                id: 36,
+                question: 'Which medication is appropriate for anaphylactic shock?',
+                options: [
+                    'Dopamine',
+                    'Epinephrine',
+                    'Norepinephrine',
+                    'Dobutamine'
+                ],
+                correct: 1,
+                explanation: 'Epinephrine is the first-line treatment for anaphylactic shock, with both alpha and beta effects to counteract the severe allergic reaction.'
+            },
+            {
+                id: 37,
+                question: 'What IV fluid is preferred for hyperkalemia concerns?',
+                options: [
+                    'Lactated Ringers',
+                    'Normal Saline',
+                    'D5W',
+                    'Albumin'
+                ],
+                correct: 1,
+                explanation: 'Normal saline is preferred when hyperkalemia is a concern, as Lactated Ringers contains potassium which could worsen hyperkalemia.'
+            },
+            {
+                id: 38,
+                question: 'Which assessment finding occurs earliest in shock progression?',
+                options: [
+                    'Hypotension',
+                    'Decreased urine output',
+                    'Tachycardia',
+                    'Altered mental status'
+                ],
+                correct: 2,
+                explanation: 'Shock progression: tachycardia (earliest) → skin changes → mental status changes → oliguria → hypotension (latest).'
+            },
+            {
+                id: 39,
+                question: 'What is the priority in trauma shock management?',
+                options: [
+                    'IV fluid administration',
+                    'Blood transfusion',
+                    'Control external bleeding',
+                    'Pain management'
+                ],
+                correct: 2,
+                explanation: 'Trauma shock priority: immediate bleeding control → IV access → crystalloid → source identification → blood products as needed.'
+            },
+            {
+                id: 40,
+                question: 'Which condition requires immediate needle decompression?',
+                options: [
+                    'Simple pneumothorax',
+                    'Tension pneumothorax',
+                    'Hemothorax',
+                    'Pulmonary contusion'
+                ],
+                correct: 1,
+                explanation: 'Tension pneumothorax requires immediate needle decompression followed by definitive chest tube placement to relieve life-threatening pressure.'
+            },
+            {
+                id: 41,
+                question: 'What describes the prognosis for shock survivors?',
+                options: [
+                    'Full recovery is expected in most cases',
+                    'Long-term complications are rare',
+                    'Risk of long-term organ dysfunction exists',
+                    'Prognosis is determined by age alone'
+                ],
+                correct: 2,
+                explanation: 'Even patients who survive shock may develop long-term complications including chronic kidney disease, cognitive impairment, and increased mortality risk.'
+            },
+            {
+                id: 42,
+                question: 'Which shock stage is characterized by normal blood pressure?',
+                options: [
+                    'Irreversible shock',
+                    'Decompensated shock',
+                    'Compensated shock',
+                    'Terminal shock'
+                ],
+                correct: 2,
+                explanation: 'Compensated shock maintains normal blood pressure through increased heart rate and vasoconstriction, while decompensated shock shows hypotension.'
+            },
+            {
+                id: 43,
+                question: 'What is the mortality rate for cardiogenic shock?',
+                options: [
+                    '10-30%',
+                    '1-3%',
+                    '20-50%',
+                    '40-80%'
+                ],
+                correct: 3,
+                explanation: 'Cardiogenic shock has the highest mortality rate (40-80%), while anaphylactic shock has the lowest with prompt treatment (1-3%).'
+            },
+            {
+                id: 44,
+                question: 'Which hemodynamic parameter is highest in distributive shock?',
+                options: [
+                    'Systemic vascular resistance',
+                    'Cardiac output',
+                    'Central venous pressure',
+                    'Pulmonary wedge pressure'
+                ],
+                correct: 1,
+                explanation: 'Distributive shock typically shows high cardiac output, high mixed venous O2 saturation, normal/low filling pressures, and low SVR.'
+            },
+            {
+                id: 45,
+                question: 'Which requires source control in septic shock?',
+                options: [
+                    'Antibiotic administration only',
+                    'Fluid resuscitation only',
+                    'Drainage of infected fluid collections',
+                    'Vasopressor support only'
+                ],
+                correct: 2,
+                explanation: 'Source control (drainage, debridement, removal of infected devices) is crucial in septic shock along with antibiotics and supportive care.'
+            },
+            {
+                id: 46,
+                question: 'What is the mechanism of vasopressin?',
+                options: [
+                    'Alpha-adrenergic receptor agonist',
+                    'Beta-adrenergic receptor agonist',
+                    'V1 receptor agonist',
+                    'Dopaminergic receptor agonist'
+                ],
+                correct: 2,
+                explanation: 'Vasopressin acts on V1 receptors to cause vasoconstriction and is often used as an adjunct to other vasopressors in refractory shock.'
+            },
+            {
+                id: 47,
+                question: 'Which intervention is first priority in cardiogenic shock?',
+                options: [
+                    'Aggressive fluid resuscitation',
+                    'Provide oxygen support',
+                    'Immediate vasopressors',
+                    'Diuretic administration'
+                ],
+                correct: 1,
+                explanation: 'Cardiogenic shock management: oxygenation → careful fluid management → treat underlying cause → monitoring → vasopressors if needed.'
+            },
+            {
+                id: 48,
+                question: 'What defines irreversible shock?',
+                options: [
+                    'Normal blood pressure with tachycardia',
+                    'Hypotension with normal mental status',
+                    'Multi-organ failure with poor prognosis',
+                    'Mild dehydration with fatigue'
+                ],
+                correct: 2,
+                explanation: 'Irreversible shock is characterized by multi-organ failure, cellular death, and poor prognosis despite aggressive treatment.'
+            },
+            {
+                id: 49,
+                question: 'Which describes shock complication mechanisms?',
+                options: [
+                    'All complications have the same cause',
+                    'ARDS from inflammatory lung injury',
+                    'Complications only affect the heart',
+                    'Kidney function always improves'
+                ],
+                correct: 1,
+                explanation: 'Complications have distinct mechanisms: ARDS (inflammatory lung injury), AKI (reduced perfusion), DIC (consumption coagulopathy), MODS (systemic inflammation).'
+            },
+            {
+                id: 50,
+                question: 'What is the recommended approach for massive transfusion in shock?',
+                options: [
+                    'Crystalloids only',
+                    'Packed red cells only',
+                    'Balanced blood product ratios (1:1:1)',
+                    'Albumin solutions only'
+                ],
+                correct: 2,
+                explanation: 'Massive transfusion protocols recommend balanced ratios of packed RBCs, fresh frozen plasma, and platelets (1:1:1) to prevent coagulopathy.'
+            }
+        ];
+        
+        // Application state
+        let currentQuestion = 0;
+        let answers = {};
+        let studentName = '';
+        
+        // DOM elements
+        const nameSection = document.getElementById('name-section');
+        const evaluationContent = document.getElementById('evaluation-content');
+        const resultsSection = document.getElementById('results-section');
+        const certificateSection = document.getElementById('certificate-section');
+        
+        // Initialize the application
+        function init() {
+            document.getElementById('start-btn').onclick = startEvaluation;
+            document.getElementById('prev-btn').onclick = goToPreviousQuestion;
+            document.getElementById('next-btn').onclick = goToNextQuestion;
+            document.getElementById('submit-btn').onclick = submitEvaluation;
+            document.getElementById('retake-btn').onclick = resetEvaluation;
+            document.getElementById('certificate-btn').onclick = showCertificate;
+            document.getElementById('download-btn').onclick = downloadCertificate;
+            document.getElementById('new-evaluation-btn').onclick = resetEvaluation;
+            
+            document.getElementById('student-name').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startEvaluation();
+                }
+            });
+        }
+        
+        function startEvaluation() {
+            studentName = document.getElementById('student-name').value.trim();
+            if (!studentName) {
+                alert('Please enter your name to begin the evaluation.');
+                return;
+            }
+            
+            nameSection.classList.add('hidden');
+            evaluationContent.classList.remove('hidden');
+            loadQuestion();
+        }
+        
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const progress = Math.round(((currentQuestion + 1) / questions.length) * 100);
+            
+            document.getElementById('question-counter').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('progress-percentage').textContent = `${progress}% Complete`;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('question-title').textContent = question.question;
+            
+            renderQuestion(question);
+            updateNavigation();
+        }
+        
+        function renderQuestion(question) {
+            const optionsContainer = document.getElementById('question-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-button';
+                button.type = 'button';
+                
+                if (answers[question.id] === index) {
+                    button.classList.add('selected');
+                }
+                
+                button.innerHTML = `<span class="choice-letter">${String.fromCharCode(65 + index)}.</span>${option}`;
+                
+                button.onclick = function() {
+                    selectAnswer(question.id, index);
+                };
+                
+                optionsContainer.appendChild(button);
+            });
+        }
+        
+        function selectAnswer(questionId, answerIndex) {
+            console.log('Answer selected:', questionId, answerIndex);
+            answers[questionId] = answerIndex;
+            
+            // Update visual state
+            const buttons = document.querySelectorAll('.choice-button');
+            buttons.forEach((btn, idx) => {
+                if (idx === answerIndex) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+            
+            updateNavigation();
+        }
+        
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            prevBtn.disabled = currentQuestion === 0;
+            
+            const hasAnswer = answers[questions[currentQuestion].id] !== undefined;
+            
+            if (currentQuestion < questions.length - 1) {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+                nextBtn.disabled = !hasAnswer;
+            } else {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+                submitBtn.disabled = !hasAnswer;
+            }
+        }
+        
+        function goToPreviousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+        
+        function goToNextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+        
+        function submitEvaluation() {
+            showResults();
+        }
+        
+        function calculateScore() {
+            let correct = 0;
+            const total = questions.length;
+            
+            questions.forEach(q => {
+                if (answers[q.id] === q.correct) {
+                    correct++;
+                }
+            });
+            
+            return { correct, total, percentage: Math.round((correct / total) * 100) };
+        }
+        
+        function showResults() {
+            evaluationContent.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            
+            const score = calculateScore();
+            
+            document.getElementById('score-display').textContent = `${score.percentage}%`;
+            document.getElementById('score-display').className = `score-display ${score.percentage >= 80 ? 'score-pass' : 'score-fail'}`;
+            document.getElementById('score-text').textContent = `You answered ${score.correct} out of ${score.total} questions correctly`;
+            document.getElementById('pass-status').textContent = score.percentage >= 80 ? 'PASSED' : 'NEEDS IMPROVEMENT';
+            document.getElementById('pass-status').className = score.percentage >= 80 ? 'score-pass' : 'score-fail';
+            
+            if (score.percentage >= 80) {
+                document.getElementById('certificate-btn').classList.remove('hidden');
+            }
+            
+            // Show detailed results
+            const resultsDetails = document.getElementById('results-details');
+            resultsDetails.innerHTML = '';
+            
+            questions.forEach((q, idx) => {
+                const userAnswer = answers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.className = `question-result ${isCorrect ? 'question-correct' : 'question-incorrect'}`;
+                resultDiv.innerHTML = `
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Question ${idx + 1}: ${q.question}</h4>
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem; color: ${isCorrect ? '#166534' : '#dc2626'};">
+                        ${isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                    </p>
+                    <p style="font-size: 0.875rem; color: #4b5563; margin-top: 0.5rem;">${q.explanation}</p>
+                `;
+                resultsDetails.appendChild(resultDiv);
+            });
+        }
+        
+        function showCertificate() {
+            const score = calculateScore();
+            if (score.percentage < 80) {
+                alert('You need at least 80% to receive a certificate. Please review and retake the evaluation.');
+                return;
+            }
+            
+            resultsSection.classList.add('hidden');
+            certificateSection.classList.remove('hidden');
+            
+            document.getElementById('certificate-name').textContent = studentName.toUpperCase();
+            document.getElementById('certificate-score').textContent = `${score.percentage}%`;
+            document.getElementById('certificate-date').textContent = `Date: ${new Date().toLocaleDateString()}`;
+        }
+        
+        function downloadCertificate() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = 800;
+            canvas.height = 600;
+            
+            // Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Border
+            ctx.strokeStyle = '#1e40af';
+            ctx.lineWidth = 8;
+            ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+            
+            // Inner border
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+            
+            // Title
+            ctx.fillStyle = '#1e40af';
+            ctx.font = 'bold 36px serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('CERTIFICATE OF COMPLETION', canvas.width / 2, 120);
+            
+            // Subtitle
+            ctx.font = '20px serif';
+            ctx.fillText('Advanced EMT - Shock Module Evaluation', canvas.width / 2, 160);
+            
+            // This certifies
+            ctx.font = '18px serif';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('This certifies that', canvas.width / 2, 220);
+            
+            // Student name
+            ctx.font = 'bold 32px serif';
+            ctx.fillStyle = '#1e40af';
+            ctx.fillText(studentName.toUpperCase(), canvas.width / 2, 280);
+            
+            // Has successfully completed
+            ctx.font = '18px serif';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('has successfully completed the Advanced EMT', canvas.width / 2, 330);
+            ctx.fillText('Shock Module Evaluation with a score of', canvas.width / 2, 355);
+            
+            // Score
+            const score = calculateScore();
+            ctx.font = 'bold 28px serif';
+            ctx.fillStyle = '#059669';
+            ctx.fillText(`${score.percentage}%`, canvas.width / 2, 395);
+            
+            // Institution
+            ctx.font = 'bold 24px serif';
+            ctx.fillStyle = '#1e40af';
+            ctx.fillText('Camp Community College', canvas.width / 2, 450);
+            
+            // Date
+            ctx.font = '16px serif';
+            ctx.fillStyle = '#374151';
+            const currentDate = new Date().toLocaleDateString();
+            ctx.fillText(`Date: ${currentDate}`, canvas.width / 2, 500);
+            
+            // Download
+            const link = document.createElement('a');
+            link.download = `${studentName.replace(/\s+/g, '_')}_Shock_Certificate.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function resetEvaluation() {
+            currentQuestion = 0;
+            answers = {};
+            studentName = '';
+            document.getElementById('student-name').value = '';
+            
+            certificateSection.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            evaluationContent.classList.add('hidden');
+            nameSection.classList.remove('hidden');
+        }
+        
+        // Initialize the application when page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
