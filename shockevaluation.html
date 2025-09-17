@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced EMT Shock Evaluation - Camp Community College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #eff6ff 0%, #ddd6fe 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 4xl;
+            margin: 0 auto;
+            max-width: 56rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            text-align: center;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-text {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        
+        .progress-percentage {
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background-color: #2563eb;
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+        
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .option-button {
+            width: 100%;
+            padding: 1rem;
+            text-align: left;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+        }
+        
+        .option-button:hover {
+            border-color: #9ca3af;
+        }
+        
+        .option-button.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .option-label {
+            font-weight: 500;
+        }
+        
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+        }
+        
+        .checkbox-option:hover {
+            background-color: #f9fafb;
+        }
+        
+        .checkbox-input {
+            margin-right: 0.75rem;
+            height: 1rem;
+            width: 1rem;
+        }
+        
+        .drag-drop-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .drag-section h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .drag-item {
+            padding: 0.5rem;
+            background-color: #dbeafe;
+            border-radius: 0.25rem;
+            cursor: move;
+            margin-bottom: 0.5rem;
+            border: 2px solid #3b82f6;
+        }
+        
+        .drop-zone {
+            padding: 0.5rem;
+            background-color: #f3f4f6;
+            border-radius: 0.25rem;
+            min-height: 40px;
+            margin-bottom: 0.5rem;
+            border: 2px dashed #d1d5db;
+        }
+        
+        .drop-zone.has-item {
+            background-color: #f0f9ff;
+            border-color: #3b82f6;
+        }
+        
+        .order-item {
+            padding: 0.75rem;
+            background-color: #f9fafb;
+            border-radius: 0.25rem;
+            border: 2px solid #d1d5db;
+            cursor: move;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .order-number {
+            color: #9ca3af;
+            margin-right: 0.75rem;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+        
+        .btn-success {
+            background-color: #059669;
+            color: white;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            background-color: #047857;
+        }
+        
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            color: #4b5563;
+            background: none;
+            border: none;
+        }
+        
+        .btn-secondary:disabled {
+            color: #9ca3af;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .name-section {
+            background-color: #eff6ff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .name-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .results-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .score-display {
+            font-size: 2.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .score-pass {
+            color: #059669;
+        }
+        
+        .score-fail {
+            color: #dc2626;
+        }
+        
+        .question-result {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+        
+        .question-correct {
+            border-left-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        
+        .question-incorrect {
+            border-left-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        
+        .question-result h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-status {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-correct {
+            color: #166534;
+        }
+        
+        .status-incorrect {
+            color: #dc2626;
+        }
+        
+        .explanation {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-top: 0.5rem;
+        }
+        
+        .certificate {
+            border: 4px solid #1e40af;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .certificate-inner {
+            border: 2px solid #3b82f6;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        
+        .certificate-title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .certificate-subtitle {
+            font-size: 1.25rem;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+        }
+        
+        .certificate-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin: 1rem 0;
+        }
+        
+        .certificate-score {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #059669;
+            margin: 1rem 0;
+        }
+        
+        .certificate-college {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin: 1rem 0;
+        }
+        
+        .button-group {
+            margin-top: 1.5rem;
+        }
+        
+        .btn-group {
+            display: inline-flex;
+            gap: 1rem;
+        }
+        
+        .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        
+        .award-icon {
+            width: 4rem;
+            height: 4rem;
+            margin: 0 auto 1rem;
+            background-color: #fbbf24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .drag-instructions {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        
+        .matched-item {
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div id="main-content">
+                <div class="title">Advanced EMT Shock Evaluation</div>
+                <p class="subtitle">Based on National Educational Standards</p>
+                
+                <div id="name-section" class="name-section">
+                    <label class="name-label">Enter your full name to begin:</label>
+                    <input type="text" id="student-name" class="name-input" placeholder="Your Full Name">
+                    <button id="start-btn" class="btn btn-primary" style="margin-top: 1rem; display: none;">Start Evaluation</button>
+                </div>
+                
+                <div id="evaluation-content" class="hidden">
+                    <div id="progress-section" class="progress-container">
+                        <div class="progress-info">
+                            <span id="question-counter" class="progress-text">Question 1 of 50</span>
+                            <span id="progress-percentage" class="progress-percentage">2% Complete</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill" style="width: 2%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="question-content">
+                        <h3 id="question-title" class="question-title"></h3>
+                        <div id="question-options"></div>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button id="prev-btn" class="btn btn-secondary">Previous</button>
+                        <button id="next-btn" class="btn btn-primary">Next →</button>
+                        <button id="submit-btn" class="btn btn-success hidden">Submit Evaluation</button>
+                    </div>
+                </div>
+                
+                <div id="results-section" class="hidden">
+                    <h2 style="font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 1.5rem;">Evaluation Results</h2>
+                    
+                    <div class="results-container">
+                        <div id="score-display" class="score-display">0%</div>
+                        <p id="score-text" style="color: #4b5563;">You answered 0 out of 50 questions correctly</p>
+                        <p id="pass-status" style="font-weight: 600;"></p>
+                    </div>
+                    
+                    <div id="results-details"></div>
+                    
+                    <div class="button-group" style="text-align: center;">
+                        <div class="btn-group">
+                            <button id="certificate-btn" class="btn btn-success hidden">
+                                🏆 Get Certificate
+                            </button>
+                            <button id="retake-btn" class="btn btn-primary">
+                                🔄 Retake Evaluation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="certificate-section" class="hidden">
+                    <div class="certificate">
+                        <div class="certificate-inner">
+                            <div class="award-icon">🏆</div>
+                            <h1 class="certificate-title">CERTIFICATE OF COMPLETION</h1>
+                            <h2 class="certificate-subtitle">Advanced EMT - Shock Module Evaluation</h2>
+                            
+                            <p style="font-size: 1.125rem; color: #374151; margin-bottom: 0.5rem;">This certifies that</p>
+                            <h3 id="certificate-name" class="certificate-name"></h3>
+                            
+                            <p style="font-size: 1.125rem; color: #374151; margin-bottom: 0.5rem;">has successfully completed the Advanced EMT</p>
+                            <p style="font-size: 1.125rem; color: #374151; margin-bottom: 0.5rem;">Shock Module Evaluation with a score of</p>
+                            <p id="certificate-score" class="certificate-score"></p>
+                            
+                            <h4 class="certificate-college">Camp Community College</h4>
+                            <p style="color: #4b5563;" id="certificate-date"></p>
+                        </div>
+                        
+                        <div class="button-group">
+                            <div class="btn-group">
+                                <button id="download-btn" class="btn btn-success">
+                                    📥 Download Certificate
+                                </button>
+                                <button id="new-evaluation-btn" class="btn btn-secondary">
+                                    🔄 Take Another Evaluation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Questions data
+        const questions = [
+            {
+                id: 1,
+                type: 'multiple-choice',
+                question: 'What is the primary mechanism of shock?',
+                options: [
+                    'Inadequate tissue perfusion',
+                    'High blood pressure',
+                    'Rapid heart rate',
+                    'Excessive oxygen delivery'
+                ],
+                correct: 0,
+                explanation: 'Shock is fundamentally defined as inadequate tissue perfusion, leading to cellular hypoxia and organ dysfunction.'
+            },
+            {
+                id: 2,
+                type: 'drag-drop',
+                question: 'Match each type of shock with its primary cause:',
+                items: ['Hypovolemic', 'Cardiogenic', 'Distributive', 'Obstructive'],
+                targets: ['Fluid loss', 'Heart failure', 'Vasodilation', 'Physical blockage'],
+                correct: [0, 1, 2, 3],
+                explanation: 'Understanding the pathophysiology of each shock type is crucial for proper treatment.'
+            },
+            {
+                id: 3,
+                type: 'multiple-select',
+                question: 'Which of the following are early signs of shock? (Select all that apply)',
+                options: [
+                    'Tachycardia',
+                    'Altered mental status',
+                    'Hypotension',
+                    'Decreased urine output',
+                    'Increased respiratory rate',
+                    'Cool, clammy skin'
+                ],
+                correct: [0, 1, 4, 5],
+                explanation: 'Early shock presents with compensatory mechanisms before hypotension develops. Hypotension and decreased urine output are late signs.'
+            },
+            {
+                id: 4,
+                type: 'order-list',
+                question: 'Place the following shock management priorities in the correct order:',
+                items: [
+                    'Control bleeding if present',
+                    'Assess airway and breathing',
+                    'Establish IV access',
+                    'Administer oxygen',
+                    'Position patient appropriately'
+                ],
+                correct: [1, 3, 0, 4, 2],
+                explanation: 'The ABC approach remains paramount: Airway, Breathing, then Circulation with bleeding control and positioning before IV access.'
+            },
+            {
+                id: 5,
+                type: 'multiple-choice',
+                question: 'What is the most appropriate initial fluid for treating hypovolemic shock in adults?',
+                options: [
+                    'D5W',
+                    '0.9% Normal Saline',
+                    'Lactated Ringers',
+                    'D5 1/2 Normal Saline'
+                ],
+                correct: 2,
+                explanation: 'Lactated Ringers is preferred for trauma-related hypovolemic shock as it more closely matches plasma electrolyte composition.'
+            },
+            {
+                id: 6,
+                type: 'drag-drop',
+                question: 'Match the medication with its appropriate shock type:',
+                items: ['Epinephrine', 'Dopamine', 'Norepinephrine', 'Dobutamine'],
+                targets: ['Anaphylactic shock', 'Cardiogenic shock', 'Septic shock', 'Cardiogenic shock (inotropic)'],
+                correct: [0, 1, 2, 3],
+                explanation: 'Different shock types require specific vasopressor and inotropic support based on their underlying pathophysiology.'
+            },
+            {
+                id: 7,
+                type: 'multiple-select',
+                question: 'Which assessment findings suggest neurogenic shock? (Select all that apply)',
+                options: [
+                    'Bradycardia',
+                    'Warm, dry skin',
+                    'Tachycardia',
+                    'Hypotension',
+                    'Cool, clammy skin',
+                    'Priapism (in males)'
+                ],
+                correct: [0, 1, 3, 5],
+                explanation: 'Neurogenic shock presents with the classic triad of hypotension, bradycardia, and warm/dry skin due to loss of sympathetic tone.'
+            },
+            {
+                id: 8,
+                type: 'multiple-choice',
+                question: 'What is the target systolic blood pressure for a trauma patient in shock?',
+                options: [
+                    '90 mmHg',
+                    '100 mmHg',
+                    '110 mmHg',
+                    '120 mmHg'
+                ],
+                correct: 0,
+                explanation: 'Permissive hypotension with target SBP of 90 mmHg helps maintain perfusion while minimizing bleeding in trauma patients.'
+            },
+            {
+                id: 9,
+                type: 'multiple-choice',
+                question: 'Which compensatory mechanism occurs FIRST in shock?',
+                options: [
+                    'Decreased urine output',
+                    'Increased heart rate',
+                    'Altered mental status',
+                    'Decreased blood pressure'
+                ],
+                correct: 1,
+                explanation: 'Tachycardia is typically the first compensatory response as the body attempts to maintain cardiac output despite reduced stroke volume.'
+            },
+            {
+                id: 10,
+                type: 'multiple-select',
+                question: 'What are the classic signs of cardiogenic shock? (Select all that apply)',
+                options: [
+                    'Jugular vein distention',
+                    'Pulmonary edema',
+                    'Warm extremities',
+                    'Third heart sound (S3)',
+                    'Hypotension',
+                    'Bradycardia'
+                ],
+                correct: [0, 1, 3, 4],
+                explanation: 'Cardiogenic shock presents with signs of pump failure: JVD, pulmonary edema, S3 gallop, and hypotension. Extremities are typically cool, not warm.'
+            },
+            {
+                id: 11,
+                type: 'drag-drop',
+                question: 'Match the shock stage with its characteristics:',
+                items: ['Compensated', 'Decompensated', 'Irreversible'],
+                targets: ['Normal BP, increased HR', 'Decreased BP, altered mental status', 'Multi-organ failure, poor prognosis'],
+                correct: [0, 1, 2],
+                explanation: 'Understanding shock progression helps determine treatment urgency and expected outcomes.'
+            },
+            {
+                id: 12,
+                type: 'multiple-choice',
+                question: 'What is the most common cause of hypovolemic shock in trauma patients?',
+                options: [
+                    'Internal bleeding',
+                    'External bleeding',
+                    'Dehydration',
+                    'Burns'
+                ],
+                correct: 0,
+                explanation: 'Internal bleeding from organ injury or fractures is the leading cause of hypovolemic shock in trauma, often being occult initially.'
+            },
+            {
+                id: 13,
+                type: 'multiple-select',
+                question: 'Which conditions can cause obstructive shock? (Select all that apply)',
+                options: [
+                    'Tension pneumothorax',
+                    'Cardiac tamponade',
+                    'Pulmonary embolism',
+                    'Aortic stenosis',
+                    'Massive pleural effusion'
+                ],
+                correct: [0, 1, 2, 4],
+                explanation: 'Obstructive shock results from physical impediment to venous return or cardiac filling. Aortic stenosis causes outflow obstruction but not shock typically.'
+            },
+            {
+                id: 14,
+                type: 'order-list',
+                question: 'Order the following steps for anaphylactic shock treatment:',
+                items: [
+                    'Administer epinephrine IM',
+                    'Remove or discontinue allergen',
+                    'Establish IV access',
+                    'Administer oxygen',
+                    'Monitor vital signs'
+                ],
+                correct: [1, 3, 0, 2, 4],
+                explanation: 'Priority is allergen removal, oxygenation, immediate epinephrine, then IV access for additional medications and monitoring.'
+            },
+            {
+                id: 15,
+                type: 'multiple-choice',
+                question: 'What is the initial fluid bolus recommendation for pediatric hypovolemic shock?',
+                options: [
+                    '10 mL/kg',
+                    '20 mL/kg',
+                    '30 mL/kg',
+                    '40 mL/kg'
+                ],
+                correct: 1,
+                explanation: 'Pediatric patients should receive 20 mL/kg of isotonic crystalloid as the initial bolus, which can be repeated based on response.'
+            },
+            {
+                id: 16,
+                type: 'multiple-select',
+                question: 'Which medications are appropriate for septic shock? (Select all that apply)',
+                options: [
+                    'Norepinephrine',
+                    'Dopamine',
+                    'Epinephrine',
+                    'Vasopressin',
+                    'Dobutamine',
+                    'Phenylephrine'
+                ],
+                correct: [0, 1, 2, 3, 4],
+                explanation: 'Multiple vasopressors and inotropes may be needed in septic shock. Phenylephrine is generally avoided due to its pure alpha effects.'
+            },
+            {
+                id: 17,
+                type: 'drag-drop',
+                question: 'Match the shock type with its mortality rate:',
+                items: ['Hypovolemic', 'Cardiogenic', 'Septic', 'Anaphylactic'],
+                targets: ['10-30%', '40-80%', '20-50%', '1-3% with treatment'],
+                correct: [0, 1, 2, 3],
+                explanation: 'Mortality rates help understand prognosis: cardiogenic has highest mortality, anaphylactic lowest with prompt treatment.'
+            },
+            {
+                id: 18,
+                type: 'multiple-choice',
+                question: 'Which position is most appropriate for a conscious patient in shock?',
+                options: [
+                    'Trendelenburg (head down)',
+                    'Supine with legs elevated',
+                    'Semi-Fowlers (head elevated)',
+                    'Left lateral recumbent'
+                ],
+                correct: 1,
+                explanation: 'Supine with legs elevated 12-18 inches helps venous return without compromising airway or breathing in conscious patients.'
+            },
+            {
+                id: 19,
+                type: 'multiple-select',
+                question: 'What are contraindications to fluid resuscitation? (Select all that apply)',
+                options: [
+                    'Cardiogenic shock with pulmonary edema',
+                    'Traumatic brain injury',
+                    'Burns covering >20% BSA',
+                    'Suspected tension pneumothorax',
+                    'Known heart failure'
+                ],
+                correct: [0, 4],
+                explanation: 'Fluid overload can worsen cardiogenic shock and heart failure. TBI, burns, and pneumothorax are not absolute contraindications.'
+            },
+            {
+                id: 20,
+                type: 'multiple-choice',
+                question: 'What is the mechanism of action for dopamine at low doses (2-5 mcg/kg/min)?',
+                options: [
+                    'Alpha-1 receptor stimulation',
+                    'Beta-1 receptor stimulation',
+                    'Dopaminergic receptor stimulation',
+                    'Beta-2 receptor stimulation'
+                ],
+                correct: 2,
+                explanation: 'At low doses, dopamine primarily stimulates dopaminergic receptors, promoting renal and splanchnic vasodilation.'
+            },
+            {
+                id: 21,
+                type: 'order-list',
+                question: 'Order these assessment findings from earliest to latest in shock progression:',
+                items: [
+                    'Decreased urine output',
+                    'Tachycardia',
+                    'Hypotension',
+                    'Cool, clammy skin',
+                    'Altered mental status'
+                ],
+                correct: [1, 3, 4, 0, 2],
+                explanation: 'Shock progression: tachycardia → skin changes → mental status changes → oliguria → hypotension (late sign).'
+            },
+            {
+                id: 22,
+                type: 'multiple-choice',
+                question: 'Which lab value is most indicative of tissue hypoperfusion in shock?',
+                options: [
+                    'Elevated white blood cell count',
+                    'Decreased hemoglobin',
+                    'Elevated lactate',
+                    'Decreased platelets'
+                ],
+                correct: 2,
+                explanation: 'Elevated serum lactate indicates anaerobic metabolism due to tissue hypoxia, making it a key marker of shock severity.'
+            },
+            {
+                id: 23,
+                type: 'multiple-select',
+                question: 'Which factors increase the risk of developing shock? (Select all that apply)',
+                options: [
+                    'Advanced age',
+                    'Chronic medical conditions',
+                    'Medications (beta-blockers)',
+                    'Pregnancy',
+                    'Malnutrition',
+                    'Recent surgery'
+                ],
+                correct: [0, 1, 2, 3, 4, 5],
+                explanation: 'Multiple factors can predispose patients to shock or mask its early signs, requiring heightened awareness.'
+            },
+            {
+                id: 24,
+                type: 'drag-drop',
+                question: 'Match the IV fluid with its primary indication:',
+                items: ['Normal Saline', 'Lactated Ringers', 'D5W', 'Albumin'],
+                targets: ['Hyperkalemia concerns', 'Trauma resuscitation', 'Hypoglycemia with dehydration', 'Severe hypoalbuminemia'],
+                correct: [0, 1, 2, 3],
+                explanation: 'Different fluids have specific indications based on electrolyte content and oncotic properties.'
+            },
+            {
+                id: 25,
+                type: 'multiple-choice',
+                question: 'What is the most reliable early indicator of shock in children?',
+                options: [
+                    'Hypotension',
+                    'Tachycardia',
+                    'Altered mental status',
+                    'Decreased capillary refill'
+                ],
+                correct: 1,
+                explanation: 'Tachycardia is the most sensitive early indicator of shock in children, as they can maintain blood pressure longer than adults.'
+            },
+            {
+                id: 26,
+                type: 'multiple-select',
+                question: 'Which are complications of untreated shock? (Select all that apply)',
+                options: [
+                    'Acute kidney injury',
+                    'Adult respiratory distress syndrome (ARDS)',
+                    'Disseminated intravascular coagulation (DIC)',
+                    'Multi-organ dysfunction syndrome (MODS)',
+                    'Cardiac arrest',
+                    'Stroke'
+                ],
+                correct: [0, 1, 2, 3, 4, 5],
+                explanation: 'Prolonged shock leads to systemic complications affecting all organ systems, ultimately resulting in death if untreated.'
+            },
+            {
+                id: 27,
+                type: 'multiple-choice',
+                question: 'In distributive shock, what happens to systemic vascular resistance?',
+                options: [
+                    'Markedly increased',
+                    'Slightly increased',
+                    'Normal',
+                    'Markedly decreased'
+                ],
+                correct: 3,
+                explanation: 'Distributive shock is characterized by widespread vasodilation, leading to markedly decreased systemic vascular resistance.'
+            },
+            {
+                id: 28,
+                type: 'order-list',
+                question: 'Order the following by priority in trauma shock management:',
+                items: [
+                    'Blood transfusion',
+                    'Control external bleeding',
+                    'Establish two large-bore IVs',
+                    'Crystalloid fluid resuscitation',
+                    'Identify source of bleeding'
+                ],
+                correct: [1, 2, 3, 4, 0],
+                explanation: 'Trauma shock priority: immediate bleeding control → IV access → crystalloid → source identification → blood products as needed.'
+            },
+            {
+                id: 29,
+                type: 'multiple-choice',
+                question: 'What is the preferred route for epinephrine administration in anaphylactic shock?',
+                options: [
+                    'Intravenous',
+                    'Intramuscular (anterolateral thigh)',
+                    'Subcutaneous',
+                    'Intraosseous'
+                ],
+                correct: 1,
+                explanation: 'Intramuscular epinephrine in the anterolateral thigh provides rapid, reliable absorption and is the preferred initial route.'
+            },
+            {
+                id: 30,
+                type: 'multiple-select',
+                question: 'Which signs suggest impending cardiovascular collapse? (Select all that apply)',
+                options: [
+                    'Narrowing pulse pressure',
+                    'Weak, thready pulse',
+                    'Mottled skin',
+                    'Confusion or agitation',
+                    'Tachypnea',
+                    'Cold extremities'
+                ],
+                correct: [0, 1, 2, 3, 5],
+                explanation: 'These signs indicate severe shock with impending cardiovascular collapse requiring immediate aggressive intervention.'
+            },
+            {
+                id: 31,
+                type: 'drag-drop',
+                question: 'Match the shock complication with its mechanism:',
+                items: ['ARDS', 'AKI', 'DIC', 'MODS'],
+                targets: ['Inflammatory lung injury', 'Reduced renal perfusion', 'Consumption coagulopathy', 'Systemic inflammation'],
+                correct: [0, 1, 2, 3],
+                explanation: 'Each complication has distinct pathophysiology but all stem from inadequate tissue perfusion and inflammatory response.'
+            },
+            {
+                id: 32,
+                type: 'multiple-choice',
+                question: 'Which parameter is most important for monitoring fluid resuscitation effectiveness?',
+                options: [
+                    'Blood pressure',
+                    'Heart rate',
+                    'Urine output',
+                    'Mental status'
+                ],
+                correct: 2,
+                explanation: 'Urine output >0.5 mL/kg/hr indicates adequate renal perfusion and is the best indicator of successful resuscitation.'
+            },
+            {
+                id: 33,
+                type: 'multiple-select',
+                question: 'What are the components of Beck\'s triad in cardiac tamponade? (Select all that apply)',
+                options: [
+                    'Jugular vein distention',
+                    'Muffled heart sounds',
+                    'Hypotension',
+                    'Pulsus paradoxus',
+                    'Tachycardia',
+                    'Chest pain'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'Beck\'s triad consists of JVD, muffled heart sounds, and hypotension. Pulsus paradoxus and tachycardia are additional findings.'
+            },
+            {
+                id: 34,
+                type: 'multiple-choice',
+                question: 'What is the maximum total dose of epinephrine that can be given IM for anaphylaxis without IV access?',
+                options: [
+                    '0.3 mg',
+                    '0.5 mg',
+                    '1.0 mg',
+                    'No maximum limit'
+                ],
+                correct: 3,
+                explanation: 'There is no maximum dose limit for epinephrine in life-threatening anaphylaxis; doses can be repeated every 5-15 minutes as needed.'
+            },
+            {
+                id: 35,
+                type: 'order-list',
+                question: 'Order these interventions for cardiogenic shock management:',
+                items: [
+                    'Consider vasopressors',
+                    'Optimize preload cautiously',
+                    'Treat underlying cause',
+                    'Provide oxygen support',
+                    'Monitor hemodynamics closely'
+                ],
+                correct: [3, 1, 2, 4, 0],
+                explanation: 'Cardiogenic shock management: oxygenation → careful fluid management → treat cause → monitoring → vasopressors if needed.'
+            },
+            {
+                id: 36,
+                type: 'multiple-choice',
+                question: 'Which finding is most specific for neurogenic shock?',
+                options: [
+                    'Hypotension',
+                    'Bradycardia with hypotension',
+                    'Altered mental status',
+                    'Warm, dry skin below level of injury'
+                ],
+                correct: 3,
+                explanation: 'Warm, dry skin below the level of spinal injury is pathognomonic for neurogenic shock due to loss of sympathetic innervation.'
+            },
+            {
+                id: 37,
+                type: 'multiple-select',
+                question: 'Which are appropriate treatments for septic shock? (Select all that apply)',
+                options: [
+                    'Broad-spectrum antibiotics',
+                    'Source control (drainage)',
+                    'Fluid resuscitation',
+                    'Vasopressors',
+                    'Corticosteroids (in some cases)',
+                    'Insulin for glucose control'
+                ],
+                correct: [0, 1, 2, 3, 4, 5],
+                explanation: 'Septic shock requires comprehensive management including infection treatment, hemodynamic support, and metabolic control.'
+            },
+            {
+                id: 38,
+                type: 'drag-drop',
+                question: 'Match the age group with normal systolic BP lower limit:',
+                items: ['Newborn', 'Toddler (1-2 years)', 'Child (2-10 years)', 'Adolescent'],
+                targets: ['60 mmHg', '70 mmHg', '70 + (2 x age in years)', '90 mmHg'],
+                correct: [0, 1, 2, 3],
+                explanation: 'Age-specific blood pressure thresholds are crucial for recognizing shock in pediatric patients.'
+            },
+            {
+                id: 39,
+                type: 'multiple-choice',
+                question: 'What is the recommended crystalloid to blood loss replacement ratio?',
+                options: [
+                    '1:1',
+                    '2:1',
+                    '3:1',
+                    '4:1'
+                ],
+                correct: 2,
+                explanation: 'The 3:1 rule suggests giving 3 mL of crystalloid for every 1 mL of estimated blood loss to account for fluid distribution.'
+            },
+            {
+                id: 40,
+                type: 'multiple-select',
+                question: 'Which factors suggest the need for blood transfusion in shock? (Select all that apply)',
+                options: [
+                    'Hemoglobin <7 g/dL',
+                    'Ongoing hemorrhage',
+                    'Signs of inadequate oxygen delivery',
+                    'Hemoglobin <10 g/dL in cardiac patients',
+                    'Failure to respond to crystalloids',
+                    'Coagulopathy present'
+                ],
+                correct: [0, 1, 2, 3, 4, 5],
+                explanation: 'Multiple factors indicate need for blood products beyond just hemoglobin levels, including clinical response and comorbidities.'
+            },
+            {
+                id: 41,
+                type: 'multiple-choice',
+                question: 'Which medication should be avoided in cardiogenic shock?',
+                options: [
+                    'Dopamine',
+                    'Dobutamine',
+                    'Furosemide',
+                    'Nitroglycerin'
+                ],
+                correct: 2,
+                explanation: 'Diuretics like furosemide can worsen hypotension and reduce preload excessively in cardiogenic shock patients.'
+            },
+            {
+                id: 42,
+                type: 'order-list',
+                question: 'Order these steps for managing tension pneumothorax causing obstructive shock:',
+                items: [
+                    'Chest tube insertion',
+                    'Needle decompression',
+                    'Confirm diagnosis clinically',
+                    'Prepare for definitive management',
+                    'Reassess after intervention'
+                ],
+                correct: [2, 1, 4, 3, 0],
+                explanation: 'Tension pneumothorax requires immediate needle decompression followed by definitive chest tube placement.'
+            },
+            {
+                id: 43,
+                type: 'multiple-choice',
+                question: 'What is the primary concern with massive fluid resuscitation?',
+                options: [
+                    'Electrolyte imbalance',
+                    'Dilutional coagulopathy',
+                    'Pulmonary edema',
+                    'Hypothermia'
+                ],
+                correct: 1,
+                explanation: 'Dilutional coagulopathy from massive crystalloid infusion can worsen bleeding and is a major concern in trauma resuscitation.'
+            },
+            {
+                id: 44,
+                type: 'multiple-select',
+                question: 'Which are signs of fluid overload during resuscitation? (Select all that apply)',
+                options: [
+                    'Jugular vein distention',
+                    'Pulmonary crackles',
+                    'Peripheral edema',
+                    'Increased respiratory rate',
+                    'S3 gallop',
+                    'Hepatomegaly'
+                ],
+                correct: [0, 1, 2, 3, 4, 5],
+                explanation: 'Multiple signs can indicate fluid overload, requiring careful monitoring during aggressive resuscitation efforts.'
+            },
+            {
+                id: 45,
+                type: 'drag-drop',
+                question: 'Match the vasopressor with its primary mechanism:',
+                items: ['Norepinephrine', 'Epinephrine', 'Dopamine', 'Vasopressin'],
+                targets: ['Alpha > Beta effects', 'Alpha and Beta effects', 'Dose-dependent effects', 'V1 receptor agonist'],
+                correct: [0, 1, 2, 3],
+                explanation: 'Understanding vasopressor mechanisms helps select appropriate agents for different shock states.'
+            },
+            {
+                id: 46,
+                type: 'multiple-choice',
+                question: 'In pediatric patients, what percentage of blood volume loss typically causes obvious shock signs?',
+                options: [
+                    '15-20%',
+                    '25-30%',
+                    '35-40%',
+                    '45-50%'
+                ],
+                correct: 1,
+                explanation: 'Children can compensate well initially, with obvious shock signs typically not appearing until 25-30% blood volume loss.'
+            },
+            {
+                id: 47,
+                type: 'multiple-select',
+                question: 'Which are indications for immediate surgical intervention in shock? (Select all that apply)',
+                options: [
+                    'Penetrating abdominal trauma with instability',
+                    'Ruptured abdominal aortic aneurysm',
+                    'Massive hemothorax',
+                    'Pelvic fracture with ongoing bleeding',
+                    'Ruptured ectopic pregnancy',
+                    'Tension pneumothorax'
+                ],
+                correct: [0, 1, 2, 3, 4],
+                explanation: 'Several conditions require immediate surgical control to stop bleeding or relieve obstruction. Tension pneumothorax needs needle decompression first.'
+            },
+            {
+                id: 48,
+                type: 'multiple-choice',
+                question: 'What is the most appropriate initial management for suspected anaphylactic shock?',
+                options: [
+                    'High-flow oxygen and IV fluids',
+                    'Epinephrine IM and remove allergen',
+                    'Corticosteroids and antihistamines',
+                    'Intubation and mechanical ventilation'
+                ],
+                correct: 1,
+                explanation: 'Immediate epinephrine IM and allergen removal are the priorities in anaphylactic shock, as delay can be fatal.'
+            },
+            {
+                id: 49,
+                type: 'order-list',
+                question: 'Order these hemodynamic parameters from highest to lowest in distributive shock:',
+                items: [
+                    'Cardiac output',
+                    'Systemic vascular resistance',
+                    'Central venous pressure',
+                    'Pulmonary capillary wedge pressure',
+                    'Mixed venous oxygen saturation'
+                ],
+                correct: [0, 4, 2, 3, 1],
+                explanation: 'Distributive shock typically shows high cardiac output, high mixed venous O2 sat, normal/low filling pressures, and low SVR.'
+            },
+            {
+                id: 50,
+                type: 'multiple-choice',
+                question: 'Which statement best describes the prognosis for patients who survive the initial shock episode?',
+                options: [
+                    'Full recovery is expected in most cases',
+                    'Long-term complications are rare',
+                    'Risk of long-term organ dysfunction exists',
+                    'Prognosis is determined by age alone'
+                ],
+                correct: 2,
+                explanation: 'Even patients who survive shock may develop long-term complications including chronic kidney disease, cognitive impairment, and increased mortality risk.'
+            }
+        ];
+        
+        // Application state
+        let currentQuestion = 0;
+        let answers = {};
+        let studentName = '';
+        
+        // DOM elements
+        const nameSection = document.getElementById('name-section');
+        const evaluationContent = document.getElementById('evaluation-content');
+        const resultsSection = document.getElementById('results-section');
+        const certificateSection = document.getElementById('certificate-section');
+        const studentNameInput = document.getElementById('student-name');
+        const startBtn = document.getElementById('start-btn');
+        const questionCounter = document.getElementById('question-counter');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const progressFill = document.getElementById('progress-fill');
+        const questionTitle = document.getElementById('question-title');
+        const questionOptions = document.getElementById('question-options');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        // Initialize the application
+        function init() {
+            studentNameInput.addEventListener('input', handleNameInput);
+            studentNameInput.addEventListener('keypress', handleNameKeypress);
+            startBtn.addEventListener('click', startEvaluation);
+            prevBtn.addEventListener('click', goToPreviousQuestion);
+            nextBtn.addEventListener('click', goToNextQuestion);
+            submitBtn.addEventListener('click', submitEvaluation);
+            
+            document.getElementById('retake-btn').addEventListener('click', resetEvaluation);
+            document.getElementById('certificate-btn').addEventListener('click', showCertificate);
+            document.getElementById('download-btn').addEventListener('click', downloadCertificate);
+            document.getElementById('new-evaluation-btn').addEventListener('click', resetEvaluation);
+        }
+        
+        function handleNameInput() {
+            const nameValue = studentNameInput.value.trim();
+            if (nameValue.length > 0) {
+                startBtn.style.display = 'block';
+            } else {
+                startBtn.style.display = 'none';
+            }
+        }
+        
+        function handleNameKeypress(e) {
+            if (e.key === 'Enter' && studentNameInput.value.trim()) {
+                startEvaluation();
+            }
+        }
+        
+        function startEvaluation() {
+            studentName = studentNameInput.value.trim();
+            if (studentName) {
+                showEvaluation();
+            } else {
+                alert('Please enter your name to begin the evaluation.');
+            }
+        }
+        
+        function showEvaluation() {
+            nameSection.classList.add('hidden');
+            evaluationContent.classList.remove('hidden');
+            loadQuestion();
+        }
+        
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const progress = Math.round(((currentQuestion + 1) / questions.length) * 100);
+            
+            questionCounter.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            progressPercentage.textContent = `${progress}% Complete`;
+            progressFill.style.width = `${progress}%`;
+            questionTitle.textContent = question.question;
+            
+            renderQuestion(question);
+            updateNavigation();
+        }
+        
+        function renderQuestion(question) {
+            questionOptions.innerHTML = '';
+            
+            switch (question.type) {
+                case 'multiple-choice':
+                    renderMultipleChoice(question);
+                    break;
+                case 'multiple-select':
+                    renderMultipleSelect(question);
+                    break;
+                case 'drag-drop':
+                    renderDragDrop(question);
+                    break;
+                case 'order-list':
+                    renderOrderList(question);
+                    break;
+            }
+        }
+        
+        function renderMultipleChoice(question) {
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = `option-button ${answers[question.id] === index ? 'selected' : ''}`;
+                button.innerHTML = `<span class="option-label">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                button.addEventListener('click', () => {
+                    answers[question.id] = index;
+                    loadQuestion();
+                    updateNavigation();
+                });
+                questionOptions.appendChild(button);
+            });
+        }
+        
+        function renderMultipleSelect(question) {
+            question.options.forEach((option, index) => {
+                const label = document.createElement('label');
+                label.className = 'checkbox-option';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'checkbox-input';
+                checkbox.checked = (answers[question.id] || []).includes(index);
+                checkbox.addEventListener('change', (e) => {
+                    const currentAnswers = answers[question.id] || [];
+                    if (e.target.checked) {
+                        answers[question.id] = [...currentAnswers, index];
+                    } else {
+                        answers[question.id] = currentAnswers.filter(a => a !== index);
+                    }
+                    updateNavigation();
+                });
+                
+                const span = document.createElement('span');
+                span.textContent = option;
+                
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                questionOptions.appendChild(label);
+            });
+        }
+        
+        function renderDragDrop(question) {
+            const container = document.createElement('div');
+            container.className = 'drag-drop-container';
+            
+            const itemsSection = document.createElement('div');
+            itemsSection.className = 'drag-section';
+            itemsSection.innerHTML = '<h4>Items:</h4>';
+            
+            const targetsSection = document.createElement('div');
+            targetsSection.className = 'drag-section';
+            targetsSection.innerHTML = '<h4>Match with:</h4>';
+            
+            // Create draggable items
+            question.items.forEach((item, index) => {
+                const dragItem = document.createElement('div');
+                dragItem.className = 'drag-item';
+                dragItem.textContent = item;
+                dragItem.draggable = true;
+                dragItem.dataset.index = index;
+                
+                dragItem.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', index);
+                });
+                
+                itemsSection.appendChild(dragItem);
+            });
+            
+            // Create drop zones
+            question.targets.forEach((target, index) => {
+                const dropZone = document.createElement('div');
+                dropZone.className = 'drop-zone';
+                dropZone.textContent = target;
+                dropZone.dataset.index = index;
+                
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+                
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const itemIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                    const targetIndex = index;
+                    
+                    if (!answers[question.id]) {
+                        answers[question.id] = [];
+                    }
+                    answers[question.id][itemIndex] = targetIndex;
+                    
+                    // Show the match
+                    const matchedDiv = document.createElement('div');
+                    matchedDiv.className = 'matched-item';
+                    matchedDiv.textContent = `→ ${question.items[itemIndex]}`;
+                    
+                    // Clear previous matches for this target
+                    const existingMatches = dropZone.querySelectorAll('.matched-item');
+                    existingMatches.forEach(match => match.remove());
+                    
+                    dropZone.appendChild(matchedDiv);
+                    updateNavigation();
+                });
+                
+                targetsSection.appendChild(dropZone);
+            });
+            
+            container.appendChild(itemsSection);
+            container.appendChild(targetsSection);
+            questionOptions.appendChild(container);
+        }
+        
+        function renderOrderList(question) {
+            const instructions = document.createElement('p');
+            instructions.className = 'drag-instructions';
+            instructions.textContent = 'Drag items to reorder them from first (top) to last (bottom):';
+            questionOptions.appendChild(instructions);
+            
+            let orderedItems = [...question.items];
+            
+            function renderItems() {
+                const itemsContainer = document.querySelector('.order-items-container');
+                if (itemsContainer) {
+                    itemsContainer.remove();
+                }
+                
+                const container = document.createElement('div');
+                container.className = 'order-items-container';
+                
+                orderedItems.forEach((item, index) => {
+                    const orderItem = document.createElement('div');
+                    orderItem.className = 'order-item';
+                    orderItem.draggable = true;
+                    orderItem.innerHTML = `<span class="order-number">${index + 1}.</span> ${item}`;
+                    orderItem.dataset.index = index;
+                    
+                    orderItem.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', index);
+                    });
+                    
+                    orderItem.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                    });
+                    
+                    orderItem.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                        const toIndex = index;
+                        
+                        if (fromIndex !== toIndex) {
+                            const [movedItem] = orderedItems.splice(fromIndex, 1);
+                            orderedItems.splice(toIndex, 0, movedItem);
+                            
+                            // Update answer
+                            answers[question.id] = orderedItems.map(item => question.items.indexOf(item));
+                            
+                            renderItems();
+                            updateNavigation();
+                        }
+                    });
+                    
+                    container.appendChild(orderItem);
+                });
+                
+                questionOptions.appendChild(container);
+            }
+            
+            renderItems();
+        }
+        
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion < questions.length - 1) {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+                nextBtn.disabled = !answers[questions[currentQuestion].id];
+            } else {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+                submitBtn.disabled = !answers[questions[currentQuestion].id];
+            }
+        }
+        
+        function goToPreviousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+        
+        function goToNextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+        
+        function submitEvaluation() {
+            if (!studentName.trim()) {
+                alert('Please enter your name before submitting.');
+                return;
+            }
+            showResults();
+        }
+        
+        function calculateScore() {
+            let correct = 0;
+            const total = questions.length;
+            
+            questions.forEach(q => {
+                const userAnswer = answers[q.id];
+                if (!userAnswer) return;
+                
+                switch (q.type) {
+                    case 'multiple-choice':
+                        if (userAnswer === q.correct) correct++;
+                        break;
+                    case 'drag-drop':
+                    case 'order-list':
+                        if (Array.isArray(userAnswer) && Array.isArray(q.correct)) {
+                            if (userAnswer.length === q.correct.length && 
+                                userAnswer.every((val, idx) => val === q.correct[idx])) {
+                                correct++;
+                            }
+                        }
+                        break;
+                    case 'multiple-select':
+                        if (Array.isArray(userAnswer) && Array.isArray(q.correct)) {
+                            const userSet = new Set(userAnswer.sort());
+                            const correctSet = new Set(q.correct.sort());
+                            if (userSet.size === correctSet.size && 
+                                [...userSet].every(x => correctSet.has(x))) {
+                                correct++;
+                            }
+                        }
+                        break;
+                }
+            });
+            
+            return { correct, total, percentage: Math.round((correct / total) * 100) };
+        }
+        
+        function showResults() {
+            evaluationContent.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            
+            const score = calculateScore();
+            
+            document.getElementById('score-display').textContent = `${score.percentage}%`;
+            document.getElementById('score-display').className = `score-display ${score.percentage >= 80 ? 'score-pass' : 'score-fail'}`;
+            document.getElementById('score-text').textContent = `You answered ${score.correct} out of ${score.total} questions correctly`;
+            document.getElementById('pass-status').textContent = score.percentage >= 80 ? 'PASSED' : 'NEEDS IMPROVEMENT';
+            document.getElementById('pass-status').className = score.percentage >= 80 ? 'score-pass' : 'score-fail';
+            
+            if (score.percentage >= 80) {
+                document.getElementById('certificate-btn').classList.remove('hidden');
+            }
+            
+            // Show detailed results
+            const resultsDetails = document.getElementById('results-details');
+            resultsDetails.innerHTML = '';
+            
+            questions.forEach((q, idx) => {
+                const userAnswer = answers[q.id];
+                const isCorrect = (() => {
+                    switch (q.type) {
+                        case 'multiple-choice':
+                            return userAnswer === q.correct;
+                        case 'drag-drop':
+                        case 'order-list':
+                            return Array.isArray(userAnswer) && Array.isArray(q.correct) &&
+                                   userAnswer.length === q.correct.length &&
+                                   userAnswer.every((val, i) => val === q.correct[i]);
+                        case 'multiple-select':
+                            if (!Array.isArray(userAnswer) || !Array.isArray(q.correct)) return false;
+                            const userSet = new Set(userAnswer.sort());
+                            const correctSet = new Set(q.correct.sort());
+                            return userSet.size === correctSet.size && [...userSet].every(x => correctSet.has(x));
+                        default:
+                            return false;
+                    }
+                })();
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.className = `question-result ${isCorrect ? 'question-correct' : 'question-incorrect'}`;
+                resultDiv.innerHTML = `
+                    <h4>Question ${idx + 1}: ${q.question}</h4>
+                    <p class="result-status ${isCorrect ? 'status-correct' : 'status-incorrect'}">
+                        ${isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                    </p>
+                    <p class="explanation">${q.explanation}</p>
+                `;
+                resultsDetails.appendChild(resultDiv);
+            });
+        }
+        
+        function showCertificate() {
+            const score = calculateScore();
+            if (score.percentage < 80) {
+                alert('You need at least 80% to receive a certificate. Please review and retake the evaluation.');
+                return;
+            }
+            
+            resultsSection.classList.add('hidden');
+            certificateSection.classList.remove('hidden');
+            
+            document.getElementById('certificate-name').textContent = studentName.toUpperCase();
+            document.getElementById('certificate-score').textContent = `${score.percentage}%`;
+            document.getElementById('certificate-date').textContent = `Date: ${new Date().toLocaleDateString()}`;
+        }
+        
+        function downloadCertificate() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = 800;
+            canvas.height = 600;
+            
+            // Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Border
+            ctx.strokeStyle = '#1e40af';
+            ctx.lineWidth = 8;
+            ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+            
+            // Inner border
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+            
+            // Title
+            ctx.fillStyle = '#1e40af';
+            ctx.font = 'bold 36px serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('CERTIFICATE OF COMPLETION', canvas.width / 2, 120);
+            
+            // Subtitle
+            ctx.font = '20px serif';
+            ctx.fillText('Advanced EMT - Shock Module Evaluation', canvas.width / 2, 160);
+            
+            // This certifies
+            ctx.font = '18px serif';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('This certifies that', canvas.width / 2, 220);
+            
+            // Student name
+            ctx.font = 'bold 32px serif';
+            ctx.fillStyle = '#1e40af';
+            ctx.fillText(studentName.toUpperCase(), canvas.width / 2, 280);
+            
+            // Has successfully completed
+            ctx.font = '18px serif';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('has successfully completed the Advanced EMT', canvas.width / 2, 330);
+            ctx.fillText('Shock Module Evaluation with a score of', canvas.width / 2, 355);
+            
+            // Score
+            const score = calculateScore();
+            ctx.font = 'bold 28px serif';
+            ctx.fillStyle = '#059669';
+            ctx.fillText(`${score.percentage}%`, canvas.width / 2, 395);
+            
+            // Institution
+            ctx.font = 'bold 24px serif';
+            ctx.fillStyle = '#1e40af';
+            ctx.fillText('Camp Community College', canvas.width / 2, 450);
+            
+            // Date
+            ctx.font = '16px serif';
+            ctx.fillStyle = '#374151';
+            const currentDate = new Date().toLocaleDateString();
+            ctx.fillText(`Date: ${currentDate}`, canvas.width / 2, 500);
+            
+            // Award icon
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, 520, 15, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Download
+            const link = document.createElement('a');
+            link.download = `${studentName.replace(/\s+/g, '_')}_Shock_Certificate.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function resetEvaluation() {
+            currentQuestion = 0;
+            answers = {};
+            studentName = '';
+            studentNameInput.value = '';
+            
+            certificateSection.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            evaluationContent.classList.add('hidden');
+            nameSection.classList.remove('hidden');
+        }
+        
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
