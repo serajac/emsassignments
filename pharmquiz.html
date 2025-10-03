@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS 181 Pharmacology Quiz</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header h2 {
+            font-size: 1.5em;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .student-info {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .student-info label {
+            display: block;
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .student-info input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        
+        .student-info input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .quiz-content {
+            padding: 30px;
+        }
+        
+        .question-block {
+            margin-bottom: 35px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .question-text {
+            flex: 1;
+            font-size: 1.1em;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .question-type {
+            display: inline-block;
+            background: #ffc107;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .options {
+            margin-top: 15px;
+        }
+        
+        .option {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #e8eeff;
+        }
+        
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .matching-item {
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .matching-item select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .ordering-container {
+            margin-top: 15px;
+        }
+        
+        .ordering-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .ordering-item input {
+            width: 60px;
+            padding: 8px;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .results h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CAMP Community College</h1>
+            <h2>EMS 181 - Principles of Pharmacology</h2>
+            <p>Chapter 12 Comprehensive Quiz</p>
+        </div>
+        
+        <div class="student-info">
+            <label for="studentName">Student Name:</label>
+            <input type="text" id="studentName" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="quiz-content" id="quizContent">
+            <!-- Questions will be inserted here -->
+        </div>
+        
+        <button class="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
+        
+        <div class="results" id="results">
+            <h2>Quiz Results</h2>
+            <div class="score-display" id="scoreDisplay"></div>
+            <p id="scoreText"></p>
+            <button class="download-btn" onclick="downloadPDF()">Download PDF Report</button>
+            <button class="download-btn" style="background: #667eea;" onclick="retakeQuiz()">Retake Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            // Multiple Choice Questions
+            {
+                id: 1,
+                type: "multiple-choice",
+                question: "What is pharmacology?",
+                options: [
+                    "The study of drug manufacturing",
+                    "The study of properties and effects of drugs and medications on the body",
+                    "The study of drug distribution",
+                    "The study of pharmacy management"
+                ],
+                correct: 1
+            },
+            {
+                id: 2,
+                type: "multiple-choice",
+                question: "What is the definition of 'dose'?",
+                options: [
+                    "The therapeutic effect of medication",
+                    "The time it takes for a drug to work",
+                    "The amount of medication that is given",
+                    "The route of administration"
+                ],
+                correct: 2
+            },
+            {
+                id: 3,
+                type: "multiple-choice",
+                question: "Which term describes effects that are undesirable but pose little risk to the patient?",
+                options: [
+                    "Untoward effects",
+                    "Toxic effects",
+                    "Unintended effects",
+                    "Contraindications"
+                ],
+                correct: 2
+            },
+            {
+                id: 4,
+                type: "multiple-choice",
+                question: "What is a contraindication?",
+                options: [
+                    "A positive drug interaction",
+                    "A time when you should not give a patient medication",
+                    "The therapeutic use of a medication",
+                    "An expected side effect"
+                ],
+                correct: 1
+            },
+            {
+                id: 5,
+                type: "multiple-choice",
+                question: "What is the trade name of a medication?",
+                options: [
+                    "The chemical composition name",
+                    "The name assigned by USP",
+                    "The brand name from the manufacturer",
+                    "The original chemical name"
+                ],
+                correct: 2
+            },
+            {
+                id: 6,
+                type: "multiple-choice",
+                question: "What does USP stand for?",
+                options: [
+                    "Universal Safety Protocol",
+                    "United States Pharmacopeia",
+                    "Uniform Substance Preparation",
+                    "United Safety Practices"
+                ],
+                correct: 1
+            },
+            {
+                id: 7,
+                type: "multiple-choice",
+                question: "Which organization enforces the Controlled Substances Act?",
+                options: [
+                    "FDA",
+                    "CDC",
+                    "DEA",
+                    "NIH"
+                ],
+                correct: 2
+            },
+            {
+                id: 8,
+                type: "multiple-choice",
+                question: "What is the fastest route of drug absorption?",
+                options: [
+                    "Oral",
+                    "Intramuscular",
+                    "Intravenous",
+                    "Subcutaneous"
+                ],
+                correct: 2
+            },
+            {
+                id: 9,
+                type: "multiple-choice",
+                question: "What is the primary organ responsible for drug biotransformation?",
+                options: [
+                    "Kidneys",
+                    "Lungs",
+                    "Heart",
+                    "Liver"
+                ],
+                correct: 3
+            },
+            {
+                id: 10,
+                type: "multiple-choice",
+                question: "What does the therapeutic index compare?",
+                options: [
+                    "Onset time to duration time",
+                    "Lethal dose to effective dose",
+                    "Absorption rate to excretion rate",
+                    "Drug cost to effectiveness"
+                ],
+                correct: 1
+            },
+            {
+                id: 11,
+                type: "multiple-choice",
+                question: "Which part of the autonomic nervous system is responsible for 'fight or flight' responses?",
+                options: [
+                    "Parasympathetic",
+                    "Somatic",
+                    "Sympathetic",
+                    "Central"
+                ],
+                correct: 2
+            },
+            {
+                id: 12,
+                type: "multiple-choice",
+                question: "What neurotransmitter is released by sympathetic nerve endings?",
+                options: [
+                    "Acetylcholine",
+                    "Dopamine",
+                    "Serotonin",
+                    "Norepinephrine"
+                ],
+                correct: 3
+            },
+            {
+                id: 13,
+                type: "multiple-choice",
+                question: "What does an agonist do?",
+                options: [
+                    "Blocks receptor sites",
+                    "Binds to and activates receptor sites",
+                    "Destroys receptors",
+                    "Prevents drug absorption"
+                ],
+                correct: 1
+            },
+            {
+                id: 14,
+                type: "multiple-choice",
+                question: "What is tolerance?",
+                options: [
+                    "An allergic reaction",
+                    "Increased sensitivity to medication",
+                    "Decreased response requiring higher doses",
+                    "Complete immunity to a drug"
+                ],
+                correct: 2
+            },
+            {
+                id: 15,
+                type: "multiple-choice",
+                question: "What is polypharmacy?",
+                options: [
+                    "Taking one medication",
+                    "Taking multiple medications",
+                    "Drug manufacturing process",
+                    "Pharmacy management"
+                ],
+                correct: 1
+            },
+            
+            // Multiple Select Questions
+            {
+                id: 16,
+                type: "multiple-select",
+                question: "Which of the following are sources from which drugs are derived? (Select all that apply)",
+                options: [
+                    "Animals",
+                    "Vegetables",
+                    "Minerals",
+                    "Synthetic compounds"
+                ],
+                correct: [0, 1, 2, 3]
+            },
+            {
+                id: 17,
+                type: "multiple-select",
+                question: "Which of the following are enteral routes of drug administration? (Select all that apply)",
+                options: [
+                    "Oral",
+                    "Sublingual",
+                    "Intravenous",
+                    "Rectal"
+                ],
+                correct: [0, 1, 3]
+            },
+            {
+                id: 18,
+                type: "multiple-select",
+                question: "Which organs are involved in drug excretion? (Select all that apply)",
+                options: [
+                    "Kidneys",
+                    "Intestines",
+                    "Lungs",
+                    "Sweat glands"
+                ],
+                correct: [0, 1, 2, 3]
+            },
+            {
+                id: 19,
+                type: "multiple-select",
+                question: "Which are sympathomimetic effects? (Select all that apply)",
+                options: [
+                    "Increased heart rate",
+                    "Bronchodilation",
+                    "Decreased blood pressure",
+                    "Pupil dilation"
+                ],
+                correct: [0, 1, 3]
+            },
+            {
+                id: 20,
+                type: "multiple-select",
+                question: "Which medications can AEMTs administer? (Select all that apply)",
+                options: [
+                    "Oxygen",
+                    "Oral glucose",
+                    "Epinephrine",
+                    "Naloxone"
+                ],
+                correct: [0, 1, 2, 3]
+            },
+            {
+                id: 21,
+                type: "multiple-select",
+                question: "Which are rights of medication administration? (Select all that apply)",
+                options: [
+                    "Right patient",
+                    "Right dose",
+                    "Right documentation",
+                    "Right to refuse"
+                ],
+                correct: [0, 1, 2, 3]
+            },
+            {
+                id: 22,
+                type: "multiple-select",
+                question: "Which factors affect drug absorption? (Select all that apply)",
+                options: [
+                    "Route of administration",
+                    "Blood flow to site",
+                    "Patient's age",
+                    "Drug formulation"
+                ],
+                correct: [0, 1, 3]
+            },
+            {
+                id: 23,
+                type: "multiple-select",
+                question: "Which are Schedule I controlled substances characteristics? (Select all that apply)",
+                options: [
+                    "High potential for abuse",
+                    "No accepted medical use",
+                    "Available by prescription",
+                    "Lack of safety under medical supervision"
+                ],
+                correct: [0, 1, 3]
+            },
+            {
+                id: 24,
+                type: "multiple-select",
+                question: "Which are unpredictable drug responses? (Select all that apply)",
+                options: [
+                    "Allergy",
+                    "Idiosyncrasy",
+                    "Tolerance",
+                    "Side effects"
+                ],
+                correct: [0, 1, 2]
+            },
+            {
+                id: 25,
+                type: "multiple-select",
+                question: "Which drug interactions result in increased effects? (Select all that apply)",
+                options: [
+                    "Synergism",
+                    "Potentiation",
+                    "Antagonism",
+                    "Additive effect"
+                ],
+                correct: [0, 1, 3]
+            },
+            
+            // Matching Questions
+            {
+                id: 26,
+                type: "matching",
+                question: "Match the drug name type with its description:",
+                pairs: [
+                    { term: "Trade name", match: "Brand name from manufacturer" },
+                    { term: "Generic name", match: "Original chemical name" },
+                    { term: "Chemical name", match: "Precise molecular structure" },
+                    { term: "Official name", match: "Name assigned by USP" }
+                ]
+            },
+            {
+                id: 27,
+                type: "matching",
+                question: "Match the pharmacokinetic process with its definition:",
+                pairs: [
+                    { term: "Absorption", match: "Movement from site into bloodstream" },
+                    { term: "Distribution", match: "Movement throughout the body" },
+                    { term: "Biotransformation", match: "Chemical alteration in the body" },
+                    { term: "Excretion", match: "Elimination from the body" }
+                ]
+            },
+            {
+                id: 28,
+                type: "matching",
+                question: "Match the autonomic receptor with its effects:",
+                pairs: [
+                    { term: "Alpha-1", match: "Vasoconstriction" },
+                    { term: "Beta-1", match: "Increased heart rate" },
+                    { term: "Beta-2", match: "Bronchodilation" },
+                    { term: "Muscarinic", match: "Decreased heart rate" }
+                ]
+            },
+            {
+                id: 29,
+                type: "matching",
+                question: "Match the drug schedule with its characteristics:",
+                pairs: [
+                    { term: "Schedule I", match: "No accepted medical use" },
+                    { term: "Schedule II", match: "High abuse potential, accepted use" },
+                    { term: "Schedule III", match: "Moderate abuse potential" },
+                    { term: "Schedule V", match: "Low abuse potential" }
+                ]
+            },
+            {
+                id: 30,
+                type: "matching",
+                question: "Match the term with its definition:",
+                pairs: [
+                    { term: "Indication", match: "Therapeutic use for medication" },
+                    { term: "Contraindication", match: "When not to give medication" },
+                    { term: "Action", match: "Intended effect on the body" },
+                    { term: "Toxicity", match: "Risk of health hazard" }
+                ]
+            },
+            
+            // Ordering Questions
+            {
+                id: 31,
+                type: "ordering",
+                question: "Place the following steps of drug passage through the body in correct order:",
+                items: [
+                    "Administration",
+                    "Absorption",
+                    "Distribution",
+                    "Biotransformation",
+                    "Excretion"
+                ],
+                correct: [1, 2, 3, 4, 5]
+            },
+            {
+                id: 32,
+                type: "ordering",
+                question: "Order these routes from fastest to slowest absorption:",
+                items: [
+                    "Intravenous",
+                    "Inhalation",
+                    "Intramuscular",
+                    "Subcutaneous",
+                    "Oral"
+                ],
+                correct: [1, 2, 3, 4, 5]
+            },
+            {
+                id: 33,
+                type: "ordering",
+                question: "Order the rights of medication administration as they typically occur:",
+                items: [
+                    "Right patient",
+                    "Right medication",
+                    "Right dose",
+                    "Right route",
+                    "Right documentation"
+                ],
+                correct: [1, 2, 3, 4, 5]
+            },
+            {
+                id: 34,
+                type: "ordering",
+                question: "Order these drug schedules from highest to lowest abuse potential:",
+                items: [
+                    "Schedule I",
+                    "Schedule II",
+                    "Schedule III",
+                    "Schedule IV",
+                    "Schedule V"
+                ],
+                correct: [1, 2, 3, 4, 5]
+            },
+            {
+                id: 35,
+                type: "ordering",
+                question: "Order the medication action timeline:",
+                items: [
+                    "Onset of action",
+                    "Peak effect",
+                    "Duration of action",
+                    "Termination of action"
+                ],
+                correct: [1, 2, 3, 4]
+            },
+            
+            // More Multiple Choice
+            {
+                id: 36,
+                type: "multiple-choice",
+                question: "What is an iatrogenic response?",
+                options: [
+                    "Expected therapeutic effect",
+                    "Adverse condition inadvertently induced by treatment",
+                    "Allergic reaction",
+                    "Normal side effect"
+                ],
+                correct: 1
+            },
+            {
+                id: 37,
+                type: "multiple-choice",
+                question: "What does idiosyncrasy mean?",
+                options: [
+                    "Common side effect",
+                    "Predictable response",
+                    "Unique response specific to one person",
+                    "Drug allergy"
+                ],
+                correct: 2
+            },
+            {
+                id: 38,
+                type: "multiple-choice",
+                question: "What is the sublingual route?",
+                options: [
+                    "Under the skin",
+                    "Under the tongue",
+                    "Into a vein",
+                    "Into muscle"
+                ],
+                correct: 1
+            },
+            {
+                id: 39,
+                type: "multiple-choice",
+                question: "What does OTC stand for?",
+                options: [
+                    "Oral Therapeutic Care",
+                    "Over-the-counter",
+                    "Ongoing Treatment Control",
+                    "Official Treatment Code"
+                ],
+                correct: 1
+            },
+            {
+                id: 40,
+                type: "multiple-choice",
+                question: "What is synergism?",
+                options: [
+                    "One drug blocking another",
+                    "Two drugs producing effect greater than sum of individual effects",
+                    "Drug causing disease",
+                    "Drug tolerance"
+                ],
+                correct: 1
+            },
+            {
+                id: 41,
+                type: "multiple-choice",
+                question: "What is the first-pass effect?",
+                options: [
+                    "First dose of medication",
+                    "Metabolism of drug by liver before reaching systemic circulation",
+                    "First symptom relief",
+                    "Initial absorption"
+                ],
+                correct: 1
+            },
+            {
+                id: 42,
+                type: "multiple-choice",
+                question: "What does an antagonist do?",
+                options: [
+                    "Activates receptors",
+                    "Blocks receptors",
+                    "Increases drug absorption",
+                    "Enhances drug effects"
+                ],
+                correct: 1
+            },
+            {
+                id: 43,
+                type: "multiple-choice",
+                question: "What is bioavailability?",
+                options: [
+                    "Drug storage location",
+                    "Fraction of administered drug that reaches systemic circulation",
+                    "Time for drug to work",
+                    "Drug manufacturing date"
+                ],
+                correct: 1
+            },
+            {
+                id: 44,
+                type: "multiple-choice",
+                question: "What is a side effect?",
+                options: [
+                    "Intended therapeutic action",
+                    "Any action other than desired action",
+                    "Toxic reaction only",
+                    "Drug interaction"
+                ],
+                correct: 1
+            },
+            {
+                id: 45,
+                type: "multiple-choice",
+                question: "What does MDI stand for?",
+                options: [
+                    "Medical Device Indicator",
+                    "Metered-Dose Inhaler",
+                    "Metabolic Distribution Index",
+                    "Maximum Dose Instruction"
+                ],
+                correct: 1
+            },
+            {
+                id: 46,
+                type: "multiple-choice",
+                question: "What is potentiation?",
+                options: [
+                    "Drug loses effectiveness",
+                    "One drug enhances effect of another",
+                    "Drug causes allergy",
+                    "Drug accumulation"
+                ],
+                correct: 1
+            },
+            {
+                id: 47,
+                type: "multiple-choice",
+                question: "What is the most common unpredictable drug response?",
+                options: [
+                    "Side effect",
+                    "Therapeutic effect",
+                    "Allergic reaction",
+                    "Duration of action"
+                ],
+                correct: 2
+            },
+            {
+                id: 48,
+                type: "multiple-choice",
+                question: "What does cross-tolerance mean?",
+                options: [
+                    "Allergy to multiple drugs",
+                    "Tolerance to other drugs in same class",
+                    "Drug interaction",
+                    "Multiple side effects"
+                ],
+                correct: 1
+            },
+            {
+                id: 49,
+                type: "multiple-choice",
+                question: "What is a cumulative effect?",
+                options: [
+                    "First dose effect",
+                    "Immediate response",
+                    "Increased effect from successive doses",
+                    "Decreased sensitivity"
+                ],
+                correct: 2
+            },
+            {
+                id: 50,
+                type: "multiple-choice",
+                question: "When can an AEMT administer medication?",
+                options: [
+                    "Anytime patient requests",
+                    "When a licensed physician gives direct order or local protocols permit",
+                    "Only in hospital setting",
+                    "Never independently"
+                ],
+                correct: 1
+            }
+        ];
+
+        // Render quiz
+        function renderQuiz() {
+            const quizContent = document.getElementById('quizContent');
+            let html = '';
+            
+            quizData.forEach((q, index) => {
+                html += `<div class="question-block">
+                    <div class="question-header">
+                        <div class="question-number">${q.id}</div>
+                        <div>
+                            <div class="question-text">${q.question}</div>
+                            <span class="question-type">${getQuestionTypeLabel(q.type)}</span>
+                        </div>
+                    </div>
+                    ${renderQuestionContent(q)}
+                </div>`;
+            });
+            
+            quizContent.innerHTML = html;
+        }
+
+        function getQuestionTypeLabel(type) {
+            const labels = {
+                'multiple-choice': 'Multiple Choice',
+                'multiple-select': 'Select All That Apply',
+                'matching': 'Matching',
+                'ordering': 'Put in Order'
+            };
+            return labels[type] || type;
+        }
+
+        function renderQuestionContent(q) {
+            switch(q.type) {
+                case 'multiple-choice':
+                    return renderMultipleChoice(q);
+                case 'multiple-select':
+                    return renderMultipleSelect(q);
+                case 'matching':
+                    return renderMatching(q);
+                case 'ordering':
+                    return renderOrdering(q);
+                default:
+                    return '';
+            }
+        }
+
+        function renderMultipleChoice(q) {
+            let html = '<div class="options">';
+            q.options.forEach((opt, i) => {
+                html += `
+                    <label class="option" onclick="selectOption(this)">
+                        <input type="radio" name="q${q.id}" value="${i}">
+                        ${opt}
+                    </label>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderMultipleSelect(q) {
+            let html = '<div class="options">';
+            q.options.forEach((opt, i) => {
+                html += `
+                    <label class="option" onclick="toggleOption(this)">
+                        <input type="checkbox" name="q${q.id}" value="${i}">
+                        ${opt}
+                    </label>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderMatching(q) {
+            const shuffledMatches = [...q.pairs.map(p => p.match)].sort(() => Math.random() - 0.5);
+            let html = '<div class="matching-container">';
+            q.pairs.forEach((pair, i) => {
+                html += `
+                    <div class="matching-item">
+                        <strong>${pair.term}</strong>
+                        <select name="q${q.id}_${i}">
+                            <option value="">Select match...</option>
+                            ${shuffledMatches.map((match, mi) => 
+                                `<option value="${match}">${match}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderOrdering(q) {
+            const shuffled = [...q.items].sort(() => Math.random() - 0.5);
+            let html = '<div class="ordering-container">';
+            shuffled.forEach((item, i) => {
+                html += `
+                    <div class="ordering-item">
+                        <input type="number" name="q${q.id}_${i}" min="1" max="${q.items.length}" 
+                               placeholder="#" data-item="${item}">
+                        <span>${item}</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function selectOption(element) {
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function toggleOption(element) {
+            element.classList.toggle('selected');
+        }
+
+        function submitQuiz() {
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert('Please enter your name before submitting the quiz.');
+                document.getElementById('studentName').focus();
+                return;
+            }
+
+            let score = 0;
+            const totalQuestions = quizData.length;
+
+            quizData.forEach(q => {
+                if (q.type === 'multiple-choice') {
+                    const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+                    if (selected && parseInt(selected.value) === q.correct) {
+                        score++;
+                    }
+                } else if (q.type === 'multiple-select') {
+                    const selected = Array.from(document.querySelectorAll(`input[name="q${q.id}"]:checked`))
+                        .map(el => parseInt(el.value))
+                        .sort();
+                    if (JSON.stringify(selected) === JSON.stringify(q.correct.sort())) {
+                        score++;
+                    }
+                } else if (q.type === 'matching') {
+                    let allCorrect = true;
+                    q.pairs.forEach((pair, i) => {
+                        const selected = document.querySelector(`select[name="q${q.id}_${i}"]`).value;
+                        if (selected !== pair.match) {
+                            allCorrect = false;
+                        }
+                    });
+                    if (allCorrect) score++;
+                } else if (q.type === 'ordering') {
+                    let allCorrect = true;
+                    const answers = {};
+                    q.items.forEach((item, i) => {
+                        const input = document.querySelector(`input[data-item="${item}"]`);
+                        const order = parseInt(input.value);
+                        if (order !== q.correct[i]) {
+                            allCorrect = false;
+                        }
+                    });
+                    if (allCorrect) score++;
+                }
+            });
+
+            const percentage = ((score / totalQuestions) * 100).toFixed(1);
+            
+            document.getElementById('scoreDisplay').textContent = `${score} / ${totalQuestions}`;
+            document.getElementById('scoreText').textContent = `You scored ${percentage}%`;
+            
+            document.querySelector('.quiz-content').style.display = 'none';
+            document.querySelector('.submit-btn').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            window.scrollTo(0, 0);
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const studentName = document.getElementById('studentName').value;
+            const scoreText = document.getElementById('scoreDisplay').textContent;
+            const percentageText = document.getElementById('scoreText').textContent;
+            
+            // Header
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('CAMP Community College', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(16);
+            doc.text('EMS 181 - Principles of Pharmacology', 105, 30, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'normal');
+            doc.text('Chapter 12 Comprehensive Quiz', 105, 40, { align: 'center' });
+            
+            // Student Info
+            doc.setFontSize(12);
+            doc.text(`Student Name: ${studentName}`, 20, 60);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 70);
+            
+            // Separator line
+            doc.setLineWidth(0.5);
+            doc.line(20, 80, 190, 80);
+            
+            // Score
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text('Quiz Results', 105, 95, { align: 'center' });
+            
+            doc.setFontSize(24);
+            doc.text(`Score: ${scoreText}`, 105, 110, { align: 'center' });
+            
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'normal');
+            doc.text(percentageText, 105, 125, { align: 'center' });
+            
+            // Grade determination
+            const percentage = parseFloat(percentageText.match(/[\d.]+/)[0]);
+            let grade = '';
+            if (percentage >= 90) grade = 'A - Excellent';
+            else if (percentage >= 80) grade = 'B - Good';
+            else if (percentage >= 70) grade = 'C - Satisfactory';
+            else if (percentage >= 60) grade = 'D - Needs Improvement';
+            else grade = 'F - Unsatisfactory';
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Grade: ${grade}`, 105, 140, { align: 'center' });
+            
+            // Footer
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'italic');
+            doc.text('This quiz covers Chapter 12: Principles of Pharmacology', 105, 160, { align: 'center' });
+            doc.text('Topics include drug terminology, pharmacokinetics, pharmacodynamics,', 105, 167, { align: 'center' });
+            doc.text('and medication administration rights', 105, 174, { align: 'center' });
+            
+            // Save
+            doc.save(`${studentName.replace(/\s+/g, '_')}_Pharmacology_Quiz.pdf`);
+        }
+
+        function retakeQuiz() {
+            document.querySelector('.quiz-content').style.display = 'block';
+            document.querySelector('.submit-btn').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            // Clear all answers
+            document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+            document.querySelectorAll('input[type="number"]').forEach(el => el.value = '');
+            document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+            
+            window.scrollTo(0, 0);
+        }
+
+        // Initialize quiz on page load
+        window.onload = () => {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
