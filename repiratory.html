@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NREMT Style Respiratory Emergencies Quiz - CAMP Community College</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- jsPDF for certificate generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Lucide Icons as inline SVG components -->
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Icon Components
+        const FileDown = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+        );
+
+        const CheckCircle = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const XCircle = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const Award = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+        );
+
+        const AlertCircle = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const GripVertical = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="9" cy="5" r="1" fill="currentColor"/>
+                <circle cx="9" cy="12" r="1" fill="currentColor"/>
+                <circle cx="9" cy="19" r="1" fill="currentColor"/>
+                <circle cx="15" cy="5" r="1" fill="currentColor"/>
+                <circle cx="15" cy="12" r="1" fill="currentColor"/>
+                <circle cx="15" cy="19" r="1" fill="currentColor"/>
+            </svg>
+        );
+
+        const NREMTRespiratoryQuiz = () => {
+            const [studentName, setStudentName] = useState('');
+            const [quizStarted, setQuizStarted] = useState(false);
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [showResults, setShowResults] = useState(false);
+            const [score, setScore] = useState(0);
+            const [draggedItem, setDraggedItem] = useState(null);
+            const [orderedAnswers, setOrderedAnswers] = useState({});
+
+            const questions = [
+                {
+                    id: 1,
+                    type: 'multiple-choice',
+                    category: 'Airway Management',
+                    difficulty: 'medium',
+                    question: "A 62-year-old patient with COPD is experiencing acute respiratory distress. His oxygen saturation is 88% on room air, respiratory rate is 28, and he is using accessory muscles. He has a history of CO2 retention. What is your BEST initial action?",
+                    options: [
+                        "Administer high-flow oxygen at 15 L/min via non-rebreather mask",
+                        "Apply oxygen at 2-4 L/min via nasal cannula and monitor response",
+                        "Begin bag-mask ventilation immediately",
+                        "Withhold oxygen and transport rapidly"
+                    ],
+                    correct: 1,
+                    rationale: "For COPD patients with hypoxic drive, start with low-flow oxygen (2-4 L/min) and titrate to maintain SpO2 90-94%. Monitor closely for respiratory depression while avoiding hypoxemia."
+                },
+                {
+                    id: 2,
+                    type: 'multiple-response',
+                    category: 'Patient Assessment',
+                    difficulty: 'medium',
+                    question: "You are assessing a patient with respiratory distress. Which of the following are signs of impending respiratory failure? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Altered mental status or confusion",
+                        "Severe cyanosis despite oxygen therapy",
+                        "Shallow, irregular respirations",
+                        "Speaking in full sentences",
+                        "Absent or diminished breath sounds",
+                        "Nasal flaring and retractions",
+                        "Strong, regular pulse at 72 bpm"
+                    ],
+                    correct: [0, 1, 2, 4, 5],
+                    rationale: "Signs of impending respiratory failure include altered mental status, severe cyanosis, shallow/irregular breathing, absent/diminished breath sounds, and increased work of breathing (nasal flaring, retractions). Full sentences and normal pulse suggest adequate compensation."
+                },
+                {
+                    id: 3,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "You respond to a 45-year-old female with sudden onset dyspnea and sharp chest pain that worsens with deep breathing. She had knee surgery 2 weeks ago. Vital signs: BP 98/60, HR 118, RR 32, SpO2 89%. Breath sounds are clear bilaterally. What condition should you MOST suspect?",
+                    options: [
+                        "Acute asthma exacerbation",
+                        "Spontaneous pneumothorax",
+                        "Pulmonary embolism",
+                        "Acute pulmonary edema"
+                    ],
+                    correct: 2,
+                    rationale: "Recent surgery, sudden onset, pleuritic chest pain, tachycardia, tachypnea, and hypoxia with clear breath sounds suggest pulmonary embolism. Post-surgical immobility is a major risk factor."
+                },
+                {
+                    id: 4,
+                    type: 'ordered-response',
+                    category: 'Airway Management',
+                    difficulty: 'medium',
+                    question: "Place the following steps for administering a metered-dose inhaler (MDI) with spacer in the CORRECT order:",
+                    options: [
+                        "Have patient exhale completely",
+                        "Shake inhaler and attach to spacer",
+                        "Instruct patient to breathe in slowly and deeply",
+                        "Have patient hold breath for 10 seconds",
+                        "Press canister to release medication into spacer",
+                        "Place spacer mouthpiece in patient's mouth"
+                    ],
+                    correctOrder: [1, 0, 5, 2, 4, 3],
+                    rationale: "Correct sequence: Shake and attach → Patient exhales → Place in mouth → Breathe slowly → Release medication → Hold breath for 10 seconds for optimal medication delivery."
+                },
+                {
+                    id: 5,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'medium',
+                    question: "A patient with chronic emphysema has developed polycythemia. This compensatory response occurs because:",
+                    options: [
+                        "Decreased oxygen delivery stimulates red blood cell production",
+                        "Increased carbon dioxide levels suppress white blood cell production",
+                        "Lung damage causes bone marrow hyperplasia",
+                        "Surfactant destruction triggers erythropoietin release"
+                    ],
+                    correct: 0,
+                    rationale: "Chronic hypoxemia in emphysema triggers increased erythropoietin production, leading to polycythemia as the body attempts to compensate for poor oxygen delivery by producing more red blood cells."
+                },
+                {
+                    id: 6,
+                    type: 'multiple-response',
+                    category: 'Special Populations',
+                    difficulty: 'medium',
+                    question: "A 3-year-old presents with high fever (103°F), drooling, stridor, and is in tripod position. Which actions are APPROPRIATE? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Place patient supine for airway examination",
+                        "Allow patient to remain in position of comfort",
+                        "Administer high-flow oxygen by blow-by if needed",
+                        "Attempt to visualize the airway with a tongue depressor",
+                        "Transport immediately with ALS intercept if available",
+                        "Have parent hold oxygen mask near child's face",
+                        "Give oral fluids to prevent dehydration"
+                    ],
+                    correct: [1, 2, 4, 5],
+                    rationale: "Suspected epiglottitis requires maintaining position of comfort, avoiding agitation, gentle oxygen delivery, and immediate transport. Never examine the airway or lay patient supine as this may cause complete obstruction."
+                },
+                {
+                    id: 7,
+                    type: 'multiple-choice',
+                    category: 'Airway Management',
+                    difficulty: 'hard',
+                    question: "You are ventilating a patient with status asthmaticus using a bag-mask device. During ventilations, you notice increasing resistance. Which technique is MOST appropriate?",
+                    options: [
+                        "Increase ventilation rate to 24 breaths per minute",
+                        "Use slow, gentle breaths with prolonged expiratory time",
+                        "Deliver rapid, forceful ventilations to overcome resistance",
+                        "Switch to mouth-to-mask ventilation for better seal"
+                    ],
+                    correct: 1,
+                    rationale: "Status asthmaticus causes severe bronchospasm and air trapping. Use slow, gentle breaths with prolonged expiratory time to prevent barotrauma and auto-PEEP. Rapid ventilations worsen air trapping."
+                },
+                {
+                    id: 8,
+                    type: 'multiple-response',
+                    category: 'Pharmacology',
+                    difficulty: 'medium',
+                    question: "Your patient with acute asthma exacerbation has their prescribed albuterol inhaler. Which findings would be CONTRAINDICATIONS to assisting with the inhaler? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Patient unable to coordinate inhalation",
+                        "Heart rate of 118 beats per minute",
+                        "Inhaler is expired",
+                        "Patient already took maximum prescribed dose",
+                        "Blood pressure of 146/88 mmHg",
+                        "Patient has no prescription for the inhaler",
+                        "Respiratory rate of 28 breaths per minute"
+                    ],
+                    correct: [0, 2, 3, 5],
+                    rationale: "Contraindications include inability to coordinate inhalation, expired medication, maximum dose reached, and no valid prescription. Tachycardia and tachypnea are expected findings in asthma exacerbation."
+                },
+                {
+                    id: 9,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "A 58-year-old with pulmonary edema is sitting upright, using accessory muscles, with pink frothy sputum. BP 168/94, HR 110, RR 36, SpO2 86%. After high-flow oxygen, what intervention would be MOST beneficial?",
+                    options: [
+                        "Immediate bag-mask ventilation",
+                        "CPAP at 5-10 cm H2O",
+                        "Nebulized albuterol treatment",
+                        "Trendelenburg positioning"
+                    ],
+                    correct: 1,
+                    rationale: "CPAP is highly effective for cardiogenic pulmonary edema, improving oxygenation by increasing intrathoracic pressure, reducing preload and afterload, and preventing alveolar collapse. Start at 5-10 cm H2O pressure."
+                },
+                {
+                    id: 10,
+                    type: 'ordered-response',
+                    category: 'Patient Assessment',
+                    difficulty: 'medium',
+                    question: "During primary assessment of a respiratory distress patient, arrange these priorities in CORRECT order:",
+                    options: [
+                        "Assess circulation and perfusion",
+                        "Form general impression and ensure scene safety",
+                        "Determine chief complaint and assess airway",
+                        "Provide appropriate oxygen therapy",
+                        "Assess respiratory rate, depth, and effort",
+                        "Make transport decision"
+                    ],
+                    correctOrder: [1, 2, 4, 3, 0, 5],
+                    rationale: "Primary survey sequence: Scene safety/general impression → Chief complaint/airway → Assess breathing → Provide oxygen → Assess circulation → Transport decision."
+                },
+                {
+                    id: 11,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'easy',
+                    question: "Type II alveolar cells serve what primary function?",
+                    options: [
+                        "Facilitate gas exchange across the membrane",
+                        "Produce surfactant to reduce surface tension",
+                        "Filter particulates from inspired air",
+                        "Regulate bronchial smooth muscle tone"
+                    ],
+                    correct: 1,
+                    rationale: "Type II alveolar cells produce surfactant, which reduces surface tension in alveoli, preventing collapse during expiration and making it easier for alveoli to expand during inspiration."
+                },
+                {
+                    id: 12,
+                    type: 'multiple-response',
+                    category: 'Medical Knowledge',
+                    difficulty: 'hard',
+                    question: "Which conditions are characterized by 'wet lungs' rather than 'dry lungs'? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Emphysema",
+                        "Acute pulmonary edema",
+                        "Chronic bronchitis",
+                        "Pneumonia",
+                        "Asthma",
+                        "Pleural effusion",
+                        "Pneumothorax"
+                    ],
+                    correct: [1, 3, 5],
+                    rationale: "'Wet lungs' have fluid accumulation: pulmonary edema, pneumonia, pleural effusion. 'Dry lungs' have obstruction/air trapping: emphysema, chronic bronchitis, asthma, pneumothorax."
+                },
+                {
+                    id: 13,
+                    type: 'multiple-choice',
+                    category: 'Special Populations',
+                    difficulty: 'medium',
+                    question: "A 6-month-old infant has nasal flaring, grunting, intercostal retractions, and audible wheezing. The mother states these symptoms began 2 days ago with cold-like symptoms. You should MOST suspect:",
+                    options: [
+                        "Croup (laryngotracheobronchitis)",
+                        "Bronchiolitis from RSV",
+                        "Bacterial pneumonia",
+                        "Foreign body aspiration"
+                    ],
+                    correct: 1,
+                    rationale: "Bronchiolitis (commonly RSV) typically affects infants <1 year, begins with upper respiratory infection symptoms, and progresses to wheezing, retractions, and respiratory distress over 2-3 days."
+                },
+                {
+                    id: 14,
+                    type: 'multiple-choice',
+                    category: 'Airway Management',
+                    difficulty: 'medium',
+                    question: "For most respiratory emergencies requiring oxygen therapy, the goal SpO2 range is:",
+                    options: [
+                        "88-92%",
+                        "90-94%",
+                        "94-99%",
+                        "100%"
+                    ],
+                    correct: 2,
+                    rationale: "Target SpO2 is 94-99% for most patients (94% for COPD patients). Oxygen saturation of 100% should be avoided as hyperoxia can be harmful. Titrate oxygen to achieve appropriate saturation."
+                },
+                {
+                    id: 15,
+                    type: 'multiple-response',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "A 70-year-old presents with sudden severe dyspnea. You note JVD, peripheral edema, crackles in all lung fields, and frothy pink sputum. Which interventions are APPROPRIATE? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Position patient upright or in position of comfort",
+                        "Administer high-flow oxygen",
+                        "Consider CPAP if available and patient tolerates",
+                        "Encourage patient to lie supine",
+                        "Limit IV fluid administration",
+                        "Administer nebulized albuterol",
+                        "Transport rapidly with ALS intercept"
+                    ],
+                    correct: [0, 1, 2, 4, 6],
+                    rationale: "Acute pulmonary edema management: upright positioning, high-flow O2, CPAP, limit fluids, rapid transport. Avoid supine position. Albuterol is not indicated for pulmonary edema."
+                },
+                {
+                    id: 16,
+                    type: 'multiple-choice',
+                    category: 'Patient Assessment',
+                    difficulty: 'medium',
+                    question: "You auscultate fine crackling sounds at the bases of the lungs during inspiration that do not clear with coughing. These sounds are BEST described as:",
+                    options: [
+                        "Rhonchi indicating mucus in airways",
+                        "Crackles (rales) suggesting fluid in alveoli",
+                        "Wheezes indicating bronchospasm",
+                        "Stridor indicating upper airway obstruction"
+                    ],
+                    correct: 1,
+                    rationale: "Crackles (formerly called rales) are fine, discontinuous sounds heard during inspiration caused by fluid in alveoli or sudden opening of collapsed airways. Common in pulmonary edema and pneumonia."
+                },
+                {
+                    id: 17,
+                    type: 'ordered-response',
+                    category: 'Airway Management',
+                    difficulty: 'hard',
+                    question: "A patient's respiratory effort is failing. Arrange the escalation of ventilatory support in CORRECT order:",
+                    options: [
+                        "Bag-mask ventilation with high-flow oxygen",
+                        "Non-rebreather mask at 15 L/min",
+                        "CPAP/BiPAP therapy",
+                        "Nasal cannula at 2-4 L/min",
+                        "Advanced airway insertion with mechanical ventilation"
+                    ],
+                    correctOrder: [3, 1, 2, 0, 4],
+                    rationale: "Escalation: Low-flow O2 → High-flow O2 → CPAP/BiPAP for failing but adequate effort → Bag-mask for inadequate effort → Advanced airway for complete failure."
+                },
+                {
+                    id: 18,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'hard',
+                    question: "A 22-year-old tall, thin male has sudden onset sharp chest pain and dyspnea. You note decreased breath sounds on the right side and hyperresonance to percussion. Trachea is midline. This MOST likely represents:",
+                    options: [
+                        "Tension pneumothorax requiring immediate decompression",
+                        "Simple pneumothorax requiring oxygen and transport",
+                        "Massive hemothorax requiring fluid resuscitation",
+                        "Pulmonary contusion from unrecognized trauma"
+                    ],
+                    correct: 1,
+                    rationale: "Spontaneous pneumothorax in tall, thin males (Marfan-type habitus). Midline trachea indicates simple pneumothorax. Tension pneumothorax shows tracheal deviation, severe hypotension, and JVD (late signs)."
+                },
+                {
+                    id: 19,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'easy',
+                    question: "What is the characteristic sound associated with pertussis (whooping cough)?",
+                    options: [
+                        "A seal-bark cough during expiration",
+                        "A 'whoop' sound during inspiration after coughing spell",
+                        "High-pitched stridor during inspiration",
+                        "Grunting sounds with each expiration"
+                    ],
+                    correct: 1,
+                    rationale: "Pertussis causes severe coughing spells lasting over a minute, followed by a characteristic 'whoop' sound during forceful inspiration as the patient gasps for air."
+                },
+                {
+                    id: 20,
+                    type: 'multiple-response',
+                    category: 'Pharmacology',
+                    difficulty: 'medium',
+                    question: "When administering nebulized bronchodilator therapy, which practices are CORRECT? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Oxygen flow rate should be at least 6 L/min for optimal particle size",
+                        "Treatment typically takes 15-20 minutes to complete",
+                        "Patient should breathe normally through mouth",
+                        "Nebulizer can be connected to mouthpiece, mask, or tracheostomy collar",
+                        "Monitor for side effects including tachycardia and tremors",
+                        "Patient should hold breath as long as possible between breaths",
+                        "Continue treatment until all medication is aerosolized"
+                    ],
+                    correct: [0, 2, 3, 4, 6],
+                    rationale: "Correct practices: ≥6 L/min O2 flow, normal breathing through mouth, various delivery methods, monitor for side effects, continue until medication gone (typically 5-10 minutes, not 15-20)."
+                },
+                {
+                    id: 21,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'medium',
+                    question: "A patient with known bee sting allergy was stung 15 minutes ago and now has facial swelling, urticaria, and audible wheezing. BP 88/54, HR 124, RR 32. After ABCs, your NEXT priority is:",
+                    options: [
+                        "Administer aspirin for potential cardiac involvement",
+                        "Assist patient with epinephrine auto-injector",
+                        "Administer oral diphenhydramine",
+                        "Perform rapid head-to-toe assessment"
+                    ],
+                    correct: 1,
+                    rationale: "Anaphylaxis with hypotension and airway compromise requires immediate epinephrine administration. This is the priority medication after ensuring airway/breathing/circulation are addressed."
+                },
+                {
+                    id: 22,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "A COPD patient on home oxygen at 2 L/min is in severe distress with SpO2 of 78%. Despite your concerns about hypoxic drive, you should:",
+                    options: [
+                        "Maintain home oxygen at 2 L/min to prevent respiratory depression",
+                        "Increase oxygen to maintain SpO2 88-94% and monitor closely",
+                        "Withhold oxygen and begin immediate bag-mask ventilation",
+                        "Administer oxygen at 15 L/min via non-rebreather mask"
+                    ],
+                    correct: 1,
+                    rationale: "Never withhold oxygen from hypoxic patients. For COPD, titrate oxygen to SpO2 88-94% (not 78%). Risk of respiratory depression is far less than risk of severe hypoxia. Monitor closely for decreasing respiratory drive."
+                },
+                {
+                    id: 23,
+                    type: 'multiple-response',
+                    category: 'Airway Management',
+                    difficulty: 'medium',
+                    question: "A child with a tracheostomy is in respiratory distress. Which actions are APPROPRIATE? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Attempt to suction through the tracheostomy tube",
+                        "Replace tube immediately if obstructed and cannot clear",
+                        "Administer oxygen directly to the tracheostomy",
+                        "Cover the tracheostomy and ventilate via mouth",
+                        "Place patient in position of comfort",
+                        "Assess for tube dislodgement or mucus plugging",
+                        "Remove tracheostomy and provide oral airway"
+                    ],
+                    correct: [0, 1, 2, 4, 5],
+                    rationale: "Appropriate actions: suction, replace if necessary, direct oxygen to trach, position comfort, assess for problems. Do not ventilate via mouth while trach is in place or remove trach unnecessarily."
+                },
+                {
+                    id: 24,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'hard',
+                    question: "A patient is hyperventilating with a rate of 40 breaths per minute without physiologic need. This will result in:",
+                    options: [
+                        "Respiratory acidosis from CO2 retention",
+                        "Respiratory alkalosis from excessive CO2 elimination",
+                        "Metabolic acidosis from lactic acid buildup",
+                        "Metabolic alkalosis from bicarbonate retention"
+                    ],
+                    correct: 1,
+                    rationale: "Hyperventilation without physiologic demand causes excessive CO2 elimination (hypocapnia), leading to respiratory alkalosis. This can cause symptoms of hyperventilation syndrome (paresthesias, dizziness, chest tightness)."
+                },
+                {
+                    id: 25,
+                    type: 'multiple-response',
+                    category: 'Infection Control',
+                    difficulty: 'easy',
+                    question: "When treating a patient with suspected COVID-19, which PPE components are REQUIRED? SELECT ALL THAT APPLY.",
+                    options: [
+                        "N95 or higher-level respirator",
+                        "Standard surgical mask",
+                        "Eye protection (goggles or face shield)",
+                        "Disposable examination gloves",
+                        "Disposable gown",
+                        "Hair covering",
+                        "Shoe covers"
+                    ],
+                    correct: [0, 2, 3, 4],
+                    rationale: "Required COVID-19 PPE: N95 or higher respirator (not surgical mask), eye protection, gloves, and gown. Hair covers and shoe covers are not routinely required for COVID-19 patients."
+                },
+                {
+                    id: 26,
+                    type: 'multiple-choice',
+                    category: 'Patient Assessment',
+                    difficulty: 'medium',
+                    question: "You are assessing a patient with known lung cancer presenting with dyspnea. You hear decreased breath sounds over the right lower lobe. This MOST likely indicates:",
+                    options: [
+                        "Bronchospasm from reactive airway disease",
+                        "Pleural effusion with fluid accumulation",
+                        "Pneumonia with consolidation",
+                        "Emphysema with hyperinflation"
+                    ],
+                    correct: 1,
+                    rationale: "Pleural effusion (fluid outside lung) is common in lung cancer patients. Fluid pushes lung away from chest wall, causing decreased breath sounds. Patients typically prefer sitting upright."
+                },
+                {
+                    id: 27,
+                    type: 'ordered-response',
+                    category: 'Emergency Management',
+                    difficulty: 'medium',
+                    question: "For a patient with severe asthma exacerbation, arrange these treatment priorities in CORRECT order:",
+                    options: [
+                        "Establish IV access",
+                        "Position patient upright for comfort",
+                        "Assess and monitor vital signs",
+                        "Administer high-flow oxygen",
+                        "Assist with bronchodilator administration",
+                        "Prepare for possible ventilatory support"
+                    ],
+                    correctOrder: [1, 3, 4, 2, 0, 5],
+                    rationale: "Treatment sequence: Position comfort → High-flow O2 → Assist with bronchodilator → Monitor vitals → IV access → Prepare for possible ventilation if status deteriorates."
+                },
+                {
+                    id: 28,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'medium',
+                    question: "A 78-year-old presents with fever, productive cough with purulent sputum, and pleuritic chest pain. Crackles are heard in the right lower lobe. These findings are MOST consistent with:",
+                    options: [
+                        "Acute bronchitis",
+                        "Pulmonary embolism",
+                        "Pneumonia",
+                        "Pleural effusion"
+                    ],
+                    correct: 2,
+                    rationale: "Pneumonia presents with fever, productive cough with purulent sputum, pleuritic chest pain, and localized crackles. Young children and older adults are at greatest risk."
+                },
+                {
+                    id: 29,
+                    type: 'multiple-response',
+                    category: 'Special Populations',
+                    difficulty: 'medium',
+                    question: "A child with suspected croup requires which management approaches? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Aggressive airway examination with laryngoscope",
+                        "Administration of humidified oxygen if available",
+                        "Keep child calm and allow position of comfort",
+                        "Separate child from parents to facilitate assessment",
+                        "Consider nebulized epinephrine per protocol",
+                        "Immediate intubation for stridor",
+                        "Avoid unnecessary agitation of the child"
+                    ],
+                    correct: [1, 2, 4, 6],
+                    rationale: "Croup management: humidified oxygen, position of comfort, keep calm (parent nearby), avoid agitation, nebulized epinephrine if severe. Never aggressively examine airway or separate from parents unnecessarily."
+                },
+                {
+                    id: 30,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'hard',
+                    question: "A worker was exposed to chlorine gas (highly water-soluble). What presentation would you MOST expect?",
+                    options: [
+                        "Delayed pulmonary edema developing 12-24 hours later",
+                        "Immediate upper airway swelling and irritation",
+                        "Systemic cyanide poisoning symptoms",
+                        "Lower airway bronchospasm only"
+                    ],
+                    correct: 1,
+                    rationale: "Highly water-soluble gases (chlorine, ammonia) cause immediate upper airway swelling and irritation. Less water-soluble gases (phosgene, nitrogen dioxide) may cause delayed pulmonary edema up to 24 hours later."
+                },
+                {
+                    id: 31,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "You are managing a patient who aspirated vomit. Which approach is MOST appropriate?",
+                    options: [
+                        "Position supine to facilitate airway visualization",
+                        "Aggressively suction and prepare for airway compromise",
+                        "Withhold oxygen to prevent further aspiration",
+                        "Induce vomiting to clear remaining gastric contents"
+                    ],
+                    correct: 1,
+                    rationale: "Aspiration has high mortality. Aggressively monitor airway patency, suction as needed, and prepare for airway control. Position patient appropriately (recovery position if decreased LOC, upright if responsive). Never induce vomiting."
+                },
+                {
+                    id: 32,
+                    type: 'multiple-response',
+                    category: 'Airway Management',
+                    difficulty: 'hard',
+                    question: "When administering CPAP therapy, which statements are CORRECT? SELECT ALL THAT APPLY.",
+                    options: [
+                        "CPAP increases intrathoracic pressure",
+                        "Success is directly related to increasing respiratory rate",
+                        "CPAP is contraindicated in pneumothorax",
+                        "Typical pressure setting is 5-10 cm H2O",
+                        "Patient must be alert and able to protect airway",
+                        "CPAP should be applied to all respiratory distress patients",
+                        "Monitor gas supply vigilantly as tank can empty quickly"
+                    ],
+                    correct: [0, 2, 3, 4, 6],
+                    rationale: "CPAP facts: increases intrathoracic pressure, contraindicated in pneumothorax, 5-10 cm H2O pressure, requires alert patient, monitor gas supply. Success is INVERSELY related to respiratory rate (decreasing rate = success)."
+                },
+                {
+                    id: 33,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'medium',
+                    question: "A 28-year-old is hyperventilating with tingling in hands/feet and carpopedal spasm. Vital signs are normal except RR of 36. No medical history. Your BEST approach is:",
+                    options: [
+                        "Have patient breathe into paper bag",
+                        "Provide oxygen and psychological support, rule out serious causes",
+                        "Administer nebulized albuterol",
+                        "Apply CPAP at 10 cm H2O"
+                    ],
+                    correct: 1,
+                    rationale: "Hyperventilation can indicate life-threatening illness or panic attack. Always provide oxygen, rule out serious causes (PE, MI, sepsis), and provide psychological support. Never use paper bag (dangerous if serious cause). Paresthesias are from respiratory alkalosis."
+                },
+                {
+                    id: 34,
+                    type: 'multiple-choice',
+                    category: 'Airway Management',
+                    difficulty: 'easy',
+                    question: "A conscious adult with complete airway obstruction should receive:",
+                    options: [
+                        "Back blows followed by chest compressions",
+                        "Abdominal thrusts until obstruction is relieved",
+                        "Immediate finger sweep of the mouth",
+                        "Blind finger sweeps alternating with bag-mask ventilation"
+                    ],
+                    correct: 1,
+                    rationale: "Conscious adult with complete obstruction: Perform abdominal thrusts (Heimlich maneuver) until obstruction is relieved or patient becomes unconscious. Never perform blind finger sweeps."
+                },
+                {
+                    id: 35,
+                    type: 'multiple-choice',
+                    category: 'Patient Assessment',
+                    difficulty: 'medium',
+                    question: "A peak flowmeter is used to measure:",
+                    options: [
+                        "Oxygen saturation in arterial blood",
+                        "Carbon dioxide levels in exhaled breath",
+                        "Maximum rate of forced expiration",
+                        "Tidal volume during normal breathing"
+                    ],
+                    correct: 2,
+                    rationale: "Peak flowmeter measures peak expiratory flow rate (PEFR) - the maximum rate a patient can forcefully exhale. Used to assess severity of asthma exacerbations and response to treatment."
+                },
+                {
+                    id: 36,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "A patient with acute pulmonary edema is deteriorating despite high-flow oxygen and CPAP. Respiratory rate has increased to 42, and the patient is becoming confused. What is your NEXT action?",
+                    options: [
+                        "Increase CPAP pressure to 15 cm H2O",
+                        "Remove CPAP and begin bag-mask ventilation",
+                        "Administer nebulized albuterol",
+                        "Position patient supine to improve ventilation"
+                    ],
+                    correct: 1,
+                    rationale: "Increasing respiratory rate and altered mental status indicate CPAP failure. When CPAP fails (increasing RR, decreased mental status), remove device and begin bag-mask ventilation. Success with CPAP shows DECREASING respiratory rate."
+                },
+                {
+                    id: 37,
+                    type: 'multiple-choice',
+                    category: 'Patient Assessment',
+                    difficulty: 'easy',
+                    question: "A barrel chest appearance is characteristically associated with:",
+                    options: [
+                        "Acute asthma exacerbation",
+                        "Chronic emphysema/COPD",
+                        "Pneumonia",
+                        "Pulmonary embolism"
+                    ],
+                    correct: 1,
+                    rationale: "Barrel chest (increased anterior-posterior diameter) is characteristic of chronic emphysema/COPD due to hyperinflation and air trapping over time. Not seen in acute conditions."
+                },
+                {
+                    id: 38,
+                    type: 'multiple-choice',
+                    category: 'Patient Assessment',
+                    difficulty: 'medium',
+                    question: "Patients with COPD often breathe through pursed lips because this technique:",
+                    options: [
+                        "Increases oxygen absorption in the alveoli",
+                        "Maintains positive pressure to prevent airway collapse",
+                        "Stimulates the hypoxic drive",
+                        "Reduces carbon dioxide production"
+                    ],
+                    correct: 1,
+                    rationale: "Pursed-lip breathing creates positive pressure during expiration, helping keep airways open longer and preventing premature collapse of small airways, improving gas exchange and reducing air trapping."
+                },
+                {
+                    id: 39,
+                    type: 'multiple-choice',
+                    category: 'Patient Assessment',
+                    difficulty: 'medium',
+                    question: "Stridor is BEST described as:",
+                    options: [
+                        "Whistling sound during expiration from bronchospasm",
+                        "High-pitched sound during inspiration from upper airway obstruction",
+                        "Crackling sounds from fluid in alveoli",
+                        "Low-pitched snoring sound from secretions"
+                    ],
+                    correct: 1,
+                    rationale: "Stridor is a high-pitched, harsh sound heard during inspiration indicating upper airway obstruction (croup, epiglottitis, foreign body, anaphylaxis). This is an ominous sign requiring immediate attention."
+                },
+                {
+                    id: 40,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'hard',
+                    question: "Auto-PEEP in COPD patients refers to:",
+                    options: [
+                        "Automatic positive end-expiratory pressure from mechanical ventilators",
+                        "Intrinsic positive pressure from incomplete exhalation and air trapping",
+                        "Artificially created positive pressure from CPAP devices",
+                        "Positive pressure generated by pursed-lip breathing"
+                    ],
+                    correct: 1,
+                    rationale: "Auto-PEEP (intrinsic PEEP) occurs when patients cannot fully exhale before next breath, trapping air and creating positive pressure in lungs. Common in COPD with bronchospasm and airway collapse. Can impair venous return."
+                },
+                {
+                    id: 41,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'medium',
+                    question: "Cystic fibrosis is BEST described as:",
+                    options: [
+                        "Acquired respiratory infection from environmental exposure",
+                        "Genetic disorder affecting lungs and digestive system",
+                        "Autoimmune condition causing bronchospasm",
+                        "Age-related degenerative lung disease"
+                    ],
+                    correct: 1,
+                    rationale: "Cystic fibrosis is a genetic disorder affecting lungs and digestive system, causing thick mucus production leading to respiratory infections and digestive problems. Often fatal in childhood, though treatments have extended life expectancy."
+                },
+                {
+                    id: 42,
+                    type: 'multiple-response',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "A patient with suspected tension pneumothorax shows severe respiratory distress, hypotension, JVD, and tracheal deviation. Which interventions should you perform? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Administer high-flow oxygen immediately",
+                        "Position patient supine",
+                        "Prepare for immediate transport or ALS intercept",
+                        "Apply CPAP to improve oxygenation",
+                        "Avoid positive pressure ventilation if possible",
+                        "Perform needle decompression if trained and authorized",
+                        "Request air medical transport for extended scene time"
+                    ],
+                    correct: [0, 2, 5],
+                    rationale: "Tension pneumothorax requires: high-flow O2, immediate transport/ALS, possible needle decompression if authorized. Avoid CPAP (worsens pneumothorax). Positive pressure ventilation may be necessary despite risks. Position upright if conscious. Rapid transport is priority."
+                },
+                {
+                    id: 43,
+                    type: 'ordered-response',
+                    category: 'Airway Management',
+                    difficulty: 'medium',
+                    question: "A patient in respiratory arrest requires immediate intervention. Place these steps in CORRECT order:",
+                    options: [
+                        "Assess for return of spontaneous breathing",
+                        "Begin bag-mask ventilation with high-flow oxygen",
+                        "Ensure open airway using appropriate maneuver",
+                        "Consider advanced airway if ventilation inadequate",
+                        "Call for ALS backup",
+                        "Attach pulse oximeter and capnography if available"
+                    ],
+                    correctOrder: [2, 1, 5, 4, 0, 3],
+                    rationale: "Respiratory arrest sequence: Open airway → Begin bag-mask ventilation with O2 → Monitor (pulse ox, capnography) → Call ALS → Assess for spontaneous breathing → Consider advanced airway if needed."
+                },
+                {
+                    id: 44,
+                    type: 'multiple-choice',
+                    category: 'Pharmacology',
+                    difficulty: 'medium',
+                    question: "After administering a beta-agonist bronchodilator, you should monitor for which common side effect?",
+                    options: [
+                        "Bradycardia and hypotension",
+                        "Tachycardia and tremors",
+                        "Respiratory depression",
+                        "Bronchospasm and wheezing"
+                    ],
+                    correct: 1,
+                    rationale: "Beta-agonist bronchodilators (albuterol) commonly cause tachycardia, nervousness, and muscle tremors due to sympathomimetic effects. Monitor heart rate and reassure patient these are expected side effects."
+                },
+                {
+                    id: 45,
+                    type: 'multiple-response',
+                    category: 'Infection Control',
+                    difficulty: 'easy',
+                    question: "Which practices help prevent transmission of respiratory infections? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Frequent handwashing for at least 20 seconds",
+                        "Wearing appropriate PPE for suspected cases",
+                        "Maintaining current vaccinations including flu vaccine",
+                        "Reusing N95 respirators between calls",
+                        "Cleaning and disinfecting equipment after each use",
+                        "Wearing HEPA respirator during aerosol-generating procedures",
+                        "Avoiding PPE to maintain patient rapport"
+                    ],
+                    correct: [0, 1, 2, 4, 5],
+                    rationale: "Infection prevention: frequent handwashing, appropriate PPE, current vaccinations, equipment disinfection, HEPA respirator for aerosol procedures. Never reuse single-use PPE or avoid PPE."
+                },
+                {
+                    id: 46,
+                    type: 'multiple-choice',
+                    category: 'Patient Assessment',
+                    difficulty: 'easy',
+                    question: "Tripod positioning in a respiratory patient indicates:",
+                    options: [
+                        "Mild respiratory distress requiring only oxygen",
+                        "Severe respiratory distress and increased work of breathing",
+                        "Cardiac chest pain radiating to the arms",
+                        "Patient preference for comfort only"
+                    ],
+                    correct: 1,
+                    rationale: "Tripod positioning (sitting upright, leaning forward, hands on knees) indicates severe respiratory distress. Patient uses this position to maximize chest expansion and engage accessory muscles. This is an ominous sign."
+                },
+                {
+                    id: 47,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'medium',
+                    question: "The destruction of pulmonary surfactant results in:",
+                    options: [
+                        "Increased surface tension making alveoli harder to expand",
+                        "Decreased oxygen production in the lungs",
+                        "Increased carbon dioxide retention",
+                        "Improved gas exchange"
+                    ],
+                    correct: 0,
+                    rationale: "Surfactant reduces surface tension in alveoli. Without surfactant (as in emphysema, ARDS), surface tension increases, making alveoli difficult to expand and prone to collapse, severely impairing gas exchange."
+                },
+                {
+                    id: 48,
+                    type: 'multiple-choice',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "You are transporting a patient with severe asthma who suddenly becomes silent with barely audible breath sounds despite continued high work of breathing. This 'silent chest' indicates:",
+                    options: [
+                        "Improvement as bronchospasm is resolving",
+                        "Critical worsening - impending respiratory arrest",
+                        "Patient has fallen asleep from exhaustion",
+                        "Proper response to bronchodilator therapy"
+                    ],
+                    correct: 1,
+                    rationale: "Silent chest in severe asthma is ominous - indicates critical airway obstruction with minimal air movement despite effort. This is pre-arrest state requiring immediate aggressive intervention: consider bag-mask ventilation, call for ALS, prepare for arrest."
+                },
+                {
+                    id: 49,
+                    type: 'multiple-choice',
+                    category: 'Medical Knowledge',
+                    difficulty: 'hard',
+                    question: "Respiratory acidosis results from:",
+                    options: [
+                        "Hyperventilation causing excessive CO2 elimination",
+                        "Hypoventilation causing CO2 retention",
+                        "Metabolic production of lactic acid",
+                        "Excessive bicarbonate loss"
+                    ],
+                    correct: 1,
+                    rationale: "Respiratory acidosis occurs when hypoventilation causes CO2 retention. Excess CO2 combines with water to form carbonic acid, lowering blood pH. Causes include impaired lung function, mechanical breathing problems, or reduced respiratory drive."
+                },
+                {
+                    id: 50,
+                    type: 'multiple-response',
+                    category: 'Emergency Management',
+                    difficulty: 'hard',
+                    question: "You respond to a 55-year-old with sudden dyspnea. Physical exam reveals JVD, peripheral edema, crackles in all lung fields, and use of accessory muscles. BP 178/100, HR 116, RR 32, SpO2 88%. Which conditions should be in your differential diagnosis? SELECT ALL THAT APPLY.",
+                    options: [
+                        "Acute pulmonary edema from heart failure",
+                        "Pneumonia",
+                        "Status asthmaticus",
+                        "Cardiogenic shock",
+                        "COPD exacerbation",
+                        "Cor pulmonale",
+                        "Pulmonary embolism"
+                    ],
+                    correct: [0, 3, 5],
+                    rationale: "JVD + peripheral edema + diffuse crackles + hypertension = fluid overload. This presentation suggests acute pulmonary edema from heart failure, possibly progressing to cardiogenic shock. Cor pulmonale (right heart failure from lung disease) is also possible. Pneumonia, asthma, COPD, and PE don't typically present with JVD and peripheral edema."
+                }
+            ];
+
+            const handleStartQuiz = () => {
+                if (studentName.trim()) {
+                    setQuizStarted(true);
+                    const initialOrdered = {};
+                    questions.forEach(q => {
+                        if (q.type === 'ordered-response') {
+                            initialOrdered[q.id] = [...q.options];
+                        }
+                    });
+                    setOrderedAnswers(initialOrdered);
+                } else {
+                    alert('Please enter your name to begin the assessment.');
+                }
+            };
+
+            const handleMultipleChoice = (questionId, answerIndex) => {
+                setAnswers(prev => ({
+                    ...prev,
+                    [questionId]: answerIndex
+                }));
+            };
+
+            const handleMultipleResponse = (questionId, optionIndex) => {
+                setAnswers(prev => {
+                    const current = prev[questionId] || [];
+                    const newAnswers = current.includes(optionIndex)
+                        ? current.filter(i => i !== optionIndex)
+                        : [...current, optionIndex];
+                    return { ...prev, [questionId]: newAnswers };
+                });
+            };
+
+            const handleDragStart = (e, questionId, index) => {
+                setDraggedItem({ questionId, index });
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+            };
+
+            const handleDrop = (e, questionId, dropIndex) => {
+                e.preventDefault();
+                if (!draggedItem || draggedItem.questionId !== questionId) return;
+
+                const items = [...orderedAnswers[questionId]];
+                const draggedItemContent = items[draggedItem.index];
+                items.splice(draggedItem.index, 1);
+                items.splice(dropIndex, 0, draggedItemContent);
+
+                setOrderedAnswers(prev => ({
+                    ...prev,
+                    [questionId]: items
+                }));
+                setDraggedItem(null);
+            };
+
+            const moveItem = (questionId, index, direction) => {
+                const items = [...orderedAnswers[questionId]];
+                const newIndex = direction === 'up' ? index - 1 : index + 1;
+                
+                if (newIndex < 0 || newIndex >= items.length) return;
+                
+                [items[index], items[newIndex]] = [items[newIndex], items[index]];
+                
+                setOrderedAnswers(prev => ({
+                    ...prev,
+                    [questionId]: items
+                }));
+            };
+
+            const handleNext = () => {
+                if (currentQuestion < questions.length - 1) {
+                    setCurrentQuestion(prev => prev + 1);
+                }
+            };
+
+            const handlePrevious = () => {
+                if (currentQuestion > 0) {
+                    setCurrentQuestion(prev => prev - 1);
+                }
+            };
+
+            const handleSubmit = () => {
+                let correctCount = 0;
+                
+                questions.forEach(q => {
+                    if (q.type === 'multiple-choice') {
+                        if (answers[q.id] === q.correct) {
+                            correctCount++;
+                        }
+                    } else if (q.type === 'multiple-response') {
+                        const userAnswers = answers[q.id] || [];
+                        const correctAnswers = q.correct;
+                        if (userAnswers.length === correctAnswers.length &&
+                            userAnswers.every(ans => correctAnswers.includes(ans))) {
+                            correctCount++;
+                        }
+                    } else if (q.type === 'ordered-response') {
+                        const userOrder = orderedAnswers[q.id];
+                        const correctOrder = q.correctOrder;
+                        let isCorrect = true;
+                        for (let i = 0; i < correctOrder.length; i++) {
+                            if (userOrder[i] !== q.options[correctOrder[i]]) {
+                                isCorrect = false;
+                                break;
+                            }
+                        }
+                        if (isCorrect) {
+                            correctCount++;
+                        }
+                    }
+                });
+                
+                setScore(correctCount);
+                setShowResults(true);
+            };
+
+            const generatePDF = () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                const percentage = ((score / questions.length) * 100).toFixed(1);
+                const passed = percentage >= 80;
+                
+                doc.setFillColor(0, 51, 102);
+                doc.rect(0, 0, 210, 45, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(26);
+                doc.setFont(undefined, 'bold');
+                doc.text('CAMP Community College', 105, 18, { align: 'center' });
+                
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'normal');
+                doc.text('Emergency Medical Services Program', 105, 28, { align: 'center' });
+                
+                doc.setFontSize(11);
+                doc.setTextColor(200, 220, 255);
+                doc.text('National Registry Style Assessment', 105, 37, { align: 'center' });
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(28);
+                doc.setFont(undefined, 'bold');
+                doc.text('CERTIFICATE OF COMPLETION', 105, 60, { align: 'center' });
+                
+                doc.setLineWidth(0.5);
+                doc.setDrawColor(0, 51, 102);
+                doc.line(35, 65, 175, 65);
+                
+                doc.setFontSize(15);
+                doc.setFont(undefined, 'normal');
+                doc.text('This certifies that', 105, 78, { align: 'center' });
+                
+                doc.setFontSize(24);
+                doc.setFont(undefined, 'bold');
+                doc.setTextColor(0, 51, 102);
+                doc.text(studentName, 105, 92, { align: 'center' });
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(13);
+                doc.setFont(undefined, 'normal');
+                doc.text('has successfully completed the comprehensive assessment for', 105, 106, { align: 'center' });
+                
+                doc.setFontSize(17);
+                doc.setFont(undefined, 'bold');
+                doc.text('EMS 183 Advanced Medical Emergencies', 105, 120, { align: 'center' });
+                doc.text('Respiratory Emergencies', 105, 130, { align: 'center' });
+                
+                doc.setFontSize(11);
+                doc.setFont(undefined, 'normal');
+                doc.setTextColor(80, 80, 80);
+                doc.text('National Registry Style Adaptive Assessment', 105, 140, { align: 'center' });
+                
+                doc.setFillColor(passed ? 220 : 255, passed ? 252 : 220, passed ? 231 : 220);
+                doc.roundedRect(65, 152, 80, 32, 3, 3, 'F');
+                
+                doc.setTextColor(passed ? 34 : 153, passed ? 139 : 0, passed ? 34 : 0);
+                doc.setFontSize(18);
+                doc.setFont(undefined, 'bold');
+                doc.text('Assessment Score', 105, 166, { align: 'center' });
+                doc.setFontSize(26);
+                doc.text(`${score}/${questions.length} (${percentage}%)`, 105, 178, { align: 'center' });
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(15);
+                doc.setFont(undefined, 'bold');
+                if (passed) {
+                    doc.setTextColor(34, 139, 34);
+                    doc.text('✓ COMPETENCY DEMONSTRATED', 105, 193, { align: 'center' });
+                } else {
+                    doc.setTextColor(153, 0, 0);
+                    doc.text('✗ ADDITIONAL PREPARATION REQUIRED', 105, 193, { align: 'center' });
+                }
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(11);
+                doc.setFont(undefined, 'normal');
+                const today = new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                doc.text(`Date of Completion: ${today}`, 105, 207, { align: 'center' });
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'bold');
+                doc.text('Assessment Format:', 20, 222);
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(9);
+                const format = [
+                    '• Multiple-choice questions (single correct answer)',
+                    '• Multiple-response questions (select all that apply)',
+                    '• Ordered-response questions (sequence-based)',
+                    '• Scenario-based clinical reasoning questions',
+                    '• Mirrors National Registry of EMT testing methodology'
+                ];
+                format.forEach((item, index) => {
+                    doc.text(item, 25, 228 + (index * 5));
+                });
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'bold');
+                doc.text('Competency Areas Assessed:', 110, 222);
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(9);
+                const topics = [
+                    '• Airway, Respiration & Ventilation',
+                    '• Patient Assessment',
+                    '• Emergency Management',
+                    '• Pharmacology',
+                    '• Special Populations',
+                    '• Medical Knowledge',
+                    '• Infection Control'
+                ];
+                topics.forEach((topic, index) => {
+                    doc.text(topic, 115, 228 + (index * 5));
+                });
+                
+                doc.setFontSize(8);
+                doc.setTextColor(128, 128, 128);
+                doc.text('Based on Sanders\' Paramedic 6th Edition, Chapter 17 | National Registry Competency Standards', 105, 274, { align: 'center' });
+                doc.text('CAMP Community College EMS Program © 2025', 105, 281, { align: 'center' });
+                
+                doc.setDrawColor(0, 51, 102);
+                doc.setLineWidth(1.5);
+                doc.rect(8, 8, 194, 279);
+                
+                doc.save(`${studentName.replace(/\s+/g, '_')}_NREMT_Respiratory_Certificate.pdf`);
+            };
+
+            const isQuestionAnswered = (q) => {
+                if (q.type === 'multiple-choice') {
+                    return answers[q.id] !== undefined;
+                } else if (q.type === 'multiple-response') {
+                    return answers[q.id] && answers[q.id].length > 0;
+                } else if (q.type === 'ordered-response') {
+                    return true;
+                }
+                return false;
+            };
+
+            const allQuestionsAnswered = questions.every(isQuestionAnswered);
+
+            if (!quizStarted) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-xl shadow-2xl p-8 max-w-3xl w-full">
+                            <div className="text-center mb-8">
+                                <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-5 px-6 rounded-t-xl -mx-8 -mt-8 mb-6">
+                                    <h1 className="text-3xl font-bold">CAMP Community College</h1>
+                                    <p className="text-blue-100 mt-1 text-lg">Emergency Medical Services Program</p>
+                                </div>
+                                <div className="mb-4">
+                                    <div className="inline-block bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-semibold mb-3">
+                                        National Registry Style Assessment
+                                    </div>
+                                </div>
+                                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                                    EMS 183 Advanced Medical Emergencies
+                                </h2>
+                                <h3 className="text-xl text-indigo-600 font-semibold">
+                                    Respiratory Emergencies Comprehensive Assessment
+                                </h3>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-indigo-600 p-5 rounded-lg">
+                                    <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                        <AlertCircle className="w-5 h-5 text-indigo-600" />
+                                        Assessment Overview
+                                    </h4>
+                                    <ul className="text-sm text-gray-700 space-y-2">
+                                        <li className="flex items-start">
+                                            <span className="mr-2">•</span>
+                                            <span><strong>50 questions</strong> using National Registry testing methodology</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="mr-2">•</span>
+                                            <span>Multiple question formats: <strong>Multiple-choice, Multiple-response, Ordered-response</strong></span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="mr-2">•</span>
+                                            <span>Based on Sanders' Paramedic 6th Edition, Chapter 17</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="mr-2">•</span>
+                                            <span>Minimum passing score: <strong>80%</strong> (40/50 correct)</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="mr-2">•</span>
+                                            <span>Scenario-based clinical reasoning questions</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="mr-2">•</span>
+                                            <span>Certificate generated upon successful completion</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                                    <p className="text-sm text-yellow-800">
+                                        <strong>Note:</strong> This assessment uses adaptive testing principles similar to the National Registry exam. Read each question carefully and select the BEST answer.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                                        Enter Your Full Name:
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={studentName}
+                                        onChange={(e) => setStudentName(e.target.value)}
+                                        placeholder="First and Last Name"
+                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-indigo-600 focus:outline-none text-lg"
+                                        onKeyPress={(e) => e.key === 'Enter' && handleStartQuiz()}
+                                    />
+                                </div>
+                                
+                                <button
+                                    onClick={handleStartQuiz}
+                                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-indigo-800 transition-all shadow-lg transform hover:scale-[1.02]"
+                                >
+                                    Begin Assessment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (showResults) {
+                const percentage = ((score / questions.length) * 100).toFixed(1);
+                const passed = percentage >= 80;
+                
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 p-4">
+                        <div className="max-w-5xl mx-auto">
+                            <div className="bg-white rounded-xl shadow-2xl p-8">
+                                <div className="text-center mb-8">
+                                    <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 px-6 rounded-t-xl -mx-8 -mt-8 mb-6">
+                                        <h1 className="text-2xl font-bold">Assessment Complete</h1>
+                                        <p className="text-blue-100 text-sm mt-1">National Registry Style Evaluation</p>
+                                    </div>
+                                    
+                                    <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 ${
+                                        passed ? 'bg-green-100' : 'bg-red-100'
+                                    }`}>
+                                        {passed ? (
+                                            <CheckCircle className="w-16 h-16 text-green-600" />
+                                        ) : (
+                                            <XCircle className="w-16 h-16 text-red-600" />
+                                        )}
+                                    </div>
+                                    
+                                    <h2 className="text-3xl font-bold text-gray-800 mb-2">{studentName}</h2>
+                                    <p className="text-gray-600 mb-1 font-semibold">EMS 183 - Respiratory Emergencies</p>
+                                    <p className="text-sm text-gray-500">National Registry Style Assessment</p>
+                                    
+                                    <div className={`inline-block px-10 py-5 rounded-xl my-6 shadow-lg ${
+                                        passed ? 'bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-500' : 'bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-500'
+                                    }`}>
+                                        <div className="text-5xl font-bold mb-1" style={{ color: passed ? '#16a34a' : '#dc2626' }}>
+                                            {score} / {questions.length}
+                                        </div>
+                                        <div className="text-3xl font-bold mb-2" style={{ color: passed ? '#16a34a' : '#dc2626' }}>
+                                            {percentage}%
+                                        </div>
+                                        <div className="text-sm text-gray-600 font-medium">
+                                            ({passed ? 'Passing' : 'Minimum'} score: 80%)
+                                        </div>
+                                    </div>
+                                    
+                                    <div className={`text-2xl font-bold mb-6 ${passed ? 'text-green-600' : 'text-red-600'}`}>
+                                        {passed ? '✓ COMPETENCY DEMONSTRATED' : '✗ ADDITIONAL PREPARATION REQUIRED'}
+                                    </div>
+                                    
+                                    {passed && (
+                                        <button
+                                            onClick={generatePDF}
+                                            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-10 py-4 rounded-lg font-bold hover:from-blue-700 hover:to-indigo-800 transition-all shadow-lg inline-flex items-center gap-2 transform hover:scale-105"
+                                        >
+                                            <FileDown className="w-6 h-6" />
+                                            Download Certificate
+                                        </button>
+                                    )}
+                                    
+                                    {!passed && (
+                                        <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded text-left">
+                                            <p className="text-sm text-yellow-800">
+                                                <strong>Recommended Action:</strong> Review the content areas where you missed questions, study Sanders' Chapter 17, and retake the assessment when ready.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div className="mt-8 border-t pt-6">
+                                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                                        <Award className="w-7 h-7 text-indigo-600" />
+                                        Detailed Answer Review
+                                    </h3>
+                                    
+                                    <div className="mb-4 grid grid-cols-3 gap-4 text-center">
+                                        <div className="bg-blue-50 p-3 rounded-lg">
+                                            <div className="text-2xl font-bold text-blue-700">{questions.filter(q => q.type === 'multiple-choice').length}</div>
+                                            <div className="text-xs text-gray-600">Multiple-Choice</div>
+                                        </div>
+                                        <div className="bg-purple-50 p-3 rounded-lg">
+                                            <div className="text-2xl font-bold text-purple-700">{questions.filter(q => q.type === 'multiple-response').length}</div>
+                                            <div className="text-xs text-gray-600">Multiple-Response</div>
+                                        </div>
+                                        <div className="bg-indigo-50 p-3 rounded-lg">
+                                            <div className="text-2xl font-bold text-indigo-700">{questions.filter(q => q.type === 'ordered-response').length}</div>
+                                            <div className="text-xs text-gray-600">Ordered-Response</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                                        {questions.map((q, index) => {
+                                            let isCorrect = false;
+                                            let userAnswerDisplay = '';
+                                            let correctAnswerDisplay = '';
+                                            
+                                            if (q.type === 'multiple-choice') {
+                                                isCorrect = answers[q.id] === q.correct;
+                                                userAnswerDisplay = q.options[answers[q.id]] || 'No answer';
+                                                correctAnswerDisplay = q.options[q.correct];
+                                            } else if (q.type === 'multiple-response') {
+                                                const userAnswers = answers[q.id] || [];
+                                                isCorrect = userAnswers.length === q.correct.length &&
+                                                            userAnswers.every(ans => q.correct.includes(ans));
+                                                userAnswerDisplay = userAnswers.map(i => q.options[i]).join('; ') || 'No answer';
+                                                correctAnswerDisplay = q.correct.map(i => q.options[i]).join('; ');
+                                            } else if (q.type === 'ordered-response') {
+                                                const userOrder = orderedAnswers[q.id];
+                                                isCorrect = true;
+                                                for (let i = 0; i < q.correctOrder.length; i++) {
+                                                    if (userOrder[i] !== q.options[q.correctOrder[i]]) {
+                                                        isCorrect = false;
+                                                        break;
+                                                    }
+                                                }
+                                                userAnswerDisplay = userOrder ? userOrder.map((item, i) => `${i + 1}. ${item}`).join(' → ') : 'No answer';
+                                                correctAnswerDisplay = q.correctOrder.map((orderIndex, i) => `${i + 1}. ${q.options[orderIndex]}`).join(' → ');
+                                            }
+                                            
+                                            return (
+                                                <div key={q.id} className={`p-5 rounded-lg border-2 ${
+                                                    isCorrect ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'
+                                                }`}>
+                                                    <div className="flex items-start gap-3">
+                                                        {isCorrect ? (
+                                                            <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                                                        ) : (
+                                                            <XCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
+                                                        )}
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center gap-2 mb-2">
+                                                                <span className={`text-xs font-bold px-2 py-1 rounded ${
+                                                                    q.type === 'multiple-choice' ? 'bg-blue-100 text-blue-700' :
+                                                                    q.type === 'multiple-response' ? 'bg-purple-100 text-purple-700' :
+                                                                    'bg-indigo-100 text-indigo-700'
+                                                                }`}>
+                                                                    {q.type === 'multiple-choice' ? 'MULTIPLE CHOICE' :
+                                                                     q.type === 'multiple-response' ? 'MULTIPLE RESPONSE' :
+                                                                     'ORDERED RESPONSE'}
+                                                                </span>
+                                                                <span className="text-xs font-semibold text-gray-600">{q.category}</span>
+                                                            </div>
+                                                            
+                                                            <p className="font-bold text-gray-800 mb-3">
+                                                                {index + 1}. {q.question}
+                                                            </p>
+                                                            
+                                                            <div className="space-y-2 text-sm">
+                                                                <div className={`p-2 rounded ${isCorrect ? 'bg-green-100' : 'bg-red-100'}`}>
+                                                                    <span className="font-semibold">Your answer: </span>
+                                                                    <span>{userAnswerDisplay}</span>
+                                                                </div>
+                                                                
+                                                                {!isCorrect && (
+                                                                    <div className="p-2 rounded bg-green-100">
+                                                                        <span className="font-semibold text-green-800">Correct answer: </span>
+                                                                        <span className="text-green-800">{correctAnswerDisplay}</span>
+                                                                    </div>
+                                                                )}
+                                                                
+                                                                <div className="p-3 bg-blue-50 rounded border-l-4 border-blue-400 mt-2">
+                                                                    <span className="font-semibold text-blue-900">Rationale: </span>
+                                                                    <span className="text-blue-800">{q.rationale}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            const currentQ = questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            const answeredCount = questions.filter(isQuestionAnswered).length;
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 p-4">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
+                            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6">
+                                <div className="flex justify-between items-center mb-2">
+                                    <div>
+                                        <h1 className="text-xl font-bold">CAMP Community College - EMS 183</h1>
+                                        <p className="text-blue-100 text-sm">National Registry Style Assessment</p>
+                                    </div>
+                                    <span className="text-blue-100 font-semibold">{studentName}</span>
+                                </div>
+                                <p className="text-blue-100">Respiratory Emergencies Comprehensive Evaluation</p>
+                            </div>
+                            
+                            <div className="bg-gray-200 h-3">
+                                <div 
+                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 h-full transition-all duration-300"
+                                    style={{ width: `${progress}%` }}
+                                />
+                            </div>
+                            
+                            <div className="p-8">
+                                <div className="mb-6">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-sm font-bold text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">
+                                                Question {currentQuestion + 1} of {questions.length}
+                                            </span>
+                                            <span className={`text-xs font-bold px-3 py-1 rounded-full ${
+                                                currentQ.type === 'multiple-choice' ? 'bg-blue-100 text-blue-700' :
+                                                currentQ.type === 'multiple-response' ? 'bg-purple-100 text-purple-700' :
+                                                'bg-indigo-100 text-indigo-700'
+                                            }`}>
+                                                {currentQ.type === 'multiple-choice' ? 'MULTIPLE CHOICE' :
+                                                 currentQ.type === 'multiple-response' ? 'SELECT ALL THAT APPLY' :
+                                                 'ORDER THE STEPS'}
+                                            </span>
+                                        </div>
+                                        <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+                                            {currentQ.category}
+                                        </span>
+                                    </div>
+                                    
+                                    <h2 className="text-xl font-bold text-gray-800 leading-relaxed">
+                                        {currentQ.question}
+                                    </h2>
+                                </div>
+                                
+                                {currentQ.type === 'multiple-choice' && (
+                                    <div className="space-y-3">
+                                        {currentQ.options.map((option, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => handleMultipleChoice(currentQ.id, index)}
+                                                className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                                                    answers[currentQ.id] === index
+                                                        ? 'bg-indigo-50 border-indigo-600 shadow-md'
+                                                        : 'bg-white border-gray-300 hover:border-indigo-400 hover:bg-gray-50'
+                                                }`}
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                                                        answers[currentQ.id] === index
+                                                            ? 'bg-indigo-600 border-indigo-600'
+                                                            : 'border-gray-400'
+                                                    }`}>
+                                                        {answers[currentQ.id] === index && (
+                                                            <div className="w-3 h-3 bg-white rounded-full" />
+                                                        )}
+                                                    </div>
+                                                    <span className="text-gray-800 leading-relaxed">{option}</span>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                                
+                                {currentQ.type === 'multiple-response' && (
+                                    <div className="space-y-3">
+                                        <div className="bg-purple-50 border-l-4 border-purple-500 p-3 mb-4">
+                                            <p className="text-sm font-semibold text-purple-900">
+                                                ⚠️ Select ALL options that apply. Partial credit not awarded.
+                                            </p>
+                                        </div>
+                                        {currentQ.options.map((option, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => handleMultipleResponse(currentQ.id, index)}
+                                                className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                                                    (answers[currentQ.id] || []).includes(index)
+                                                        ? 'bg-purple-50 border-purple-600 shadow-md'
+                                                        : 'bg-white border-gray-300 hover:border-purple-400 hover:bg-gray-50'
+                                                }`}
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    <div className={`w-6 h-6 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                                                        (answers[currentQ.id] || []).includes(index)
+                                                            ? 'bg-purple-600 border-purple-600'
+                                                            : 'border-gray-400'
+                                                    }`}>
+                                                        {(answers[currentQ.id] || []).includes(index) && (
+                                                            <CheckCircle className="w-4 h-4 text-white" />
+                                                        )}
+                                                    </div>
+                                                    <span className="text-gray-800 leading-relaxed">{option}</span>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                                
+                                {currentQ.type === 'ordered-response' && (
+                                    <div className="space-y-3">
+                                        <div className="bg-indigo-50 border-l-4 border-indigo-500 p-3 mb-4">
+                                            <p className="text-sm font-semibold text-indigo-900">
+                                                📋 Arrange the items in the correct order. Use the arrow buttons or drag items.
+                                            </p>
+                                        </div>
+                                        {orderedAnswers[currentQ.id]?.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                draggable
+                                                onDragStart={(e) => handleDragStart(e, currentQ.id, index)}
+                                                onDragOver={handleDragOver}
+                                                onDrop={(e) => handleDrop(e, currentQ.id, index)}
+                                                className="bg-white border-2 border-gray-300 rounded-lg p-4 cursor-move hover:border-indigo-400 hover:shadow-md transition-all"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex flex-col gap-1">
+                                                        <button
+                                                            onClick={() => moveItem(currentQ.id, index, 'up')}
+                                                            disabled={index === 0}
+                                                            className="p-1 hover:bg-gray-100 rounded disabled:opacity-30"
+                                                        >
+                                                            <span className="text-xl">▲</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => moveItem(currentQ.id, index, 'down')}
+                                                            disabled={index === orderedAnswers[currentQ.id].length - 1}
+                                                            className="p-1 hover:bg-gray-100 rounded disabled:opacity-30"
+                                                        >
+                                                            <span className="text-xl">▼</span>
+                                                        </button>
+                                                    </div>
+                                                    <GripVertical className="w-5 h-5 text-gray-400" />
+                                                    <div className="flex-1 flex items-center gap-3">
+                                                        <span className="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">
+                                                            {index + 1}
+                                                        </span>
+                                                        <span className="text-gray-800">{item}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                
+                                <div className="flex justify-between items-center mt-8 pt-6 border-t">
+                                    <button
+                                        onClick={handlePrevious}
+                                        disabled={currentQuestion === 0}
+                                        className="px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    >
+                                        ← Previous
+                                    </button>
+                                    
+                                    <div className="text-center">
+                                        <span className="text-sm font-semibold text-gray-700">
+                                            {answeredCount} of {questions.length} answered
+                                        </span>
+                                        {!allQuestionsAnswered && (
+                                            <p className="text-xs text-red-600 mt-1">
+                                                Answer all questions to submit
+                                            </p>
+                                        )}
+                                    </div>
+                                    
+                                    {currentQuestion === questions.length - 1 ? (
+                                        <button
+                                            onClick={handleSubmit}
+                                            disabled={!allQuestionsAnswered}
+                                            className="px-8 py-3 rounded-lg font-bold bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
+                                        >
+                                            Submit Assessment
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleNext}
+                                            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-700 text-white hover:from-blue-700 hover:to-indigo-800 transition-all"
+                                        >
+                                            Next →
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<NREMTRespiratoryQuiz />);
+    </script>
+</body>
+</html>
