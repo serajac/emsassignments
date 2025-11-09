@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Emergencies Comprehensive Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .icon-award {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .category-box {
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .cat-gyn { background-color: #dbeafe; color: #1e3a8a; }
+        .cat-immuno { background-color: #dcfce7; color: #14532d; }
+        .cat-psych { background-color: #f3e8ff; color: #581c87; }
+        .cat-tox { background-color: #fed7aa; color: #7c2d12; }
+
+        .input-group {
+            margin: 30px 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: #78350f;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            color: #14532d;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #7f1d1d;
+        }
+
+        .progress-bar-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            transition: width 0.3s;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .badge-category {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        .badge-type {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 20px 0 30px;
+            line-height: 1.6;
+        }
+
+        .option-button {
+            width: 100%;
+            text-align: left;
+            padding: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            background: white;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .option-button:hover {
+            border-color: #60a5fa;
+            background: #f9fafb;
+        }
+
+        .option-button.selected {
+            border-color: #2563eb;
+            background: #dbeafe;
+        }
+
+        .option-button.selected-true {
+            border-color: #16a34a;
+            background: #dcfce7;
+        }
+
+        .option-button.selected-false {
+            border-color: #dc2626;
+            background: #fee2e2;
+        }
+
+        .option-label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .nav-buttons button {
+            flex: 1;
+        }
+
+        .results-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .icon-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .icon-error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-box {
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .score-box-blue {
+            background: #dbeafe;
+        }
+
+        .score-box-green {
+            background: #dcfce7;
+        }
+
+        .score-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .category-results {
+            margin: 30px 0;
+        }
+
+        .category-result-item {
+            margin-bottom: 20px;
+        }
+
+        .category-result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .progress-bar-result {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill-pass {
+            height: 100%;
+            background: #16a34a;
+        }
+
+        .progress-fill-fail {
+            height: 100%;
+            background: #dc2626;
+        }
+
+        .btn-with-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .score-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app"></div>
+
+    <script>
+        // Question Bank
+        const questionBank = [
+            // GYN Emergencies
+            {
+                id: 1,
+                type: 'multiple-choice',
+                category: 'GYN Emergencies',
+                question: 'What are the two main hormones produced by the ovaries?',
+                options: ['Testosterone and progesterone', 'Estrogen and progesterone', 'Insulin and glucagon', 'Oxytocin and prolactin'],
+                correctAnswer: 'Estrogen and progesterone'
+            },
+            {
+                id: 2,
+                type: 'true-false',
+                category: 'GYN Emergencies',
+                question: 'Menstruation typically lasts 4 to 6 days with blood loss of approximately 25 to 60 mL.',
+                correctAnswer: true
+            },
+            {
+                id: 3,
+                type: 'multiple-choice',
+                category: 'GYN Emergencies',
+                question: 'Which structure carries the ovum from the ovary to the uterus?',
+                options: ['Cervix', 'Fallopian tube', 'Vagina', 'Endometrium'],
+                correctAnswer: 'Fallopian tube'
+            },
+            {
+                id: 4,
+                type: 'multiple-select',
+                category: 'GYN Emergencies',
+                question: 'Which of the following are signs and symptoms of pelvic inflammatory disease (PID)? (Select all that apply)',
+                options: ['Lower abdominal pain', 'Fever', 'Vaginal discharge', 'Shuffling gait', 'Chest pain'],
+                correctAnswers: ['Lower abdominal pain', 'Fever', 'Vaginal discharge', 'Shuffling gait']
+            },
+            {
+                id: 5,
+                type: 'multiple-choice',
+                category: 'GYN Emergencies',
+                question: 'A ruptured ectopic pregnancy is considered:',
+                options: ['A minor emergency', 'A true medical emergency', 'Not an emergency if bleeding is minimal', 'Only serious in the third trimester'],
+                correctAnswer: 'A true medical emergency'
+            },
+            {
+                id: 6,
+                type: 'true-false',
+                category: 'GYN Emergencies',
+                question: 'You should pack or place dressings inside the vagina to control bleeding.',
+                correctAnswer: false
+            },
+            {
+                id: 7,
+                type: 'multiple-choice',
+                category: 'GYN Emergencies',
+                question: 'What is the recommended initial IV fluid bolus for a patient with gynecologic bleeding showing signs of shock?',
+                options: ['10 mL/kg', '20 mL/kg', '30 mL/kg', '50 mL/kg'],
+                correctAnswer: '20 mL/kg'
+            },
+            {
+                id: 8,
+                type: 'multiple-choice',
+                category: 'GYN Emergencies',
+                question: 'Menorrhagia refers to:',
+                options: ['Absence of menstrual period', 'Heavy vaginal bleeding', 'Painful menstruation', 'Irregular periods'],
+                correctAnswer: 'Heavy vaginal bleeding'
+            },
+            {
+                id: 9,
+                type: 'true-false',
+                category: 'GYN Emergencies',
+                question: 'When treating a sexual assault victim, you should cut through clothing to look for injuries.',
+                correctAnswer: false
+            },
+            {
+                id: 10,
+                type: 'multiple-select',
+                category: 'GYN Emergencies',
+                question: 'What should a sexual assault patient be discouraged from doing before examination? (Select all that apply)',
+                options: ['Urinating', 'Changing clothes', 'Using hand sanitizer', 'Rinsing mouth', 'Walking'],
+                correctAnswers: ['Urinating', 'Changing clothes', 'Using hand sanitizer', 'Rinsing mouth']
+            },
+            {
+                id: 11,
+                type: 'multiple-choice',
+                category: 'GYN Emergencies',
+                question: 'The initial onset of menstruation is called:',
+                options: ['Menopause', 'Menarche', 'Menorrhagia', 'Amenorrhea'],
+                correctAnswer: 'Menarche'
+            },
+            {
+                id: 12,
+                type: 'case-scenario',
+                category: 'GYN Emergencies',
+                question: 'A 26-year-old female presents with sudden onset of severe lower abdominal pain on the right side that radiates to her back. She reports minimal vaginal bleeding and has missed her last period. Her vital signs show BP 90/60, HR 118, RR 22. What is the most likely diagnosis?',
+                options: ['Pelvic inflammatory disease', 'Ruptured ovarian cyst', 'Ectopic pregnancy', 'Normal menstruation'],
+                correctAnswer: 'Ectopic pregnancy'
+            },
+
+            // Immunologic Emergencies
+            {
+                id: 13,
+                type: 'multiple-choice',
+                category: 'Immunologic Emergencies',
+                question: 'Anaphylaxis is defined as:',
+                options: [
+                    'A mild allergic reaction',
+                    'An extreme systemic allergic reaction involving two or more body systems',
+                    'A localized skin reaction',
+                    'An allergic reaction to food only'
+                ],
+                correctAnswer: 'An extreme systemic allergic reaction involving two or more body systems'
+            },
+            {
+                id: 14,
+                type: 'multiple-select',
+                category: 'Immunologic Emergencies',
+                question: 'Which of the following are general categories of allergens? (Select all that apply)',
+                options: ['Insect bites and stings', 'Medications', 'Plants', 'Foods', 'Chemicals'],
+                correctAnswers: ['Insect bites and stings', 'Medications', 'Plants', 'Foods', 'Chemicals']
+            },
+            {
+                id: 15,
+                type: 'true-false',
+                category: 'Immunologic Emergencies',
+                question: 'The two main types of immunity in the body are cellular immunity and humoral immunity.',
+                correctAnswer: true
+            },
+            {
+                id: 16,
+                type: 'multiple-choice',
+                category: 'Immunologic Emergencies',
+                question: 'The process where granules burst and release their contents from mast cells is called:',
+                options: ['Phagocytosis', 'Degranulation', 'Mitosis', 'Antibody formation'],
+                correctAnswer: 'Degranulation'
+            },
+            {
+                id: 17,
+                type: 'multiple-choice',
+                category: 'Immunologic Emergencies',
+                question: 'The preferred route of epinephrine administration for anaphylaxis with respiratory compromise is:',
+                options: ['Subcutaneous', 'Intravenous', 'Intramuscular', 'Oral'],
+                correctAnswer: 'Intramuscular'
+            },
+            {
+                id: 18,
+                type: 'true-false',
+                category: 'Immunologic Emergencies',
+                question: 'The thigh is preferred over the deltoid site for epinephrine administration due to more rapid absorption.',
+                correctAnswer: true
+            },
+            {
+                id: 19,
+                type: 'multiple-select',
+                category: 'Immunologic Emergencies',
+                question: 'Which are common side effects of epinephrine? (Select all that apply)',
+                options: ['Tachycardia', 'Hypertension', 'Bradycardia', 'Anxiety', 'Headache', 'Hypotension'],
+                correctAnswers: ['Tachycardia', 'Hypertension', 'Anxiety', 'Headache']
+            },
+            {
+                id: 20,
+                type: 'multiple-choice',
+                category: 'Immunologic Emergencies',
+                question: 'Insect stings account for approximately how many deaths each year in the United States?',
+                options: ['10 to 20', '30 to 50', '90 to 100', '200 to 300'],
+                correctAnswer: '90 to 100'
+            },
+            {
+                id: 21,
+                type: 'true-false',
+                category: 'Immunologic Emergencies',
+                question: 'You should use tweezers to remove a bee stinger as quickly as possible.',
+                correctAnswer: false
+            },
+            {
+                id: 22,
+                type: 'multiple-choice',
+                category: 'Immunologic Emergencies',
+                question: 'A biphasic response in anaphylaxis means:',
+                options: [
+                    'The patient has two allergens',
+                    'The patient experiences an initial reaction, appears to recover, then has recurrence of symptoms',
+                    'Two doses of epinephrine are needed',
+                    'The reaction affects two body systems'
+                ],
+                correctAnswer: 'The patient experiences an initial reaction, appears to recover, then has recurrence of symptoms'
+            },
+            {
+                id: 23,
+                type: 'multiple-choice',
+                category: 'Immunologic Emergencies',
+                question: 'How long should you hold an EpiPen against the thigh during administration?',
+                options: ['1 second', '3 seconds', '5 seconds', '10 seconds'],
+                correctAnswer: '3 seconds'
+            },
+            {
+                id: 24,
+                type: 'case-scenario',
+                category: 'Immunologic Emergencies',
+                question: 'A 32-year-old patient was stung by a bee 10 minutes ago. She now has hives, difficulty breathing, wheezing, and her BP is 85/50. What is your immediate priority treatment?',
+                options: ['Remove the stinger', 'Administer epinephrine IM', 'Start an IV', 'Give oxygen only'],
+                correctAnswer: 'Administer epinephrine IM'
+            },
+            {
+                id: 25,
+                type: 'true-false',
+                category: 'Immunologic Emergencies',
+                question: 'Patients experiencing allergic reactions should be encouraged to seek medical attention even if symptoms resolve, due to risk of delayed reactions.',
+                correctAnswer: true
+            },
+
+            // Psychiatric Emergencies
+            {
+                id: 26,
+                type: 'multiple-choice',
+                category: 'Psychiatric Emergencies',
+                question: 'According to the National Institute of Mental Health, approximately what percentage of Americans has some type of mental disorder at one time or another?',
+                options: ['1 in 10', '1 in 5', '1 in 3', '1 in 2'],
+                correctAnswer: '1 in 5'
+            },
+            {
+                id: 27,
+                type: 'true-false',
+                category: 'Psychiatric Emergencies',
+                question: 'All individuals with mental health disorders are dangerous and violent.',
+                correctAnswer: false
+            },
+            {
+                id: 28,
+                type: 'multiple-choice',
+                category: 'Psychiatric Emergencies',
+                question: 'Behavior is best defined as:',
+                options: [
+                    'A person\'s emotional state',
+                    'What you can see of a person\'s response to the environment',
+                    'A person\'s thoughts',
+                    'A medical diagnosis'
+                ],
+                correctAnswer: 'What you can see of a person\'s response to the environment'
+            },
+            {
+                id: 29,
+                type: 'multiple-choice',
+                category: 'Psychiatric Emergencies',
+                question: 'A behavioral crisis or emergency is defined as:',
+                options: [
+                    'Any mental illness',
+                    'Any reaction to events that interferes with activities of daily living',
+                    'Only violent behavior',
+                    'Depression lasting less than one week'
+                ],
+                correctAnswer: 'Any reaction to events that interferes with activities of daily living'
+            },
+            {
+                id: 30,
+                type: 'multiple-select',
+                category: 'Psychiatric Emergencies',
+                question: 'Which factors can produce behavioral emergencies or altered mental status? (Select all that apply)',
+                options: ['Sudden grief', 'Hypoglycemia', 'Drug intoxication', 'Hypoxia', 'Head trauma'],
+                correctAnswers: ['Sudden grief', 'Hypoglycemia', 'Drug intoxication', 'Hypoxia', 'Head trauma']
+            },
+            {
+                id: 31,
+                type: 'true-false',
+                category: 'Psychiatric Emergencies',
+                question: 'When assessing a behavioral emergency patient, you should approach quickly and touch them immediately to provide reassurance.',
+                correctAnswer: false
+            },
+            {
+                id: 32,
+                type: 'multiple-choice',
+                category: 'Psychiatric Emergencies',
+                question: 'Organic brain syndrome is:',
+                options: [
+                    'Always permanent',
+                    'A temporary or permanent dysfunction caused by disturbance in brain tissue functioning',
+                    'Only caused by trauma',
+                    'Not treatable'
+                ],
+                correctAnswer: 'A temporary or permanent dysfunction caused by disturbance in brain tissue functioning'
+            },
+            {
+                id: 33,
+                type: 'multiple-choice',
+                category: 'Psychiatric Emergencies',
+                question: 'Reflective listening (active listening) involves:',
+                options: [
+                    'Interrupting the patient frequently',
+                    'Repeating back to patients what they said, encouraging them to expand',
+                    'Avoiding eye contact',
+                    'Speaking loudly'
+                ],
+                correctAnswer: 'Repeating back to patients what they said, encouraging them to expand'
+            },
+            {
+                id: 34,
+                type: 'multiple-select',
+                category: 'Psychiatric Emergencies',
+                question: 'When assessing level of danger from a potentially violent patient, you should evaluate: (Select all that apply)',
+                options: ['History', 'Posture', 'The scene', 'Vocal activity', 'Physical activity'],
+                correctAnswers: ['History', 'Posture', 'The scene', 'Vocal activity', 'Physical activity']
+            },
+            {
+                id: 35,
+                type: 'true-false',
+                category: 'Psychiatric Emergencies',
+                question: 'Sadness in response to a crisis situation like divorce or job loss is always abnormal and indicates mental illness.',
+                correctAnswer: false
+            },
+            {
+                id: 36,
+                type: 'multiple-choice',
+                category: 'Psychiatric Emergencies',
+                question: 'If an abnormal pattern of behavior lasts for at least ____, it is a matter of concern from a mental health standpoint.',
+                options: ['1 week', '2 weeks', '1 month', '6 months'],
+                correctAnswer: '1 month'
+            },
+            {
+                id: 37,
+                type: 'true-false',
+                category: 'Psychiatric Emergencies',
+                question: 'When documenting a psychiatric emergency with restraints, you should document what types of restraints were used and why.',
+                correctAnswer: true
+            },
+            {
+                id: 38,
+                type: 'case-scenario',
+                category: 'Psychiatric Emergencies',
+                question: 'You are called to a scene where a patient is threatening suicide and has a detailed plan with access to the means. The patient also has a history of depression. What is your risk assessment?',
+                options: ['Low risk', 'Moderate risk', 'High risk - patient likely to carry out plan', 'No risk if patient is talking'],
+                correctAnswer: 'High risk - patient likely to carry out plan'
+            },
+
+            // Toxicology
+            {
+                id: 39,
+                type: 'multiple-choice',
+                category: 'Toxicology',
+                question: 'The National Poison Control Center hotline number is:',
+                options: ['911', '1-800-222-1222', '1-888-POISON-1', '411'],
+                correctAnswer: '1-800-222-1222'
+            },
+            {
+                id: 40,
+                type: 'multiple-select',
+                category: 'Toxicology',
+                question: 'What are the four main routes by which toxins enter the body? (Select all that apply)',
+                options: ['Ingestion', 'Inhalation', 'Injection', 'Absorption', 'Osmosis'],
+                correctAnswers: ['Ingestion', 'Inhalation', 'Injection', 'Absorption']
+            },
+            {
+                id: 41,
+                type: 'true-false',
+                category: 'Toxicology',
+                question: 'A poison is toxic by nature, regardless of how it enters the body or in what quantities.',
+                correctAnswer: true
+            },
+            {
+                id: 42,
+                type: 'multiple-choice',
+                category: 'Toxicology',
+                question: 'When treating poisoning by ingestion, where does most absorption occur?',
+                options: ['Mouth', 'Stomach', 'Small intestine', 'Large intestine'],
+                correctAnswer: 'Small intestine'
+            },
+            {
+                id: 43,
+                type: 'multiple-choice',
+                category: 'Toxicology',
+                question: 'Activated charcoal works by:',
+                options: [
+                    'Neutralizing acid',
+                    'Binding to poison and carrying it out of the system',
+                    'Inducing vomiting',
+                    'Diluting the poison'
+                ],
+                correctAnswer: 'Binding to poison and carrying it out of the system'
+            },
+            {
+                id: 44,
+                type: 'true-false',
+                category: 'Toxicology',
+                question: 'You should enter a hazardous environment to rescue a patient with suspected inhalation poisoning.',
+                correctAnswer: false
+            },
+            {
+                id: 45,
+                type: 'multiple-choice',
+                category: 'Toxicology',
+                question: 'Which type of poisoning is usually the result of drug abuse?',
+                options: ['Ingestion', 'Inhalation', 'Injection', 'Absorption'],
+                correctAnswer: 'Injection'
+            },
+            {
+                id: 46,
+                type: 'multiple-choice',
+                category: 'Toxicology',
+                question: 'The most serious absorption poisons are typically:',
+                options: ['Household cleaners', 'Organophosphates and pesticides', 'Plant toxins', 'Food allergens'],
+                correctAnswer: 'Organophosphates and pesticides'
+            },
+            {
+                id: 47,
+                type: 'true-false',
+                category: 'Toxicology',
+                question: 'Inhaled toxins reach the alveoli quickly, providing a limited window for treatment.',
+                correctAnswer: true
+            },
+            {
+                id: 48,
+                type: 'multiple-select',
+                category: 'Toxicology',
+                question: 'Signs of chemical suicide in a vehicle may include: (Select all that apply)',
+                options: ['Taped or sealed windows', 'Locked doors', 'Posted warning signs', 'Empty chemical containers', 'Open windows'],
+                correctAnswers: ['Taped or sealed windows', 'Locked doors', 'Posted warning signs', 'Empty chemical containers']
+            },
+            {
+                id: 49,
+                type: 'multiple-choice',
+                category: 'Toxicology',
+                question: 'Flunitrazepam (Rohypnol) is commonly known as:',
+                options: ['A stimulant', 'A date rape drug', 'An antidote', 'An antibiotic'],
+                correctAnswer: 'A date rape drug'
+            },
+            {
+                id: 50,
+                type: 'case-scenario',
+                category: 'Toxicology',
+                question: 'You respond to a call where a patient is found unconscious with empty pill bottles nearby. What should you do with the containers?',
+                options: [
+                    'Leave them at the scene',
+                    'Take containers, bottles, and labels to the hospital',
+                    'Throw them away',
+                    'Give them to family'
+                ],
+                correctAnswer: 'Take containers, bottles, and labels to the hospital'
+            }
+        ];
+
+        // Application State
+        let state = {
+            currentQuestion: 0,
+            answers: {},
+            showResults: false,
+            studentName: '',
+            hasStarted: false
+        };
+
+        // Helper Functions
+        function calculateScore() {
+            let correct = 0;
+            questionBank.forEach(question => {
+                const userAnswer = state.answers[question.id];
+                if (question.type === 'multiple-select') {
+                    const correctSet = new Set(question.correctAnswers);
+                    const userSet = new Set(userAnswer || []);
+                    if (correctSet.size === userSet.size && 
+                        [...correctSet].every(item => userSet.has(item))) {
+                        correct++;
+                    }
+                } else if (question.type === 'true-false') {
+                    if (userAnswer === question.correctAnswer) {
+                        correct++;
+                    }
+                } else {
+                    if (userAnswer === question.correctAnswer) {
+                        correct++;
+                    }
+                }
+            });
+            return { 
+                correct, 
+                total: questionBank.length, 
+                percentage: ((correct / questionBank.length) * 100).toFixed(1) 
+            };
+        }
+
+        function generateCertificate() {
+            const score = calculateScore();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = 1200;
+            canvas.height = 800;
+            
+            // Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Border
+            ctx.strokeStyle = '#1e3a8a';
+            ctx.lineWidth = 20;
+            ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+            
+            // Inner border
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 5;
+            ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+            
+            // Title
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 60px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('CERTIFICATE OF COMPLETION', canvas.width / 2, 150);
+            
+            // Subtitle
+            ctx.font = '30px Arial';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('Medical Emergencies Comprehensive Test', canvas.width / 2, 210);
+            
+            // Award circle
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, 300, 50, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Student name
+            ctx.font = 'italic 35px Arial';
+            ctx.fillStyle = '#1e3a8a';
+            ctx.fillText('This certifies that', canvas.width / 2, 390);
+            
+            ctx.font = 'bold 50px Arial';
+            ctx.fillText(state.studentName || 'Student', canvas.width / 2, 460);
+            
+            ctx.font = '35px Arial';
+            ctx.fillText('has successfully completed the', canvas.width / 2, 520);
+            ctx.fillText('Medical Emergencies Assessment', canvas.width / 2, 570);
+            
+            // Score
+            ctx.font = 'bold 40px Arial';
+            ctx.fillStyle = score.percentage >= 70 ? '#10b981' : '#ef4444';
+            ctx.fillText(`Score: ${score.correct}/${score.total} (${score.percentage}%)`, canvas.width / 2, 650);
+            
+            // Date
+            ctx.font = '25px Arial';
+            ctx.fillStyle = '#6b7280';
+            const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            ctx.fillText(today, canvas.width / 2, 720);
+            
+            // Download
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = `${(state.studentName || 'Student').replace(/\s+/g, '_')}_Medical_Emergencies_Certificate.png`;
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        // Render Functions
+        function renderWelcomeScreen() {
+            return `
+                <div class="card welcome-screen">
+                    <div class="icon-award">🏆</div>
+                    <h1>Medical Emergencies<br>Comprehensive Test</h1>
+                    <p class="subtitle">50-Question Assessment Covering:</p>
+                    
+                    <div class="category-grid">
+                        <div class="category-box cat-gyn">• Gynecologic Emergencies</div>
+                        <div class="category-box cat-immuno">• Immunologic Emergencies</div>
+                        <div class="category-box cat-psych">• Psychiatric Emergencies</div>
+                        <div class="category-box cat-tox">• Toxicology</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="studentName">Enter Your Name:</label>
+                        <input 
+                            type="text" 
+                            id="studentName" 
+                            placeholder="Full Name"
+                            value="${state.studentName}"
+                        >
+                    </div>
+                    
+                    <button class="btn-primary" id="startBtn" ${!state.studentName.trim() ? 'disabled' : ''}>
+                        Begin Test
+                    </button>
+                    
+                    <div class="alert alert-warning">
+                        <strong>Note:</strong> This test includes multiple choice, true/false, multiple select, 
+                        and case scenario questions. Take your time and answer all questions to receive your certificate.
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderQuestionScreen() {
+            const question = questionBank[state.currentQuestion];
+            const progress = ((state.currentQuestion + 1) / questionBank.length) * 100;
+            
+            let optionsHTML = '';
+            
+            if (question.type === 'multiple-choice' || question.type === 'case-scenario') {
+                optionsHTML = question.options.map((option, index) => {
+                    const isSelected = state.answers[question.id] === option;
+                    return `
+                        <button class="option-button ${isSelected ? 'selected' : ''}" 
+                                data-question="${question.id}" 
+                                data-answer="${option}">
+                            <span class="option-label">${String.fromCharCode(65 + index)}.</span>
+                            ${option}
+                        </button>
+                    `;
+                }).join('');
+            } else if (question.type === 'true-false') {
+                optionsHTML = `
+                    <button class="option-button ${state.answers[question.id] === true ? 'selected-true' : ''}" 
+                            data-question="${question.id}" 
+                            data-answer="true">
+                        <span class="option-label">✓</span> True
+                    </button>
+                    <button class="option-button ${state.answers[question.id] === false ? 'selected-false' : ''}" 
+                            data-question="${question.id}" 
+                            data-answer="false">
+                        <span class="option-label">✗</span> False
+                    </button>
+                `;
+            } else if (question.type === 'multiple-select') {
+                optionsHTML = '<p style="color: #6b7280; margin-bottom: 15px; font-style: italic;">Select all that apply:</p>';
+                optionsHTML += question.options.map(option => {
+                    const isSelected = (state.answers[question.id] || []).includes(option);
+                    return `
+                        <button class="option-button ${isSelected ? 'selected' : ''}" 
+                                data-question="${question.id}" 
+                                data-answer="${option}"
+                                data-multi="true">
+                            <span class="option-label">${isSelected ? '☑' : '☐'}</span>
+                            ${option}
+                        </button>
+                    `;
+                }).join('');
+            }
+            
+            return `
+                <div class="card progress-bar-container">
+                    <div class="progress-header">
+                        <span>Question ${state.currentQuestion + 1} of ${questionBank.length}</span>
+                        <span>${progress.toFixed(0)}% Complete</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div>
+                        <span class="badge badge-category">${question.category}</span>
+                        <span class="badge badge-type">
+                            ${question.type.split('-').map(word => 
+                                word.charAt(0).toUpperCase() + word.slice(1)
+                            ).join(' ')}
+                        </span>
+                    </div>
+                    
+                    <h2 class="question-text">${question.question}</h2>
+                    
+                    <div id="options">
+                        ${optionsHTML}
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button class="btn-secondary" id="prevBtn" 
+                                ${state.currentQuestion === 0 ? 'disabled' : ''}>
+                            Previous
+                        </button>
+                        ${state.currentQuestion === questionBank.length - 1 
+                            ? '<button class="btn-success" id="submitBtn">Submit Test</button>'
+                            : '<button class="btn-primary" id="nextBtn">Next</button>'
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderResultsScreen() {
+            const score = calculateScore();
+            const passed = score.percentage >= 70;
+            
+            const categories = ['GYN Emergencies', 'Immunologic Emergencies', 'Psychiatric Emergencies', 'Toxicology'];
+            const categoryResults = categories.map(category => {
+                const categoryQuestions = questionBank.filter(q => q.category === category);
+                const categoryCorrect = categoryQuestions.filter(q => {
+                    const userAnswer = state.answers[q.id];
+                    if (q.type === 'multiple-select') {
+                        const correctSet = new Set(q.correctAnswers);
+                        const userSet = new Set(userAnswer || []);
+                        return correctSet.size === userSet.size && 
+                            [...correctSet].every(item => userSet.has(item));
+                    } else if (q.type === 'true-false') {
+                        return userAnswer === q.correctAnswer;
+                    } else {
+                        return userAnswer === q.correctAnswer;
+                    }
+                }).length;
+                const categoryPercentage = ((categoryCorrect / categoryQuestions.length) * 100).toFixed(1);
+                
+                return {
+                    category,
+                    correct: categoryCorrect,
+                    total: categoryQuestions.length,
+                    percentage: categoryPercentage
+                };
+            });
+            
+            return `
+                <div class="card">
+                    <div class="results-icon ${passed ? 'icon-success' : 'icon-error'}">
+                        ${passed ? '✓' : '✗'}
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <h1>${passed ? 'Congratulations!' : 'Test Complete'}</h1>
+                        <p class="subtitle">
+                            ${state.studentName}, you scored ${score.correct} out of ${score.total} (${score.percentage}%)
+                        </p>
+                        
+                        ${passed 
+                            ? '<div class="alert alert-success"><p style="font-size: 1.1rem; font-weight: 600;">You have successfully passed the Medical Emergencies Comprehensive Test!</p></div>'
+                            : '<div class="alert alert-error"><p style="font-size: 1.1rem; font-weight: 600;">A score of 70% or higher is required to pass. Please review the material and try again.</p></div>'
+                        }
+                    </div>
+                    
+                    <div class="score-grid">
+                        <div class="score-box score-box-blue">
+                            <div class="score-label" style="color: #1e3a8a;">Total Questions</div>
+                            <div class="score-value" style="color: #2563eb;">${score.total}</div>
+                        </div>
+                        <div class="score-box score-box-green">
+                            <div class="score-label" style="color: #14532d;">Correct Answers</div>
+                            <div class="score-value" style="color: #16a34a;">${score.correct}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-results">
+                        <h2 style="font-size: 1.5rem; margin-bottom: 20px;">Results by Category:</h2>
+                        ${categoryResults.map(cat => `
+                            <div class="category-result-item">
+                                <div class="category-result-header">
+                                    <span>${cat.category}</span>
+                                    <span style="color: #6b7280;">${cat.correct}/${cat.total} (${cat.percentage}%)</span>
+                                </div>
+                                <div class="progress-bar-result">
+                                    <div class="${cat.percentage >= 70 ? 'progress-fill-pass' : 'progress-fill-fail'}" 
+                                         style="width: ${cat.percentage}%"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    ${passed 
+                        ? '<button class="btn-primary btn-with-icon" id="downloadCertBtn"><span>📥</span> Download Certificate</button>'
+                        : ''
+                    }
+                    
+                    <button class="btn-secondary" id="restartBtn" style="margin-top: 15px;">
+                        Start New Test
+                    </button>
+                </div>
+            `;
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (!state.hasStarted) {
+                app.innerHTML = renderWelcomeScreen();
+                
+                const input = document.getElementById('studentName');
+                const startBtn = document.getElementById('startBtn');
+                
+                input.addEventListener('input', (e) => {
+                    state.studentName = e.target.value;
+                    startBtn.disabled = !state.studentName.trim();
+                });
+                
+                startBtn.addEventListener('click', () => {
+                    state.hasStarted = true;
+                    render();
+                });
+            } else if (state.showResults) {
+                app.innerHTML = renderResultsScreen();
+                
+                const downloadBtn = document.getElementById('downloadCertBtn');
+                if (downloadBtn) {
+                    downloadBtn.addEventListener('click', generateCertificate);
+                }
+                
+                const restartBtn = document.getElementById('restartBtn');
+                restartBtn.addEventListener('click', () => {
+                    state = {
+                        currentQuestion: 0,
+                        answers: {},
+                        showResults: false,
+                        studentName: '',
+                        hasStarted: false
+                    };
+                    render();
+                });
+            } else {
+                app.innerHTML = renderQuestionScreen();
+                
+                const question = questionBank[state.currentQuestion];
+                const options = document.querySelectorAll('#options .option-button');
+                
+                options.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const questionId = parseInt(btn.dataset.question);
+                        const answer = btn.dataset.answer;
+                        const isMulti = btn.dataset.multi === 'true';
+                        
+                        if (isMulti) {
+                            // Multiple select
+                            const current = state.answers[questionId] || [];
+                            if (current.includes(answer)) {
+                                state.answers[questionId] = current.filter(item => item !== answer);
+                            } else {
+                                state.answers[questionId] = [...current, answer];
+                            }
+                        } else if (answer === 'true' || answer === 'false') {
+                            // True/False
+                            state.answers[questionId] = answer === 'true';
+                        } else {
+                            // Multiple choice
+                            state.answers[questionId] = answer;
+                        }
+                        
+                        render();
+                    });
+                });
+                
+                const prevBtn = document.getElementById('prevBtn');
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        if (state.currentQuestion > 0) {
+                            state.currentQuestion--;
+                            render();
+                        }
+                    });
+                }
+                
+                const nextBtn = document.getElementById('nextBtn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        if (state.currentQuestion < questionBank.length - 1) {
+                            state.currentQuestion++;
+                            render();
+                        }
+                    });
+                }
+                
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.addEventListener('click', () => {
+                        state.showResults = true;
+                        render();
+                    });
+                }
+            }
+        }
+
+        // Initialize app
+        render();
+    </script>
+</body>
+</html>
