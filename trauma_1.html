@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trauma Assessment - Camp Community College</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-screen h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .welcome-screen p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .question-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8edff;
+        }
+
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .matching-container,
+        .sequence-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .matching-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .matching-item span {
+            flex: 1;
+        }
+
+        .matching-item select,
+        .sequence-item input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            min-width: 150px;
+        }
+
+        .sequence-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sequence-item input {
+            width: 60px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .score-display h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .score-percentage {
+            font-size: 5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .score-message {
+            font-size: 1.3em;
+        }
+
+        .certificate-section {
+            margin-top: 40px;
+        }
+
+        .fill-blank-input {
+            padding: 8px 15px;
+            border: none;
+            border-bottom: 2px solid #667eea;
+            background: transparent;
+            font-size: 1em;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .nested-question {
+            margin-left: 20px;
+            padding-left: 20px;
+            border-left: 3px solid #667eea;
+            margin-top: 15px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .navigation, .btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const TraumaAssessment = () => {
+            const [studentName, setStudentName] = useState('');
+            const [started, setStarted] = useState(false);
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [completed, setCompleted] = useState(false);
+
+            const questions = [
+                {
+                    id: 1,
+                    type: 'multiple',
+                    question: 'What is the primary cause of death and disability in people between ages 1 and 44 years?',
+                    options: ['Heart disease', 'Unintentional injury', 'Cancer', 'Infectious diseases'],
+                    correct: 'Unintentional injury'
+                },
+                {
+                    id: 2,
+                    type: 'multiple',
+                    question: 'Traumatic injury occurs when the body\'s tissues are exposed to:',
+                    options: ['Energy levels beyond their tolerance', 'Normal stress levels', 'Low-impact forces', 'Minor mechanical pressure'],
+                    correct: 'Energy levels beyond their tolerance'
+                },
+                {
+                    id: 3,
+                    type: 'multiple',
+                    question: 'How many collisions typically occur in a motor vehicle crash?',
+                    options: ['One', 'Two', 'Three', 'Four'],
+                    correct: 'Three'
+                },
+                {
+                    id: 4,
+                    type: 'matching',
+                    question: 'Match the type of energy with its description:',
+                    pairs: [
+                        { left: 'Kinetic energy', options: ['Energy in motion', 'Stored energy', 'Heat energy', 'Pressure changes'], correct: 'Energy in motion' },
+                        { left: 'Thermal energy', options: ['Energy in motion', 'Stored energy', 'Heat energy', 'Pressure changes'], correct: 'Heat energy' },
+                        { left: 'Barometric energy', options: ['Energy in motion', 'Stored energy', 'Heat energy', 'Pressure changes'], correct: 'Pressure changes' }
+                    ]
+                },
+                {
+                    id: 5,
+                    type: 'multiple',
+                    question: 'Blunt trauma is defined as:',
+                    options: [
+                        'Injury by objects that pierce the skin',
+                        'Injury primarily without anything penetrating the soft tissues',
+                        'Injury from chemical exposure',
+                        'Injury from electrical current'
+                    ],
+                    correct: 'Injury primarily without anything penetrating the soft tissues'
+                },
+                {
+                    id: 6,
+                    type: 'multiple',
+                    question: 'The three collisions in a typical vehicle crash include all EXCEPT:',
+                    options: [
+                        'Vehicle against another object',
+                        'Passenger against the interior of the vehicle',
+                        'Internal organs against solid structures of the body',
+                        'Tires against the roadway'
+                    ],
+                    correct: 'Tires against the roadway'
+                },
+                {
+                    id: 7,
+                    type: 'sequence',
+                    question: 'Order the steps of proper hemorrhage control (1-4):',
+                    items: [
+                        { text: 'Apply direct pressure', correct: 1 },
+                        { text: 'Apply pressure dressing', correct: 2 },
+                        { text: 'Apply tourniquet if needed', correct: 3 },
+                        { text: 'Transport rapidly', correct: 4 }
+                    ]
+                },
+                {
+                    id: 8,
+                    type: 'multiple',
+                    question: 'What is perfusion?',
+                    options: [
+                        'Circulation of blood within an organ or tissue in adequate amounts',
+                        'The process of breathing',
+                        'Heart rate regulation',
+                        'Blood pressure measurement'
+                    ],
+                    correct: 'Circulation of blood within an organ or tissue in adequate amounts'
+                },
+                {
+                    id: 9,
+                    type: 'multiple',
+                    question: 'Hypoperfusion is also known as:',
+                    options: ['Hypertension', 'Shock', 'Hyperventilation', 'Tachycardia'],
+                    correct: 'Shock'
+                },
+                {
+                    id: 10,
+                    type: 'checkbox',
+                    question: 'Which organs does emergency medical care primarily support? (Select all that apply)',
+                    options: ['Heart', 'Brain', 'Lungs', 'Kidneys', 'Stomach', 'Spleen'],
+                    correct: ['Heart', 'Brain', 'Lungs', 'Kidneys']
+                },
+                {
+                    id: 11,
+                    type: 'fill',
+                    question: 'The repetitive pumping process of the heart is called the _______ cycle.',
+                    correct: 'cardiac'
+                },
+                {
+                    id: 12,
+                    type: 'multiple',
+                    question: 'Preload is defined as:',
+                    options: [
+                        'Amount of blood returned to the heart to be pumped out',
+                        'Pressure in the aorta',
+                        'Heart rate measurement',
+                        'Blood oxygen level'
+                    ],
+                    correct: 'Amount of blood returned to the heart to be pumped out'
+                },
+                {
+                    id: 13,
+                    type: 'multiple',
+                    question: 'Stroke volume (SV) is:',
+                    options: [
+                        'The amount of blood ejected per contraction',
+                        'Blood pressure during stroke',
+                        'Heart rate during exercise',
+                        'Total blood volume'
+                    ],
+                    correct: 'The amount of blood ejected per contraction'
+                },
+                {
+                    id: 14,
+                    type: 'multiple',
+                    question: 'Hemorrhage is defined as:',
+                    options: [
+                        'A discharge of blood from the blood vessels',
+                        'Low blood pressure',
+                        'Rapid heart rate',
+                        'Difficulty breathing'
+                    ],
+                    correct: 'A discharge of blood from the blood vessels'
+                },
+                {
+                    id: 15,
+                    type: 'checkbox',
+                    question: 'External bleeding can be controlled using: (Select all that apply)',
+                    options: ['Direct pressure', 'Hemostatic dressings', 'Tourniquets', 'Ice only', 'Elevation only'],
+                    correct: ['Direct pressure', 'Hemostatic dressings', 'Tourniquets']
+                },
+                {
+                    id: 16,
+                    type: 'matching',
+                    question: 'Match the bleeding assessment finding with its medical term:',
+                    pairs: [
+                        { left: 'Blood in urine', options: ['Hematemesis', 'Hematuria', 'Hemoptysis', 'Melena'], correct: 'Hematuria' },
+                        { left: 'Vomiting blood', options: ['Hematemesis', 'Hematuria', 'Hemoptysis', 'Melena'], correct: 'Hematemesis' },
+                        { left: 'Coughing up blood', options: ['Hematemesis', 'Hematuria', 'Hemoptysis', 'Melena'], correct: 'Hemoptysis' }
+                    ]
+                },
+                {
+                    id: 17,
+                    type: 'multiple',
+                    question: 'The first sign of internal bleeding is generally:',
+                    options: [
+                        'A change in mental status',
+                        'Visible bruising',
+                        'Severe pain',
+                        'Rapid pulse'
+                    ],
+                    correct: 'A change in mental status'
+                },
+                {
+                    id: 18,
+                    type: 'nested',
+                    question: 'A 45-year-old male presents after a motor vehicle crash:',
+                    subQuestions: [
+                        {
+                            question: 'What type of trauma is most likely?',
+                            options: ['Penetrating', 'Blunt', 'Chemical', 'Thermal'],
+                            correct: 'Blunt'
+                        },
+                        {
+                            question: 'You should maintain a high index of suspicion for:',
+                            options: ['Minor injuries only', 'Hidden injuries', 'No injuries', 'Superficial wounds'],
+                            correct: 'Hidden injuries'
+                        }
+                    ]
+                },
+                {
+                    id: 19,
+                    type: 'multiple',
+                    question: 'Which mechanism of injury is associated with internal bleeding?',
+                    options: ['Paper cut', 'Minor abrasion', 'Falls', 'Sunburn'],
+                    correct: 'Falls'
+                },
+                {
+                    id: 20,
+                    type: 'fill',
+                    question: 'A pool of blood collected within damaged tissue is called a _______.',
+                    correct: 'hematoma'
+                },
+                {
+                    id: 21,
+                    type: 'multiple',
+                    question: 'The skin is the body\'s:',
+                    options: [
+                        'First line of defense',
+                        'Second line of defense',
+                        'Last line of defense',
+                        'Primary immune response'
+                    ],
+                    correct: 'First line of defense'
+                },
+                {
+                    id: 22,
+                    type: 'multiple',
+                    question: 'The two principal layers of skin are:',
+                    options: [
+                        'Epidermis and dermis',
+                        'Epidermis and hypodermis',
+                        'Dermis and subcutaneous',
+                        'Cortex and medulla'
+                    ],
+                    correct: 'Epidermis and dermis'
+                },
+                {
+                    id: 23,
+                    type: 'multiple',
+                    question: 'A contusion is:',
+                    options: [
+                        'Bleeding beneath the skin without breaking the skin',
+                        'A penetrating wound',
+                        'A burn injury',
+                        'A fracture'
+                    ],
+                    correct: 'Bleeding beneath the skin without breaking the skin'
+                },
+                {
+                    id: 24,
+                    type: 'fill',
+                    question: 'Blue or black discoloration of the skin is called _______.',
+                    correct: 'ecchymosis'
+                },
+                {
+                    id: 25,
+                    type: 'multiple',
+                    question: 'Crush syndrome is characterized by:',
+                    options: [
+                        'Tissue necrosis with release of harmful products into the bloodstream',
+                        'Minor bruising',
+                        'Superficial abrasion',
+                        'Simple laceration'
+                    ],
+                    correct: 'Tissue necrosis with release of harmful products into the bloodstream'
+                },
+                {
+                    id: 26,
+                    type: 'multiple',
+                    question: 'Compartment syndrome is characterized by:',
+                    options: [
+                        'Pain out of proportion to the injury',
+                        'No pain at all',
+                        'Mild discomfort',
+                        'Immediate relief'
+                    ],
+                    correct: 'Pain out of proportion to the injury'
+                },
+                {
+                    id: 27,
+                    type: 'matching',
+                    question: 'Match the wound type with its description:',
+                    pairs: [
+                        { left: 'Abrasion', options: ['Body part rubs across rough surface', 'Tearing away of tissue', 'Sharp object penetration', 'Smooth cut'], correct: 'Body part rubs across rough surface' },
+                        { left: 'Avulsion', options: ['Body part rubs across rough surface', 'Tearing away of tissue', 'Sharp object penetration', 'Smooth cut'], correct: 'Tearing away of tissue' },
+                        { left: 'Puncture', options: ['Body part rubs across rough surface', 'Tearing away of tissue', 'Sharp object penetration', 'Smooth cut'], correct: 'Sharp object penetration' }
+                    ]
+                },
+                {
+                    id: 28,
+                    type: 'checkbox',
+                    question: 'Dressings and bandages are applied to: (Select all that apply)',
+                    options: [
+                        'Control bleeding',
+                        'Prevent contamination',
+                        'Protect the wound',
+                        'Make the wound look better',
+                        'Hide the injury'
+                    ],
+                    correct: ['Control bleeding', 'Prevent contamination', 'Protect the wound']
+                },
+                {
+                    id: 29,
+                    type: 'sequence',
+                    question: 'Order the layers of skin from outermost to innermost (1-3):',
+                    items: [
+                        { text: 'Epidermis', correct: 1 },
+                        { text: 'Dermis', correct: 2 },
+                        { text: 'Subcutaneous tissue', correct: 3 }
+                    ]
+                },
+                {
+                    id: 30,
+                    type: 'multiple',
+                    question: 'Burns can be caused by all of the following EXCEPT:',
+                    options: ['Thermal', 'Chemical', 'Electrical', 'Mechanical pressure'],
+                    correct: 'Mechanical pressure'
+                },
+                {
+                    id: 31,
+                    type: 'nested',
+                    question: 'A patient has a severe laceration with active bleeding:',
+                    subQuestions: [
+                        {
+                            question: 'Your first action should be:',
+                            options: ['Apply direct pressure', 'Apply a tourniquet', 'Wash the wound', 'Call for help only'],
+                            correct: 'Apply direct pressure'
+                        },
+                        {
+                            question: 'If direct pressure fails, your next step is:',
+                            options: ['Give up', 'Apply pressure dressing', 'Remove your gloves', 'Leave the scene'],
+                            correct: 'Apply pressure dressing'
+                        }
+                    ]
+                },
+                {
+                    id: 32,
+                    type: 'fill',
+                    question: 'The presence of infectious organisms or foreign bodies in a wound is called _______.',
+                    correct: 'contamination'
+                },
+                {
+                    id: 33,
+                    type: 'multiple',
+                    question: 'Afterload is defined as:',
+                    options: [
+                        'Pressure in the aorta or peripheral vascular resistance',
+                        'Amount of blood in the heart',
+                        'Heart rate',
+                        'Breathing rate'
+                    ],
+                    correct: 'Pressure in the aorta or peripheral vascular resistance'
+                },
+                {
+                    id: 34,
+                    type: 'multiple',
+                    question: 'What does MOI stand for?',
+                    options: [
+                        'Mechanism of injury',
+                        'Mode of intervention',
+                        'Medical order index',
+                        'Method of inspection'
+                    ],
+                    correct: 'Mechanism of injury'
+                },
+                {
+                    id: 35,
+                    type: 'checkbox',
+                    question: 'Different forms of energy that can cause trauma include: (Select all that apply)',
+                    options: ['Mechanical', 'Chemical', 'Thermal', 'Magnetic', 'Nuclear'],
+                    correct: ['Mechanical', 'Chemical', 'Thermal']
+                },
+                {
+                    id: 36,
+                    type: 'multiple',
+                    question: 'Penetrating trauma is defined as:',
+                    options: [
+                        'Injury by objects that pierce and penetrate the surface of the body',
+                        'Injury without skin penetration',
+                        'Thermal burns',
+                        'Chemical exposure'
+                    ],
+                    correct: 'Injury by objects that pierce and penetrate the surface of the body'
+                },
+                {
+                    id: 37,
+                    type: 'multiple',
+                    question: 'Which of the following is a common mechanism of internal bleeding?',
+                    options: ['Ruptured ectopic pregnancy', 'Minor bruise', 'Paper cut', 'Mild abrasion'],
+                    correct: 'Ruptured ectopic pregnancy'
+                },
+                {
+                    id: 38,
+                    type: 'fill',
+                    question: 'Black, tarry stools indicating GI bleeding are called _______.',
+                    correct: 'melena'
+                },
+                {
+                    id: 39,
+                    type: 'multiple',
+                    question: 'Delivery of oxygen to tissues depends on all EXCEPT:',
+                    options: ['Adequate heart rate', 'Stroke volume', 'Hemoglobin levels', 'Shoe size'],
+                    correct: 'Shoe size'
+                },
+                {
+                    id: 40,
+                    type: 'matching',
+                    question: 'Match the assessment finding with the correct term:',
+                    pairs: [
+                        { left: 'Difficulty breathing', options: ['Dyspnea', 'Tachycardia', 'Hypotension', 'Hematoma'], correct: 'Dyspnea' },
+                        { left: 'Rapid heart rate', options: ['Dyspnea', 'Tachycardia', 'Hypotension', 'Hematoma'], correct: 'Tachycardia' },
+                        { left: 'Low blood pressure', options: ['Dyspnea', 'Tachycardia', 'Hypotension', 'Hematoma'], correct: 'Hypotension' }
+                    ]
+                },
+                {
+                    id: 41,
+                    type: 'nested',
+                    question: 'A patient presents with a closed injury showing significant swelling:',
+                    subQuestions: [
+                        {
+                            question: 'This injury likely involves:',
+                            options: ['A contusion or hematoma', 'An open fracture', 'A penetrating wound', 'No injury'],
+                            correct: 'A contusion or hematoma'
+                        },
+                        {
+                            question: 'Your assessment should include checking for:',
+                            options: ['Distal pulses and sensation', 'Nothing else needed', 'Only vital signs', 'Temperature only'],
+                            correct: 'Distal pulses and sensation'
+                        }
+                    ]
+                },
+                {
+                    id: 42,
+                    type: 'multiple',
+                    question: 'An incision is characterized by:',
+                    options: [
+                        'A smooth cut from a sharp object',
+                        'Rough, irregular edges',
+                        'Puncture hole',
+                        'Tissue avulsion'
+                    ],
+                    correct: 'A smooth cut from a sharp object'
+                },
+                {
+                    id: 43,
+                    type: 'sequence',
+                    question: 'Order the priorities in trauma care (1-4):',
+                    items: [
+                        { text: 'Ensure scene safety', correct: 1 },
+                        { text: 'Assess airway and breathing', correct: 2 },
+                        { text: 'Control major hemorrhage', correct: 3 },
+                        { text: 'Transport to appropriate facility', correct: 4 }
+                    ]
+                },
+                {
+                    id: 44,
+                    type: 'checkbox',
+                    question: 'Signs of internal bleeding include: (Select all that apply)',
+                    options: ['Pain', 'Swelling', 'Distention', 'Bruising', 'Perfect health'],
+                    correct: ['Pain', 'Swelling', 'Distention', 'Bruising']
+                },
+                {
+                    id: 45,
+                    type: 'multiple',
+                    question: 'Static tension in the skin:',
+                    options: [
+                        'Develops over areas with limited movement',
+                        'Is found over muscles',
+                        'Doesn\'t exist',
+                        'Only occurs in children'
+                    ],
+                    correct: 'Develops over areas with limited movement'
+                },
+                {
+                    id: 46,
+                    type: 'fill',
+                    question: 'Orifices in the body are lined with _______ membranes.',
+                    correct: 'mucous'
+                },
+                {
+                    id: 47,
+                    type: 'multiple',
+                    question: 'The most important factor in preventing soft-tissue injury complications is:',
+                    options: [
+                        'Proper wound care and protection',
+                        'Ignoring the wound',
+                        'Removing all dressings',
+                        'Exposing to air immediately'
+                    ],
+                    correct: 'Proper wound care and protection'
+                },
+                {
+                    id: 48,
+                    type: 'multiple',
+                    question: 'Which type of injury results from substantial force applied to the body?',
+                    options: ['Crushing injury', 'Abrasion', 'Small laceration', 'Minor contusion'],
+                    correct: 'Crushing injury'
+                },
+                {
+                    id: 49,
+                    type: 'matching',
+                    question: 'Match the burn type with its cause:',
+                    pairs: [
+                        { left: 'Thermal burn', options: ['Heat/fire', 'Electricity', 'Corrosive substance', 'Friction'], correct: 'Heat/fire' },
+                        { left: 'Chemical burn', options: ['Heat/fire', 'Electricity', 'Corrosive substance', 'Friction'], correct: 'Corrosive substance' },
+                        { left: 'Electrical burn', options: ['Heat/fire', 'Electricity', 'Corrosive substance', 'Friction'], correct: 'Electricity' }
+                    ]
+                },
+                {
+                    id: 50,
+                    type: 'multiple',
+                    question: 'Proper prehospital evaluation and care of trauma patients:',
+                    options: [
+                        'Minimizes suffering, disability, and death',
+                        'Has no effect on outcomes',
+                        'Only matters for minor injuries',
+                        'Is not important'
+                    ],
+                    correct: 'Minimizes suffering, disability, and death'
+                }
+            ];
+
+            const handleStart = () => {
+                if (studentName.trim()) {
+                    setStarted(true);
+                }
+            };
+
+            const handleAnswer = (value) => {
+                setAnswers({ ...answers, [currentQuestion]: value });
+            };
+
+            const handleNext = () => {
+                if (currentQuestion < questions.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                } else {
+                    setCompleted(true);
+                }
+            };
+
+            const handlePrevious = () => {
+                if (currentQuestion > 0) {
+                    setCurrentQuestion(currentQuestion - 1);
+                }
+            };
+
+            const calculateScore = () => {
+                let correct = 0;
+                let total = 0;
+
+                questions.forEach((q, index) => {
+                    if (q.type === 'nested') {
+                        q.subQuestions.forEach((sq, sqIndex) => {
+                            total++;
+                            const answer = answers[index]?.[sqIndex];
+                            if (answer === sq.correct) correct++;
+                        });
+                    } else if (q.type === 'matching') {
+                        q.pairs.forEach((pair, pairIndex) => {
+                            total++;
+                            const answer = answers[index]?.[pairIndex];
+                            if (answer === pair.correct) correct++;
+                        });
+                    } else if (q.type === 'sequence') {
+                        q.items.forEach((item, itemIndex) => {
+                            total++;
+                            const answer = answers[index]?.[itemIndex];
+                            if (parseInt(answer) === item.correct) correct++;
+                        });
+                    } else if (q.type === 'checkbox') {
+                        total++;
+                        const answer = answers[index] || [];
+                        const correctSet = new Set(q.correct);
+                        const answerSet = new Set(answer);
+                        if (correctSet.size === answerSet.size && 
+                            [...correctSet].every(item => answerSet.has(item))) {
+                            correct++;
+                        }
+                    } else if (q.type === 'fill') {
+                        total++;
+                        const answer = (answers[index] || '').toLowerCase().trim();
+                        const correctAnswer = q.correct.toLowerCase().trim();
+                        if (answer === correctAnswer) correct++;
+                    } else {
+                        total++;
+                        if (answers[index] === q.correct) correct++;
+                    }
+                });
+
+                return { correct, total, percentage: Math.round((correct / total) * 100) };
+            };
+
+            const generateCertificate = () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const score = calculateScore();
+                
+                // Background
+                doc.setFillColor(102, 126, 234);
+                doc.rect(0, 0, 297, 210, 'F');
+                
+                // White center
+                doc.setFillColor(255, 255, 255);
+                doc.roundedRect(20, 20, 257, 170, 10, 10, 'F');
+                
+                // Border
+                doc.setDrawColor(118, 75, 162);
+                doc.setLineWidth(2);
+                doc.roundedRect(25, 25, 247, 160, 8, 8, 'S');
+                
+                // Title
+                doc.setFontSize(36);
+                doc.setTextColor(102, 126, 234);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Certificate of Completion', 148.5, 50, { align: 'center' });
+                
+                // Subtitle
+                doc.setFontSize(18);
+                doc.setTextColor(118, 75, 162);
+                doc.text('Trauma Assessment', 148.5, 65, { align: 'center' });
+                
+                // Student name
+                doc.setFontSize(28);
+                doc.setTextColor(51, 51, 51);
+                doc.setFont('helvetica', 'bold');
+                doc.text(studentName, 148.5, 90, { align: 'center' });
+                
+                // Description
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(102, 102, 102);
+                doc.text('has successfully completed the comprehensive trauma assessment', 148.5, 105, { align: 'center' });
+                doc.text('covering Trauma Overview, Bleeding, and Soft-Tissue Injuries', 148.5, 115, { align: 'center' });
+                
+                // Score
+                doc.setFontSize(22);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(102, 126, 234);
+                doc.text(`Score: ${score.correct}/${score.total} (${score.percentage}%)`, 148.5, 135, { align: 'center' });
+                
+                // Date
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(102, 102, 102);
+                const today = new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                doc.text(`Date: ${today}`, 148.5, 155, { align: 'center' });
+                
+                // Footer
+                doc.setFontSize(10);
+                doc.setTextColor(118, 75, 162);
+                doc.text('Camp Community College - Emergency Medical Services', 148.5, 170, { align: 'center' });
+                
+                doc.save(`${studentName.replace(/\s+/g, '_')}_Trauma_Certificate.pdf`);
+            };
+
+            const renderQuestion = () => {
+                const q = questions[currentQuestion];
+                const answer = answers[currentQuestion];
+
+                switch (q.type) {
+                    case 'multiple':
+                        return (
+                            <div className="options">
+                                {q.options.map((option, index) => (
+                                    <label 
+                                        key={index}
+                                        className={`option ${answer === option ? 'selected' : ''}`}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name={`q${q.id}`}
+                                            checked={answer === option}
+                                            onChange={() => handleAnswer(option)}
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
+                        );
+
+                    case 'checkbox':
+                        return (
+                            <div className="options">
+                                {q.options.map((option, index) => (
+                                    <label 
+                                        key={index}
+                                        className={`option ${answer?.includes(option) ? 'selected' : ''}`}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={answer?.includes(option) || false}
+                                            onChange={(e) => {
+                                                const currentAnswers = answer || [];
+                                                if (e.target.checked) {
+                                                    handleAnswer([...currentAnswers, option]);
+                                                } else {
+                                                    handleAnswer(currentAnswers.filter(a => a !== option));
+                                                }
+                                            }}
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
+                        );
+
+                    case 'matching':
+                        return (
+                            <div className="matching-container">
+                                {q.pairs.map((pair, index) => (
+                                    <div key={index} className="matching-item">
+                                        <span><strong>{pair.left}:</strong></span>
+                                        <select
+                                            value={answer?.[index] || ''}
+                                            onChange={(e) => {
+                                                const newAnswer = answer || {};
+                                                newAnswer[index] = e.target.value;
+                                                handleAnswer({ ...newAnswer });
+                                            }}
+                                        >
+                                            <option value="">Select match...</option>
+                                            {pair.options.map((opt, optIndex) => (
+                                                <option key={optIndex} value={opt}>{opt}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+
+                    case 'sequence':
+                        return (
+                            <div className="sequence-container">
+                                {q.items.map((item, index) => (
+                                    <div key={index} className="sequence-item">
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max={q.items.length}
+                                            value={answer?.[index] || ''}
+                                            onChange={(e) => {
+                                                const newAnswer = answer || {};
+                                                newAnswer[index] = e.target.value;
+                                                handleAnswer({ ...newAnswer });
+                                            }}
+                                        />
+                                        <span>{item.text}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+
+                    case 'fill':
+                        return (
+                            <div>
+                                <input
+                                    type="text"
+                                    className="fill-blank-input"
+                                    value={answer || ''}
+                                    onChange={(e) => handleAnswer(e.target.value)}
+                                    placeholder="Type your answer..."
+                                />
+                            </div>
+                        );
+
+                    case 'nested':
+                        return (
+                            <div>
+                                {q.subQuestions.map((sq, sqIndex) => (
+                                    <div key={sqIndex} className="nested-question">
+                                        <div className="question-text" style={{ fontSize: '1em', marginBottom: '15px' }}>
+                                            {sq.question}
+                                        </div>
+                                        <div className="options">
+                                            {sq.options.map((option, optIndex) => (
+                                                <label 
+                                                    key={optIndex}
+                                                    className={`option ${answer?.[sqIndex] === option ? 'selected' : ''}`}
+                                                >
+                                                    <input
+                                                        type="radio"
+                                                        name={`q${q.id}_sq${sqIndex}`}
+                                                        checked={answer?.[sqIndex] === option}
+                                                        onChange={() => {
+                                                            const newAnswer = answer || {};
+                                                            newAnswer[sqIndex] = option;
+                                                            handleAnswer({ ...newAnswer });
+                                                        }}
+                                                    />
+                                                    {option}
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+
+                    default:
+                        return null;
+                }
+            };
+
+            if (!started) {
+                return (
+                    <div className="container">
+                        <div className="header">
+                            <h1>🏥 Trauma Assessment</h1>
+                            <p>Camp Community College - EMS Program</p>
+                        </div>
+                        <div className="content welcome-screen">
+                            <h2>Welcome to the Comprehensive Trauma Assessment</h2>
+                            <p>
+                                This assessment covers three critical chapters:<br/>
+                                <strong>Chapter 26:</strong> Trauma Overview<br/>
+                                <strong>Chapter 27:</strong> Bleeding<br/>
+                                <strong>Chapter 28:</strong> Soft-Tissue Injuries
+                            </p>
+                            <p>
+                                You will complete 50 questions with various formats including multiple choice, 
+                                matching, sequencing, and more. Upon completion, you'll receive a certificate 
+                                with your score.
+                            </p>
+                            <div className="input-group">
+                                <label>Enter Your Full Name:</label>
+                                <input
+                                    type="text"
+                                    value={studentName}
+                                    onChange={(e) => setStudentName(e.target.value)}
+                                    placeholder="John Doe"
+                                    autoFocus
+                                />
+                            </div>
+                            <button 
+                                className="btn" 
+                                onClick={handleStart}
+                                disabled={!studentName.trim()}
+                            >
+                                Begin Assessment
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (completed) {
+                const score = calculateScore();
+                const passed = score.percentage >= 70;
+
+                return (
+                    <div className="container">
+                        <div className="header">
+                            <h1>🏥 Assessment Complete</h1>
+                            <p>Camp Community College - EMS Program</p>
+                        </div>
+                        <div className="content results-container">
+                            <div className="score-display">
+                                <h2>Congratulations, {studentName}!</h2>
+                                <div className="score-percentage">{score.percentage}%</div>
+                                <div className="score-message">
+                                    {score.correct} out of {score.total} correct
+                                </div>
+                                <div className="score-message" style={{ marginTop: '20px' }}>
+                                    {passed ? '✅ Passed' : '❌ Did not pass (70% required)'}
+                                </div>
+                            </div>
+                            
+                            <div className="certificate-section">
+                                <button className="btn" onClick={generateCertificate}>
+                                    📄 Download Certificate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            const q = questions[currentQuestion];
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>🏥 Trauma Assessment</h1>
+                        <p>Student: {studentName}</p>
+                    </div>
+                    <div className="content">
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                        </div>
+                        
+                        <div className="question-container">
+                            <div className="question-number">
+                                Question {currentQuestion + 1} of {questions.length}
+                            </div>
+                            <div className="question-text">{q.question}</div>
+                            {renderQuestion()}
+                        </div>
+
+                        <div className="navigation">
+                            <button 
+                                className="btn" 
+                                onClick={handlePrevious}
+                                disabled={currentQuestion === 0}
+                            >
+                                ← Previous
+                            </button>
+                            <button 
+                                className="btn" 
+                                onClick={handleNext}
+                            >
+                                {currentQuestion === questions.length - 1 ? 'Finish' : 'Next →'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<TraumaAssessment />, document.getElementById('root'));
+    </script>
+</body>
+</html>
