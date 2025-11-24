@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Trauma Assessment Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-screen h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .welcome-screen p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .welcome-screen ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+            color: #666;
+        }
+
+        .welcome-screen li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin: 30px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .question-container {
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8f0fe;
+        }
+
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .matching-item {
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .matching-select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .sequence-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: move;
+        }
+
+        .sequence-number {
+            width: 40px;
+            padding: 5px;
+            margin-right: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .fill-blank {
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .fill-blank input {
+            width: 200px;
+            padding: 8px;
+            border: none;
+            border-bottom: 2px solid #667eea;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .score-circle.pass {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .score-circle.fail {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        .results-details {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .results-details p {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .certificate {
+            margin: 30px auto;
+            padding: 40px;
+            max-width: 700px;
+            background: white;
+            border: 10px solid;
+            border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+            position: relative;
+        }
+
+        .certificate::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid #ddd;
+        }
+
+        .certificate-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .certificate h2 {
+            font-size: 36px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        .certificate h3 {
+            font-size: 24px;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .certificate p {
+            margin: 15px 0;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .certificate .student-name {
+            font-size: 32px;
+            color: #1e3c72;
+            font-weight: bold;
+            margin: 20px 0;
+            font-family: 'Georgia', serif;
+        }
+
+        .certificate-footer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .signature-line {
+            text-align: center;
+        }
+
+        .signature-line p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .btn, .navigation {
+                display: none;
+            }
+        }
+
+        .nested-question {
+            margin-left: 20px;
+            margin-top: 15px;
+            padding-left: 15px;
+            border-left: 3px solid #ddd;
+        }
+
+        .drag-drop-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .drag-options, .drop-zones {
+            min-height: 200px;
+        }
+
+        .drag-item {
+            padding: 10px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: grab;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+        }
+
+        .drop-zone {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            min-height: 50px;
+        }
+
+        .drop-zone.filled {
+            border-style: solid;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Comprehensive Trauma Assessment Test</h1>
+            <p>Chapters 29-32: Face & Neck, Head & Spine, Chest, Abdominal & Genitourinary Injuries</p>
+        </div>
+
+        <div class="content">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="welcome-screen">
+                <h2>Welcome to the Trauma Assessment Examination</h2>
+                <p>This comprehensive examination will test your knowledge across four critical chapters of trauma care:</p>
+                <ul>
+                    <li><strong>Chapter 29:</strong> Face and Neck Injuries</li>
+                    <li><strong>Chapter 30:</strong> Head and Spine Injuries</li>
+                    <li><strong>Chapter 31:</strong> Chest Injuries</li>
+                    <li><strong>Chapter 32:</strong> Abdominal and Genitourinary Injuries</li>
+                </ul>
+                <p><strong>Test Details:</strong></p>
+                <ul>
+                    <li>50 Questions covering all chapters</li>
+                    <li>Various question types: Multiple Choice, Matching, Sequencing, Fill-in-the-Blank, and Nested Questions</li>
+                    <li>Passing Score: 70% (35 correct answers)</li>
+                    <li>Upon completion, you'll receive a downloadable certificate</li>
+                </ul>
+                
+                <div class="input-group">
+                    <label for="studentName">Enter Your Full Name:</label>
+                    <input type="text" id="studentName" placeholder="John Doe" required>
+                </div>
+
+                <button class="btn" onclick="startTest()">Begin Test</button>
+            </div>
+
+            <!-- Test Container -->
+            <div id="testContainer" style="display: none;">
+                <div class="progress-text" id="progressText">Question 1 of 50</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 2%;"></div>
+                </div>
+
+                <div id="questionsContainer"></div>
+
+                <div class="navigation">
+                    <button class="btn" id="prevBtn" onclick="previousQuestion()" style="display: none;">Previous</button>
+                    <button class="btn" id="nextBtn" onclick="nextQuestion()">Next Question</button>
+                    <button class="btn" id="submitBtn" onclick="submitTest()" style="display: none;">Submit Test</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="resultsContainer" class="results-container">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">Test Results</h2>
+                <div id="scoreCircle" class="score-circle"></div>
+                <div class="results-details">
+                    <p><strong>Student:</strong> <span id="resultName"></span></p>
+                    <p><strong>Score:</strong> <span id="resultScore"></span>%</p>
+                    <p><strong>Correct Answers:</strong> <span id="resultCorrect"></span> out of 50</p>
+                    <p><strong>Status:</strong> <span id="resultStatus"></span></p>
+                    <p><strong>Date:</strong> <span id="resultDate"></span></p>
+                </div>
+
+                <div id="certificateContainer"></div>
+
+                <button class="btn" onclick="downloadCertificate()">📄 Download Certificate (PDF)</button>
+                <button class="btn" onclick="window.print()">🖨️ Print Certificate</button>
+                <button class="btn" onclick="resetTest()">🔄 Retake Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let studentName = '';
+        let currentQuestion = 0;
+        let answers = {};
+        let score = 0;
+
+        const questions = [
+            // CHAPTER 29: Face and Neck Injuries (Questions 1-13)
+            {
+                number: 1,
+                type: 'multiple-choice',
+                question: 'What are the three primary treatment objectives for face and neck injuries?',
+                options: [
+                    'Airway management, bleeding control, and prevention of further injury',
+                    'Pain management, bandaging, and transport',
+                    'Splinting, elevation, and ice application',
+                    'Oxygen administration, IV access, and vital signs monitoring'
+                ],
+                correct: 0
+            },
+            {
+                number: 2,
+                type: 'multiple-choice',
+                question: 'Which nerve innervates the eye muscles and carries parasympathetic nerve fibers?',
+                options: [
+                    'Optic nerve',
+                    'Oculomotor nerve',
+                    'Facial nerve',
+                    'Trigeminal nerve'
+                ],
+                correct: 1
+            },
+            {
+                number: 3,
+                type: 'multiple-choice',
+                question: 'What is the medical term for blood in the anterior chamber of the eye?',
+                options: [
+                    'Hemothorax',
+                    'Hematoma',
+                    'Hyphema',
+                    'Hemoptysis'
+                ],
+                correct: 2
+            },
+            {
+                number: 4,
+                type: 'fill-blank',
+                question: 'The opening in the center of the iris is called the _____.',
+                correct: ['pupil']
+            },
+            {
+                number: 5,
+                type: 'multiple-choice',
+                question: 'What is subcutaneous emphysema?',
+                options: [
+                    'Swelling of the lymph nodes',
+                    'A crackling sensation produced by air in the soft tissues',
+                    'Fluid accumulation under the skin',
+                    'Inflammation of subcutaneous tissue'
+                ],
+                correct: 1
+            },
+            {
+                number: 6,
+                type: 'matching',
+                question: 'Match the facial fracture with its characteristic sign or symptom:',
+                pairs: [
+                    { left: 'Nasal fracture', right: 'Lateral displacement and nosebleed' },
+                    { left: 'Orbital fracture', right: 'Double vision (diplopia)' },
+                    { left: 'Mandibular fracture', right: 'Pain at angle of jaw' },
+                    { left: 'Zygomatic fracture', right: 'Flattened appearance of cheek' }
+                ]
+            },
+            {
+                number: 7,
+                type: 'multiple-choice',
+                question: 'What is the most common site of a single mandibular fracture?',
+                options: [
+                    'The chin',
+                    'The angle of the jaw',
+                    'The condyle',
+                    'The midline'
+                ],
+                correct: 1
+            },
+            {
+                number: 8,
+                type: 'true-false',
+                question: 'Anterior nosebleeds typically bleed more slowly than posterior nosebleeds.',
+                correct: true
+            },
+            {
+                number: 9,
+                type: 'multiple-choice',
+                question: 'When managing an avulsed tooth, how should you handle it?',
+                options: [
+                    'By the root to preserve the crown',
+                    'By the crown and not by the root',
+                    'Rinse it thoroughly with hot water',
+                    'Scrub it clean before transport'
+                ],
+                correct: 1
+            },
+            {
+                number: 10,
+                type: 'multiple-choice',
+                question: 'What potentially life-threatening complication can occur with penetrating neck injuries?',
+                options: [
+                    'Hypertension',
+                    'Air embolism',
+                    'Hyperventilation',
+                    'Hypothermia'
+                ],
+                correct: 1
+            },
+            {
+                number: 11,
+                type: 'sequence',
+                question: 'Place these steps in the correct order for controlling epistaxis following facial trauma:',
+                items: [
+                    'Position patient leaning forward',
+                    'Apply direct pressure to the nares',
+                    'Assess for continued bleeding',
+                    'Maintain pressure for several minutes'
+                ],
+                correct: [0, 1, 3, 2]
+            },
+            {
+                number: 12,
+                type: 'multiple-select',
+                question: 'Which of the following are signs of a facial fracture? (Select all that apply)',
+                options: [
+                    'Bleeding in the mouth',
+                    'Increased appetite',
+                    'Loose or absent teeth',
+                    'Crepitus on palpation',
+                    'Improved vision',
+                    'Ecchymosis and swelling'
+                ],
+                correct: [0, 2, 3, 5]
+            },
+            {
+                number: 13,
+                type: 'multiple-choice',
+                question: 'What should you do with well-fitting dentures in a patient with facial trauma?',
+                options: [
+                    'Always remove them immediately',
+                    'Leave them in place',
+                    'Remove only the upper denture',
+                    'Remove only the lower denture'
+                ],
+                correct: 1
+            },
+
+            // CHAPTER 30: Head and Spine Injuries (Questions 14-25)
+            {
+                number: 14,
+                type: 'multiple-choice',
+                question: 'What is the most common mechanism of traumatic brain injury?',
+                options: [
+                    'Falls',
+                    'Motor vehicle crashes',
+                    'Sports injuries',
+                    'Assaults'
+                ],
+                correct: 0
+            },
+            {
+                number: 15,
+                type: 'fill-blank',
+                question: 'The three layers of membranes that protect the brain and spinal cord are collectively called the _____.',
+                correct: ['meninges']
+            },
+            {
+                number: 16,
+                type: 'multiple-choice',
+                question: 'Which type of skull fracture involves bone fragments driven into the brain tissue?',
+                options: [
+                    'Linear fracture',
+                    'Depressed fracture',
+                    'Basilar fracture',
+                    'Comminuted fracture'
+                ],
+                correct: 1
+            },
+            {
+                number: 17,
+                type: 'matching',
+                question: 'Match the brain injury type with its description:',
+                pairs: [
+                    { left: 'Concussion', right: 'Brief loss of consciousness without structural damage' },
+                    { left: 'Contusion', right: 'Bruising of brain tissue' },
+                    { left: 'Epidural hematoma', right: 'Bleeding between skull and dura mater' },
+                    { left: 'Subdural hematoma', right: 'Bleeding beneath the dura mater' }
+                ]
+            },
+            {
+                number: 18,
+                type: 'multiple-choice',
+                question: 'What is the classic presentation of a basilar skull fracture?',
+                options: [
+                    'Raccoon eyes and Battle sign',
+                    'Halo sign and tinnitus',
+                    'Pupil dilation and bradycardia',
+                    'Hypertension and fever'
+                ],
+                correct: 0
+            },
+            {
+                number: 19,
+                type: 'nested',
+                question: 'A patient presents with a head injury following a motor vehicle crash.',
+                subQuestions: [
+                    {
+                        question: 'What is your first priority in assessment?',
+                        type: 'multiple-choice',
+                        options: [
+                            'Assess mental status',
+                            'Ensure airway patency',
+                            'Check pupil response',
+                            'Obtain vital signs'
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: 'If the patient has unequal pupils, this suggests:',
+                        type: 'multiple-choice',
+                        options: [
+                            'Hypoxia',
+                            'Increased intracranial pressure',
+                            'Hypotension',
+                            'Cervical spine injury'
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                number: 20,
+                type: 'multiple-choice',
+                question: 'What is the normal Glasgow Coma Scale (GCS) score range?',
+                options: [
+                    '0-10',
+                    '3-15',
+                    '1-12',
+                    '5-20'
+                ],
+                correct: 1
+            },
+            {
+                number: 21,
+                type: 'sequence',
+                question: 'Arrange the Cushing triad symptoms in order:',
+                items: [
+                    'Hypertension',
+                    'Bradycardia',
+                    'Irregular respirations'
+                ],
+                correct: [0, 1, 2]
+            },
+            {
+                number: 22,
+                type: 'multiple-select',
+                question: 'Which of the following indicate a serious spinal cord injury? (Select all that apply)',
+                options: [
+                    'Paralysis below the injury site',
+                    'Loss of bowel and bladder control',
+                    'Mild headache',
+                    'Loss of sensation',
+                    'Normal reflexes',
+                    'Priapism in males'
+                ],
+                correct: [0, 1, 3, 5]
+            },
+            {
+                number: 23,
+                type: 'multiple-choice',
+                question: 'When should you suspect a cervical spine injury?',
+                options: [
+                    'Only when the patient complains of neck pain',
+                    'Only with obvious deformity',
+                    'With any significant trauma above the clavicles',
+                    'Only in motor vehicle crashes'
+                ],
+                correct: 2
+            },
+            {
+                number: 24,
+                type: 'multiple-choice',
+                question: 'What is neurogenic shock?',
+                options: [
+                    'Shock from blood loss',
+                    'Shock from loss of sympathetic nervous system control',
+                    'Shock from severe pain',
+                    'Shock from brain injury'
+                ],
+                correct: 1
+            },
+            {
+                number: 25,
+                type: 'true-false',
+                question: 'All patients with head injuries should be suspected of having a cervical spine injury.',
+                correct: true
+            },
+
+            // CHAPTER 31: Chest Injuries (Questions 26-38)
+            {
+                number: 26,
+                type: 'multiple-choice',
+                question: 'What is the most immediate life threat from a tension pneumothorax?',
+                options: [
+                    'Infection',
+                    'Pain',
+                    'Compression of the heart and great vessels',
+                    'Bleeding into the chest cavity'
+                ],
+                correct: 2
+            },
+            {
+                number: 27,
+                type: 'fill-blank',
+                question: 'The condition where air accumulates in the pleural space is called a _____.',
+                correct: ['pneumothorax']
+            },
+            {
+                number: 28,
+                type: 'matching',
+                question: 'Match the chest injury with its characteristic feature:',
+                pairs: [
+                    { left: 'Flail chest', right: 'Paradoxical chest wall movement' },
+                    { left: 'Tension pneumothorax', right: 'Tracheal deviation' },
+                    { left: 'Cardiac tamponade', right: 'Muffled heart sounds' },
+                    { left: 'Hemothorax', right: 'Blood in pleural space' }
+                ]
+            },
+            {
+                number: 29,
+                type: 'multiple-choice',
+                question: 'How should you manage an open chest wound (sucking chest wound)?',
+                options: [
+                    'Leave it open to allow air to escape',
+                    'Apply an occlusive dressing sealed on three sides',
+                    'Apply a fully sealed occlusive dressing',
+                    'Pack it with gauze'
+                ],
+                correct: 1
+            },
+            {
+                number: 30,
+                type: 'sequence',
+                question: 'Arrange these steps for managing a penetrating chest injury with an impaled object:',
+                items: [
+                    'Ensure scene safety',
+                    'Stabilize the impaled object',
+                    'Apply bulky dressings around the object',
+                    'Secure dressings in place',
+                    'Monitor patient closely'
+                ],
+                correct: [0, 1, 2, 3, 4]
+            },
+            {
+                number: 31,
+                type: 'nested',
+                question: 'A patient has been involved in a high-speed motor vehicle crash and presents with chest pain and difficulty breathing.',
+                subQuestions: [
+                    {
+                        question: 'On examination, you notice paradoxical chest wall movement. This indicates:',
+                        type: 'multiple-choice',
+                        options: [
+                            'Pneumothorax',
+                            'Flail chest',
+                            'Cardiac tamponade',
+                            'Hemothorax'
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: 'The best initial treatment for this condition is:',
+                        type: 'multiple-choice',
+                        options: [
+                            'Needle decompression',
+                            'Chest tube insertion',
+                            'High-flow oxygen and support of the flail segment',
+                            'Immediate intubation'
+                        ],
+                        correct: 2
+                    }
+                ]
+            },
+            {
+                number: 32,
+                type: 'multiple-select',
+                question: 'Which of the following are signs of cardiac tamponade (Beck\'s triad)? (Select all that apply)',
+                options: [
+                    'Jugular vein distention',
+                    'Hypertension',
+                    'Muffled heart sounds',
+                    'Narrowing pulse pressure',
+                    'Bradycardia',
+                    'Clear breath sounds'
+                ],
+                correct: [0, 2, 3]
+            },
+            {
+                number: 33,
+                type: 'multiple-choice',
+                question: 'What is commotio cordis?',
+                options: [
+                    'A heart attack',
+                    'Sudden cardiac arrest from blunt chest trauma during a critical period of the cardiac cycle',
+                    'Inflammation of the heart muscle',
+                    'Rupture of the heart wall'
+                ],
+                correct: 1
+            },
+            {
+                number: 34,
+                type: 'true-false',
+                question: 'A simple pneumothorax can progress to a tension pneumothorax.',
+                correct: true
+            },
+            {
+                number: 35,
+                type: 'multiple-choice',
+                question: 'What mechanism of injury is most commonly associated with traumatic aortic disruption?',
+                options: [
+                    'Penetrating trauma',
+                    'Rapid deceleration injuries',
+                    'Crushing injuries',
+                    'Electrical injuries'
+                ],
+                correct: 1
+            },
+            {
+                number: 36,
+                type: 'multiple-choice',
+                question: 'How many ribs need to be fractured in two or more places to create a flail chest?',
+                options: [
+                    'One',
+                    'Two or more',
+                    'Four or more',
+                    'Six or more'
+                ],
+                correct: 1
+            },
+            {
+                number: 37,
+                type: 'fill-blank',
+                question: 'Bruising of lung tissue is called pulmonary _____.',
+                correct: ['contusion']
+            },
+            {
+                number: 38,
+                type: 'multiple-choice',
+                question: 'What is traumatic asphyxia?',
+                options: [
+                    'Choking on a foreign object',
+                    'Severe crushing injury to the chest resulting in backflow of blood into the head and neck',
+                    'Lack of oxygen from drowning',
+                    'Suffocation from toxic gas'
+                ],
+                correct: 1
+            },
+
+            // CHAPTER 32: Abdominal and Genitourinary Injuries (Questions 39-50)
+            {
+                number: 39,
+                type: 'multiple-choice',
+                question: 'The abdomen is divided into how many quadrants for assessment purposes?',
+                options: [
+                    'Two',
+                    'Three',
+                    'Four',
+                    'Five'
+                ],
+                correct: 2
+            },
+            {
+                number: 40,
+                type: 'matching',
+                question: 'Match the abdominal organ with its location:',
+                pairs: [
+                    { left: 'Liver', right: 'Right upper quadrant' },
+                    { left: 'Spleen', right: 'Left upper quadrant' },
+                    { left: 'Appendix', right: 'Right lower quadrant' },
+                    { left: 'Sigmoid colon', right: 'Left lower quadrant' }
+                ]
+            },
+            {
+                number: 41,
+                type: 'fill-blank',
+                question: 'Solid organs include the liver, spleen, pancreas, and _____.',
+                correct: ['kidneys', 'kidney']
+            },
+            {
+                number: 42,
+                type: 'multiple-choice',
+                question: 'What is an evisceration?',
+                options: [
+                    'Internal bleeding in the abdomen',
+                    'Displacement of organs outside the body through an open wound',
+                    'Bruising of abdominal organs',
+                    'Perforation of the stomach'
+                ],
+                correct: 1
+            },
+            {
+                number: 43,
+                type: 'multiple-choice',
+                question: 'How should you manage an abdominal evisceration?',
+                options: [
+                    'Push the organs back inside',
+                    'Cover with a dry sterile dressing',
+                    'Cover with a moist sterile dressing and occlusive covering',
+                    'Leave it exposed to air'
+                ],
+                correct: 2
+            },
+            {
+                number: 44,
+                type: 'nested',
+                question: 'A patient has sustained blunt abdominal trauma from a fall.',
+                subQuestions: [
+                    {
+                        question: 'The most commonly injured solid organ in blunt abdominal trauma is:',
+                        type: 'multiple-choice',
+                        options: [
+                            'Liver',
+                            'Spleen',
+                            'Pancreas',
+                            'Kidney'
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: 'Signs of internal abdominal bleeding include:',
+                        type: 'multiple-select',
+                        options: [
+                            'Rigid abdomen',
+                            'Increased appetite',
+                            'Distended abdomen',
+                            'Signs of shock',
+                            'Bradycardia',
+                            'Guarding'
+                        ],
+                        correct: [0, 2, 3, 5]
+                    }
+                ]
+            },
+            {
+                number: 45,
+                type: 'sequence',
+                question: 'Arrange these steps for assessing the abdomen in correct order:',
+                items: [
+                    'Inspect for injuries',
+                    'Auscultate bowel sounds (if trained)',
+                    'Palpate each quadrant gently',
+                    'Reassess for changes'
+                ],
+                correct: [0, 1, 2, 3]
+            },
+            {
+                number: 46,
+                type: 'multiple-choice',
+                question: 'What position should you transport a patient with suspected abdominal injuries?',
+                options: [
+                    'Prone position',
+                    'Supine with legs flexed',
+                    'Left lateral recumbent',
+                    'Sitting upright'
+                ],
+                correct: 1
+            },
+            {
+                number: 47,
+                type: 'true-false',
+                question: 'Hollow organs are more likely to cause infection if ruptured than solid organs.',
+                correct: true
+            },
+            {
+                number: 48,
+                type: 'multiple-select',
+                question: 'Which of the following are hollow organs? (Select all that apply)',
+                options: [
+                    'Stomach',
+                    'Liver',
+                    'Intestines',
+                    'Spleen',
+                    'Bladder',
+                    'Kidneys'
+                ],
+                correct: [0, 2, 4]
+            },
+            {
+                number: 49,
+                type: 'multiple-choice',
+                question: 'What should you do if a patient has an impaled object in the abdomen?',
+                options: [
+                    'Remove it immediately',
+                    'Cut it flush with the skin',
+                    'Stabilize it in place',
+                    'Remove it if it\'s less than 3 inches long'
+                ],
+                correct: 2
+            },
+            {
+                number: 50,
+                type: 'multiple-choice',
+                question: 'Kehr sign, pain in the left shoulder, may indicate injury to which organ?',
+                options: [
+                    'Liver',
+                    'Spleen',
+                    'Kidney',
+                    'Stomach'
+                ],
+                correct: 1
+            }
+        ];
+
+        function startTest() {
+            const nameInput = document.getElementById('studentName');
+            studentName = nameInput.value.trim();
+            
+            if (!studentName) {
+                alert('Please enter your name before starting the test.');
+                return;
+            }
+
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('testContainer').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            const q = questions[currentQuestion];
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            
+            let questionHTML = `
+                <div class="question-number">Question ${q.number} of 50 - Chapter ${getChapter(q.number)}</div>
+                <div class="question-text">${q.question}</div>
+            `;
+
+            if (q.type === 'multiple-choice') {
+                questionHTML += '<div class="options">';
+                q.options.forEach((option, index) => {
+                    const checked = answers[q.number] === index ? 'checked' : '';
+                    const selected = answers[q.number] === index ? 'selected' : '';
+                    questionHTML += `
+                        <label class="option ${selected}" onclick="selectOption(${q.number}, ${index})">
+                            <input type="radio" name="q${q.number}" value="${index}" ${checked}>
+                            ${option}
+                        </label>
+                    `;
+                });
+                questionHTML += '</div>';
+            }
+            else if (q.type === 'multiple-select') {
+                questionHTML += '<div class="options">';
+                q.options.forEach((option, index) => {
+                    const checked = answers[q.number] && answers[q.number].includes(index) ? 'checked' : '';
+                    const selected = answers[q.number] && answers[q.number].includes(index) ? 'selected' : '';
+                    questionHTML += `
+                        <label class="option ${selected}" onclick="toggleMultiSelect(${q.number}, ${index})">
+                            <input type="checkbox" value="${index}" ${checked}>
+                            ${option}
+                        </label>
+                    `;
+                });
+                questionHTML += '</div>';
+            }
+            else if (q.type === 'true-false') {
+                questionHTML += '<div class="options">';
+                ['True', 'False'].forEach((option, index) => {
+                    const checked = answers[q.number] === (index === 0) ? 'checked' : '';
+                    const selected = answers[q.number] === (index === 0) ? 'selected' : '';
+                    questionHTML += `
+                        <label class="option ${selected}" onclick="selectTrueFalse(${q.number}, ${index === 0})">
+                            <input type="radio" name="q${q.number}" value="${index === 0}" ${checked}>
+                            ${option}
+                        </label>
+                    `;
+                });
+                questionHTML += '</div>';
+            }
+            else if (q.type === 'fill-blank') {
+                const value = answers[q.number] || '';
+                questionHTML += `
+                    <div class="fill-blank">
+                        <input type="text" id="fill${q.number}" value="${value}" 
+                               onchange="saveFillBlank(${q.number}, this.value)" 
+                               placeholder="Type your answer here">
+                    </div>
+                `;
+            }
+            else if (q.type === 'matching') {
+                questionHTML += '<div class="matching-container">';
+                questionHTML += '<div><strong>Terms:</strong>';
+                q.pairs.forEach((pair, index) => {
+                    questionHTML += `<div class="matching-item">${index + 1}. ${pair.left}</div>`;
+                });
+                questionHTML += '</div><div><strong>Definitions:</strong>';
+                q.pairs.forEach((pair, index) => {
+                    const value = answers[q.number] ? answers[q.number][index] : '';
+                    questionHTML += `
+                        <div class="matching-item">
+                            <select class="matching-select" onchange="saveMatching(${q.number}, ${index}, this.value)">
+                                <option value="">Select...</option>
+                                ${q.pairs.map((p, i) => `
+                                    <option value="${i}" ${value == i ? 'selected' : ''}>${p.right}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    `;
+                });
+                questionHTML += '</div></div>';
+            }
+            else if (q.type === 'sequence') {
+                questionHTML += '<div class="sequence-container">';
+                q.items.forEach((item, index) => {
+                    const value = answers[q.number] ? answers[q.number][index] : '';
+                    questionHTML += `
+                        <div class="sequence-item">
+                            <input type="number" class="sequence-number" min="1" max="${q.items.length}" 
+                                   value="${value}" onchange="saveSequence(${q.number}, ${index}, this.value)">
+                            ${item}
+                        </div>
+                    `;
+                });
+                questionHTML += '</div>';
+            }
+            else if (q.type === 'nested') {
+                q.subQuestions.forEach((subQ, subIndex) => {
+                    questionHTML += `
+                        <div class="nested-question">
+                            <div class="question-text">${String.fromCharCode(97 + subIndex)}. ${subQ.question}</div>
+                    `;
+                    
+                    if (subQ.type === 'multiple-choice') {
+                        questionHTML += '<div class="options">';
+                        subQ.options.forEach((option, optIndex) => {
+                            const answerKey = `${q.number}_${subIndex}`;
+                            const checked = answers[answerKey] === optIndex ? 'checked' : '';
+                            const selected = answers[answerKey] === optIndex ? 'selected' : '';
+                            questionHTML += `
+                                <label class="option ${selected}" onclick="selectNestedOption(${q.number}, ${subIndex}, ${optIndex})">
+                                    <input type="radio" name="q${answerKey}" value="${optIndex}" ${checked}>
+                                    ${option}
+                                </label>
+                            `;
+                        });
+                        questionHTML += '</div>';
+                    }
+                    else if (subQ.type === 'multiple-select') {
+                        questionHTML += '<div class="options">';
+                        subQ.options.forEach((option, optIndex) => {
+                            const answerKey = `${q.number}_${subIndex}`;
+                            const checked = answers[answerKey] && answers[answerKey].includes(optIndex) ? 'checked' : '';
+                            const selected = answers[answerKey] && answers[answerKey].includes(optIndex) ? 'selected' : '';
+                            questionHTML += `
+                                <label class="option ${selected}" onclick="toggleNestedMultiSelect(${q.number}, ${subIndex}, ${optIndex})">
+                                    <input type="checkbox" value="${optIndex}" ${checked}>
+                                    ${option}
+                                </label>
+                            `;
+                        });
+                        questionHTML += '</div>';
+                    }
+                    
+                    questionHTML += '</div>';
+                });
+            }
+
+            questionDiv.innerHTML = questionHTML;
+            container.appendChild(questionDiv);
+
+            updateProgress();
+            updateNavigationButtons();
+        }
+
+        function getChapter(questionNumber) {
+            if (questionNumber <= 13) return '29 (Face & Neck)';
+            if (questionNumber <= 25) return '30 (Head & Spine)';
+            if (questionNumber <= 38) return '31 (Chest)';
+            return '32 (Abdomen & Genitourinary)';
+        }
+
+        function selectOption(questionNumber, optionIndex) {
+            answers[questionNumber] = optionIndex;
+            renderQuestion();
+        }
+
+        function toggleMultiSelect(questionNumber, optionIndex) {
+            if (!answers[questionNumber]) {
+                answers[questionNumber] = [];
+            }
+            const index = answers[questionNumber].indexOf(optionIndex);
+            if (index > -1) {
+                answers[questionNumber].splice(index, 1);
+            } else {
+                answers[questionNumber].push(optionIndex);
+            }
+            renderQuestion();
+        }
+
+        function selectTrueFalse(questionNumber, value) {
+            answers[questionNumber] = value;
+            renderQuestion();
+        }
+
+        function saveFillBlank(questionNumber, value) {
+            answers[questionNumber] = value.trim().toLowerCase();
+        }
+
+        function saveMatching(questionNumber, pairIndex, value) {
+            if (!answers[questionNumber]) {
+                answers[questionNumber] = {};
+            }
+            answers[questionNumber][pairIndex] = parseInt(value);
+        }
+
+        function saveSequence(questionNumber, itemIndex, value) {
+            if (!answers[questionNumber]) {
+                answers[questionNumber] = {};
+            }
+            answers[questionNumber][itemIndex] = parseInt(value);
+        }
+
+        function selectNestedOption(questionNumber, subIndex, optionIndex) {
+            const answerKey = `${questionNumber}_${subIndex}`;
+            answers[answerKey] = optionIndex;
+            renderQuestion();
+        }
+
+        function toggleNestedMultiSelect(questionNumber, subIndex, optionIndex) {
+            const answerKey = `${questionNumber}_${subIndex}`;
+            if (!answers[answerKey]) {
+                answers[answerKey] = [];
+            }
+            const index = answers[answerKey].indexOf(optionIndex);
+            if (index > -1) {
+                answers[answerKey].splice(index, 1);
+            } else {
+                answers[answerKey].push(optionIndex);
+            }
+            renderQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prevBtn').style.display = currentQuestion > 0 ? 'inline-block' : 'none';
+            document.getElementById('nextBtn').style.display = 
+                currentQuestion < questions.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('submitBtn').style.display = 
+                currentQuestion === questions.length - 1 ? 'inline-block' : 'none';
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function submitTest() {
+            if (!confirm('Are you sure you want to submit your test? You cannot change your answers after submission.')) {
+                return;
+            }
+
+            calculateScore();
+            showResults();
+        }
+
+        function calculateScore() {
+            score = 0;
+            let correctCount = 0;
+
+            questions.forEach(q => {
+                if (q.type === 'multiple-choice' || q.type === 'true-false') {
+                    if (answers[q.number] === q.correct) {
+                        correctCount++;
+                    }
+                }
+                else if (q.type === 'multiple-select') {
+                    const userAnswer = answers[q.number] || [];
+                    if (JSON.stringify(userAnswer.sort()) === JSON.stringify(q.correct.sort())) {
+                        correctCount++;
+                    }
+                }
+                else if (q.type === 'fill-blank') {
+                    const userAnswer = (answers[q.number] || '').toLowerCase();
+                    if (q.correct.some(correct => userAnswer === correct.toLowerCase())) {
+                        correctCount++;
+                    }
+                }
+                else if (q.type === 'matching') {
+                    const userAnswer = answers[q.number] || {};
+                    let allCorrect = true;
+                    q.pairs.forEach((pair, index) => {
+                        if (userAnswer[index] !== index) {
+                            allCorrect = false;
+                        }
+                    });
+                    if (allCorrect) {
+                        correctCount++;
+                    }
+                }
+                else if (q.type === 'sequence') {
+                    const userAnswer = answers[q.number] || {};
+                    let allCorrect = true;
+                    q.items.forEach((item, index) => {
+                        if (userAnswer[index] !== q.correct[index] + 1) {
+                            allCorrect = false;
+                        }
+                    });
+                    if (allCorrect) {
+                        correctCount++;
+                    }
+                }
+                else if (q.type === 'nested') {
+                    let nestedCorrect = true;
+                    q.subQuestions.forEach((subQ, subIndex) => {
+                        const answerKey = `${q.number}_${subIndex}`;
+                        if (subQ.type === 'multiple-choice') {
+                            if (answers[answerKey] !== subQ.correct) {
+                                nestedCorrect = false;
+                            }
+                        }
+                        else if (subQ.type === 'multiple-select') {
+                            const userAnswer = answers[answerKey] || [];
+                            if (JSON.stringify(userAnswer.sort()) !== JSON.stringify(subQ.correct.sort())) {
+                                nestedCorrect = false;
+                            }
+                        }
+                    });
+                    if (nestedCorrect) {
+                        correctCount++;
+                    }
+                }
+            });
+
+            score = Math.round((correctCount / questions.length) * 100);
+            return { score, correctCount };
+        }
+
+        function showResults() {
+            const { score: finalScore, correctCount } = calculateScore();
+            const passed = finalScore >= 70;
+
+            document.getElementById('testContainer').style.display = 'none';
+            document.getElementById('resultsContainer').classList.add('active');
+
+            const scoreCircle = document.getElementById('scoreCircle');
+            scoreCircle.textContent = finalScore + '%';
+            scoreCircle.className = 'score-circle ' + (passed ? 'pass' : 'fail');
+
+            document.getElementById('resultName').textContent = studentName;
+            document.getElementById('resultScore').textContent = finalScore;
+            document.getElementById('resultCorrect').textContent = correctCount;
+            document.getElementById('resultStatus').textContent = passed ? 
+                '✅ PASSED - Excellent work!' : '❌ FAILED - Review materials and try again';
+            document.getElementById('resultDate').textContent = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            if (passed) {
+                generateCertificate();
+            }
+        }
+
+        function generateCertificate() {
+            const certificateHTML = `
+                <div class="certificate" id="certificate">
+                    <div class="certificate-content">
+                        <h2>🏆 Certificate of Completion 🏆</h2>
+                        <p>This certifies that</p>
+                        <div class="student-name">${studentName}</div>
+                        <p>has successfully completed the</p>
+                        <h3>Comprehensive Trauma Assessment Examination</h3>
+                        <p>Covering Chapters 29-32:<br>
+                        Face & Neck Injuries, Head & Spine Injuries,<br>
+                        Chest Injuries, and Abdominal & Genitourinary Injuries</p>
+                        <p><strong>Score Achieved: ${score}%</strong></p>
+                        <p><strong>Questions Correct: ${Math.round(score * 50 / 100)} out of 50</strong></p>
+                        <div class="certificate-footer">
+                            <div class="signature-line">
+                                <p>__________________________</p>
+                                <p>Date: ${new Date().toLocaleDateString()}</p>
+                            </div>
+                            <div class="signature-line">
+                                <p>__________________________</p>
+                                <p>Instructor Signature</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('certificateContainer').innerHTML = certificateHTML;
+        }
+
+        function downloadCertificate() {
+            window.print();
+        }
+
+        function resetTest() {
+            if (confirm('Are you sure you want to retake the test? All answers will be cleared.')) {
+                currentQuestion = 0;
+                answers = {};
+                score = 0;
+                document.getElementById('resultsContainer').classList.remove('active');
+                document.getElementById('welcomeScreen').style.display = 'block';
+                document.getElementById('studentName').value = studentName;
+            }
+        }
+    </script>
+</body>
+</html>
