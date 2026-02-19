@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDCC EMS — Cardiology Case Studies</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800&family=Barlow:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #060c18;
+  --navy2: #0d1b2e;
+  --navy3: #102040;
+  --panel: #0f1e33;
+  --card: #132540;
+  --border: rgba(0,160,255,0.18);
+  --blue: #00a8ff;
+  --blue2: #0077cc;
+  --cyan: #00e5ff;
+  --amber: #f59e0b;
+  --red: #ff3b5c;
+  --green: #00e676;
+  --purple: #b44dff;
+  --text: #e2eaf5;
+  --muted: #7a99bb;
+  --white: #ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Barlow',sans-serif;
+  background:var(--navy);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── SCANLINE OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);
+  pointer-events:none;z-index:9999;
+}
+
+/* ── LANDING ── */
+#landing{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;
+  padding:40px 20px;
+}
+.landing-bg{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,120,255,0.12) 0%, transparent 70%),
+             radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,59,92,0.07) 0%, transparent 60%),
+             var(--navy);
+  z-index:-1;
+}
+
+.pdcc-header{
+  text-align:center;
+  margin-bottom:60px;
+}
+.pdcc-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(0,168,255,0.1);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:6px 16px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:600;
+  letter-spacing:3px;
+  color:var(--blue);
+  margin-bottom:24px;
+  text-transform:uppercase;
+}
+.pdcc-badge::before{
+  content:'';
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 8px var(--blue);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.landing-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(36px,7vw,72px);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-1px;
+  color:var(--white);
+  margin-bottom:12px;
+}
+.landing-title span{color:var(--blue);}
+.landing-sub{
+  font-size:16px;font-weight:300;
+  color:var(--muted);
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+
+/* ECG line decoration */
+.ecg-line{
+  width:100%;max-width:600px;
+  height:60px;margin:32px auto;
+  position:relative;
+}
+.ecg-line svg{width:100%;height:100%;}
+
+.case-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+  width:100%;max-width:1200px;
+  margin:0 auto;
+}
+.case-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:28px;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  position:relative;
+  overflow:hidden;
+}
+.case-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:3px;
+}
+.case-card.g1::before{background:linear-gradient(90deg,#ff3b5c,#ff8c42);}
+.case-card.g2::before{background:linear-gradient(90deg,#f59e0b,#ffd700);}
+.case-card.g3::before{background:linear-gradient(90deg,#b44dff,#00a8ff);}
+.case-card.g4::before{background:linear-gradient(90deg,#00e5ff,#00a8ff);}
+.case-card.bonus::before{background:linear-gradient(90deg,#00e676,#00e5ff);}
+.case-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(0,168,255,0.4);
+  box-shadow:0 12px 40px rgba(0,0,0,0.4);
+}
+.case-tag{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:14px;
+  opacity:0.9;
+}
+.case-card.g1 .case-tag{color:#ff3b5c;}
+.case-card.g2 .case-tag{color:#f59e0b;}
+.case-card.g3 .case-tag{color:#b44dff;}
+.case-card.g4 .case-tag{color:#00e5ff;}
+.case-card.bonus .case-tag{color:#00e676;}
+.case-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;font-weight:700;
+  color:var(--white);
+  margin-bottom:8px;
+  line-height:1.2;
+}
+.case-desc{
+  font-size:13px;color:var(--muted);
+  line-height:1.6;
+  margin-bottom:18px;
+}
+.case-meta{
+  display:flex;gap:16px;flex-wrap:wrap;
+}
+.case-meta-item{
+  display:flex;align-items:center;gap:5px;
+  font-size:12px;color:var(--muted);
+}
+.case-meta-item span.dot{
+  width:5px;height:5px;
+  border-radius:50%;
+  background:var(--muted);
+}
+.open-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:18px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:9px 18px;
+  border-radius:4px;
+  border:none;cursor:pointer;
+  transition:all 0.2s;
+}
+.case-card.g1 .open-btn{background:rgba(255,59,92,0.15);color:#ff3b5c;border:1px solid rgba(255,59,92,0.3);}
+.case-card.g2 .open-btn{background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);}
+.case-card.g3 .open-btn{background:rgba(180,77,255,0.15);color:#b44dff;border:1px solid rgba(180,77,255,0.3);}
+.case-card.g4 .open-btn{background:rgba(0,229,255,0.15);color:#00e5ff;border:1px solid rgba(0,229,255,0.3);}
+.case-card.bonus .open-btn{background:rgba(0,230,118,0.15);color:#00e676;border:1px solid rgba(0,230,118,0.3);}
+.case-card:hover .open-btn{filter:brightness(1.2);}
+
+/* ── CASE VIEW ── */
+#case-view{display:none;min-height:100vh;}
+.case-topbar{
+  background:var(--navy2);
+  border-bottom:1px solid var(--border);
+  padding:0 30px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:60px;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:20px;}
+.back-btn{
+  display:flex;align-items:center;gap:7px;
+  background:none;border:1px solid var(--border);
+  color:var(--muted);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:7px 14px;border-radius:4px;
+  cursor:pointer;transition:all 0.2s;
+}
+.back-btn:hover{color:var(--blue);border-color:var(--blue);}
+.case-topbar-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px;font-weight:700;
+  color:var(--white);
+}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.status-pill{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  padding:4px 10px;
+  border-radius:20px;
+  border:1px solid;
+}
+.status-pill.critical{color:#ff3b5c;border-color:rgba(255,59,92,0.4);background:rgba(255,59,92,0.1);}
+.status-pill.urgent{color:#f59e0b;border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.1);}
+.status-pill.stable{color:#00e676;border-color:rgba(0,230,118,0.4);background:rgba(0,230,118,0.1);}
+
+/* ── TABS ── */
+.case-tabs{
+  background:var(--navy2);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  padding:0 30px;
+  overflow-x:auto;
+  gap:0;
+}
+.tab-btn{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:14px 20px;
+  background:none;border:none;
+  color:var(--muted);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all 0.2s;
+  white-space:nowrap;
+  position:relative;
+}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-btn:hover:not(.active){color:var(--text);}
+.tab-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;
+  border-radius:50%;
+  background:var(--amber);
+  color:var(--navy);
+  font-size:9px;font-weight:700;
+  margin-left:5px;
+  vertical-align:middle;
+}
+
+/* ── CONTENT PANELS ── */
+.case-content{padding:30px;max-width:1200px;margin:0 auto;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* SECTION BLOCKS */
+.section-block{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:8px;
+  margin-bottom:24px;
+  overflow:hidden;
+}
+.section-header{
+  background:var(--card);
+  padding:14px 22px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);
+}
+.section-icon{font-size:16px;}
+.section-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:15px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);
+}
+.section-body{padding:22px;}
+
+/* DATA GRID */
+.data-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:14px;
+  margin-bottom:16px;
+}
+.data-item{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:6px;
+  padding:12px 14px;
+}
+.data-label{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.data-value{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:600;
+  color:var(--white);
+}
+.data-value.critical{color:var(--red);}
+.data-value.warning{color:var(--amber);}
+.data-value.normal{color:var(--green);}
+.data-unit{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--muted);
+  margin-left:3px;
+}
+
+/* NARRATIVE BLOCK */
+.narrative{
+  font-size:14px;line-height:1.8;
+  color:var(--text);
+  padding:4px 0;
+}
+.narrative strong{color:var(--amber);font-weight:600;}
+.narrative .highlight{
+  background:rgba(0,168,255,0.1);
+  border-left:3px solid var(--blue);
+  padding:8px 14px;
+  border-radius:0 4px 4px 0;
+  margin:12px 0;
+  font-style:italic;
+}
+
+/* ECG DISPLAY */
+.ecg-display{
+  background:#010e1a;
+  border:1px solid rgba(0,229,255,0.2);
+  border-radius:6px;
+  padding:20px;
+  font-family:'DM Mono',monospace;
+  position:relative;
+  overflow:hidden;
+}
+.ecg-display::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px),
+    linear-gradient(rgba(0,229,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.02) 1px, transparent 1px);
+  background-size: 20px 20px, 20px 20px, 4px 4px, 4px 4px;
+  pointer-events:none;
+}
+.ecg-lead{
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:10px;
+  align-items:center;
+  margin-bottom:8px;
+  position:relative;z-index:1;
+}
+.ecg-lead-name{
+  font-size:11px;color:#00e5ff;
+  letter-spacing:1px;
+}
+.ecg-trace{
+  height:40px;
+  position:relative;
+}
+.ecg-trace canvas,.ecg-trace svg{width:100%;height:100%;}
+.ecg-findings{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid rgba(0,229,255,0.15);
+  position:relative;z-index:1;
+}
+.ecg-finding-item{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:12px;
+  margin-bottom:6px;
+}
+.ecg-finding-item::before{content:'→';color:#00e5ff;flex-shrink:0;}
+
+/* LAB TABLE */
+.lab-table{width:100%;border-collapse:collapse;}
+.lab-table th{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);
+  padding:8px 14px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
+.lab-table td{
+  font-family:'DM Mono',monospace;
+  font-size:13px;
+  padding:9px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  vertical-align:middle;
+}
+.lab-table tr:hover td{background:rgba(255,255,255,0.02);}
+.lab-critical{color:var(--red);font-weight:500;}
+.lab-abnormal{color:var(--amber);font-weight:500;}
+.lab-normal{color:var(--green);}
+.lab-flag{
+  font-size:10px;
+  padding:2px 6px;
+  border-radius:3px;
+  font-weight:600;
+  margin-left:6px;
+}
+.lab-flag.H{background:rgba(255,59,92,0.2);color:#ff3b5c;}
+.lab-flag.L{background:rgba(0,168,255,0.2);color:#00a8ff;}
+.lab-flag.C{background:rgba(255,59,92,0.4);color:#fff;}
+
+/* SPECIALIST CARD */
+.specialist-card{
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+  margin-bottom:16px;
+}
+.specialist-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;
+  background:rgba(255,255,255,0.03);
+  border-bottom:1px solid var(--border);
+}
+.specialist-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:16px;font-weight:700;
+  color:var(--white);
+}
+.specialist-dept{
+  font-size:12px;color:var(--muted);
+  margin-top:2px;
+}
+.specialist-time{
+  font-family:'DM Mono',monospace;
+  font-size:11px;color:var(--muted);
+}
+.specialist-body{
+  padding:18px;
+  font-size:14px;line-height:1.8;
+  color:var(--text);
+}
+
+/* STUDENT INPUT AREA */
+.input-block{
+  background:rgba(0,168,255,0.04);
+  border:1px solid rgba(0,168,255,0.2);
+  border-radius:8px;
+  padding:20px;
+  margin-bottom:20px;
+}
+.input-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.input-label::after{
+  content:'REQUIRED';
+  font-size:9px;
+  padding:2px 6px;
+  background:rgba(0,168,255,0.15);
+  border-radius:3px;
+  letter-spacing:1px;
+}
+.input-hint{
+  font-size:12px;color:var(--muted);
+  margin-bottom:10px;
+  line-height:1.6;
+}
+textarea.student-input{
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(0,168,255,0.25);
+  border-radius:6px;
+  padding:14px;
+  color:var(--text);
+  font-family:'Barlow',sans-serif;
+  font-size:14px;
+  line-height:1.7;
+  resize:vertical;
+  min-height:120px;
+  transition:border-color 0.2s;
+  outline:none;
+}
+textarea.student-input:focus{border-color:var(--blue);}
+textarea.student-input::placeholder{color:rgba(122,153,187,0.5);}
+input.student-input-short{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(0,168,255,0.25);
+  border-radius:6px;
+  padding:10px 14px;
+  color:var(--text);
+  font-family:'Barlow',sans-serif;
+  font-size:14px;
+  width:100%;
+  outline:none;
+  transition:border-color 0.2s;
+}
+input.student-input-short:focus{border-color:var(--blue);}
+.input-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:14px;
+}
+.input-field-group{margin-bottom:14px;}
+.input-field-label{
+  font-size:12px;color:var(--muted);
+  margin-bottom:5px;
+  display:block;
+}
+select.student-select{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(0,168,255,0.25);
+  border-radius:6px;
+  padding:10px 14px;
+  color:var(--text);
+  font-family:'Barlow',sans-serif;
+  font-size:14px;
+  width:100%;
+  outline:none;
+  cursor:pointer;
+  appearance:none;
+}
+select.student-select option{background:var(--navy2);color:var(--text);}
+
+/* RESEARCH CHECKLIST */
+.research-block{
+  background:rgba(245,158,11,0.05);
+  border:1px solid rgba(245,158,11,0.2);
+  border-radius:8px;
+  padding:20px;
+  margin-bottom:20px;
+}
+.research-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--amber);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.research-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(245,158,11,0.1);
+}
+.research-item:last-child{border-bottom:none;}
+.research-checkbox{
+  width:18px;height:18px;
+  border:2px solid rgba(245,158,11,0.5);
+  border-radius:3px;
+  background:transparent;
+  cursor:pointer;
+  flex-shrink:0;
+  margin-top:1px;
+  appearance:none;
+  position:relative;
+  transition:all 0.2s;
+}
+.research-checkbox:checked{
+  background:var(--amber);
+  border-color:var(--amber);
+}
+.research-checkbox:checked::after{
+  content:'✓';
+  position:absolute;
+  top:-1px;left:2px;
+  font-size:12px;
+  color:var(--navy);
+  font-weight:700;
+}
+.research-text{
+  font-size:13px;line-height:1.6;color:var(--text);
+}
+.research-text strong{color:var(--amber);}
+.research-text em{color:var(--muted);font-style:normal;font-size:12px;}
+
+/* MEMBER FIELDS */
+.member-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:14px;
+  margin-bottom:20px;
+}
+.member-field{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:14px;
+}
+.member-num{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--blue);
+  letter-spacing:1px;margin-bottom:8px;
+}
+
+/* SUMMARY */
+.summary-section{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:30px;
+  margin-bottom:20px;
+}
+.generate-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:var(--white);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:14px 28px;
+  border-radius:6px;
+  border:none;cursor:pointer;
+  transition:all 0.3s;
+  box-shadow:0 4px 20px rgba(0,168,255,0.3);
+}
+.generate-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,168,255,0.5);}
+.print-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(0,230,118,0.1);
+  color:var(--green);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:14px 28px;
+  border-radius:6px;
+  border:1px solid rgba(0,230,118,0.3);cursor:pointer;
+  transition:all 0.2s;
+  margin-left:14px;
+}
+.print-btn:hover{background:rgba(0,230,118,0.2);}
+
+#executive-summary{
+  display:none;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:30px;
+  margin-top:24px;
+}
+.summary-output{
+  font-size:14px;line-height:1.9;
+  color:var(--text);
+  white-space:pre-wrap;
+}
+
+/* VITALS MONITOR */
+.vitals-monitor{
+  background:#010e1a;
+  border:1px solid rgba(0,229,255,0.15);
+  border-radius:8px;
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:14px;
+}
+.vital-display{
+  text-align:center;
+  padding:14px;
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:6px;
+}
+.vital-label{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:#00e5ff;
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.vital-value{
+  font-family:'DM Mono',monospace;
+  font-size:28px;font-weight:500;
+  line-height:1;
+  margin-bottom:4px;
+}
+.vital-value.red{color:#ff3b5c;text-shadow:0 0 12px rgba(255,59,92,0.5);}
+.vital-value.amber{color:#f59e0b;text-shadow:0 0 12px rgba(245,158,11,0.5);}
+.vital-value.green{color:#00e676;text-shadow:0 0 12px rgba(0,230,118,0.4);}
+.vital-value.cyan{color:#00e5ff;text-shadow:0 0 12px rgba(0,229,255,0.4);}
+.vital-unit{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+
+/* IMAGE placeholder */
+.radiology-img{
+  background:linear-gradient(135deg, #0a0e1a 0%, #081220 100%);
+  border:1px solid rgba(0,229,255,0.1);
+  border-radius:6px;
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+  font-family:'DM Mono',monospace;
+  font-size:12px;
+  position:relative;
+  overflow:hidden;
+}
+.radiology-img svg{margin-bottom:12px;opacity:0.4;}
+
+/* PROGRESS */
+.progress-bar-wrap{
+  background:rgba(255,255,255,0.05);
+  border-radius:4px;
+  height:4px;
+  margin-top:8px;
+  overflow:hidden;
+}
+.progress-bar-fill{
+  height:100%;
+  border-radius:4px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  transition:width 0.4s ease;
+}
+
+.completion-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:600;
+  letter-spacing:1px;
+  padding:5px 12px;
+  border-radius:4px;
+  margin-top:10px;
+}
+.completion-badge.incomplete{background:rgba(245,158,11,0.1);color:var(--amber);border:1px solid rgba(245,158,11,0.3);}
+.completion-badge.complete{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.3);}
+
+.alert-box{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:14px 18px;
+  border-radius:6px;
+  margin-bottom:16px;
+  font-size:13px;line-height:1.6;
+}
+.alert-box.red{background:rgba(255,59,92,0.08);border:1px solid rgba(255,59,92,0.25);color:#ff8fa3;}
+.alert-box.amber{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);color:#fcd34d;}
+.alert-box.blue{background:rgba(0,168,255,0.08);border:1px solid rgba(0,168,255,0.25);color:#7dd3fc;}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+@media print{
+  #landing,#case-view .case-topbar,#case-view .case-tabs{display:none!important;}
+  #executive-summary{display:block!important;}
+  body{background:white;color:black;}
+  .summary-output{color:black;}
+}
+@media(max-width:600px){
+  .case-grid{grid-template-columns:1fr;}
+  .data-grid{grid-template-columns:1fr 1fr;}
+  .case-content{padding:16px;}
+  .vitals-monitor{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LANDING PAGE ═══ -->
+<div id="landing">
+  <div class="landing-bg"></div>
+  <div class="pdcc-header">
+    <div class="pdcc-badge">Paul D. Camp Community College · EMS Program</div>
+    <h1 class="landing-title">Cardiology<br><span>Case Studies</span></h1>
+    <p class="landing-sub">Advanced Paramedic Education · Group Case Analysis · 2025–2026</p>
+    <div style="font-size:13px;color:var(--muted);max-width:560px;margin:12px auto 0;text-align:center;line-height:1.7">
+      Each group is assigned one case study. Complete all analysis sections, answer all research prompts, and generate your executive summary for presentation. The bonus case is available to all groups.
+    </div>
+  </div>
+
+  <!-- ECG decoration -->
+  <div class="ecg-line">
+    <svg viewBox="0 0 600 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="0,30 40,30 50,30 55,10 58,50 62,10 65,30 80,30 120,30 125,28 130,30 170,30 175,25 180,30 220,30 225,28 232,10 235,50 238,10 241,30 280,30 320,30 325,28 330,30 370,30 375,25 380,30 420,30 428,10 431,50 434,10 437,30 480,30 520,30 525,28 530,30 560,30 600,30"
+        stroke="rgba(0,168,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <div class="case-grid">
+    <!-- Group 1 -->
+    <div class="case-card g1" onclick="openCase('g1')">
+      <div class="case-tag">◈ Group 1 Case Study</div>
+      <div class="case-title">Inferior STEMI with Right Ventricular Involvement</div>
+      <div class="case-desc">62-year-old male construction worker. Onset of crushing substernal chest pain radiating to jaw. Diaphoretic, hypotensive. Found by coworkers.</div>
+      <div class="case-meta">
+        <div class="case-meta-item"><span class="dot"></span> 62-Year-Old Male</div>
+        <div class="case-meta-item"><span class="dot"></span> STEMI · RV Infarct</div>
+        <div class="case-meta-item"><span class="dot"></span> High Complexity</div>
+      </div>
+      <button class="open-btn" onclick="event.stopPropagation();openCase('g1')">Open Case →</button>
+    </div>
+    <!-- Group 2 -->
+    <div class="case-card g2" onclick="openCase('g2')">
+      <div class="case-tag">◈ Group 2 Case Study</div>
+      <div class="case-title">Hypertensive Emergency with Acute Pulmonary Edema</div>
+      <div class="case-desc">67-year-old female with sudden onset severe dyspnea. Sitting bolt upright, frothy pink sputum. BP critically elevated. Hx of CHF and poorly controlled hypertension.</div>
+      <div class="case-meta">
+        <div class="case-meta-item"><span class="dot"></span> 67-Year-Old Female</div>
+        <div class="case-meta-item"><span class="dot"></span> CHF · HTN Emergency</div>
+        <div class="case-meta-item"><span class="dot"></span> High Complexity</div>
+      </div>
+      <button class="open-btn" onclick="event.stopPropagation();openCase('g2')">Open Case →</button>
+    </div>
+    <!-- Group 3 -->
+    <div class="case-card g3" onclick="openCase('g3')">
+      <div class="case-tag">◈ Group 3 Case Study</div>
+      <div class="case-title">Sustained Ventricular Tachycardia — Ischemic Cardiomyopathy</div>
+      <div class="case-desc">48-year-old male attorney. Palpitations and near-syncope. Wide complex tachycardia at 168 bpm. Prior MI 3 years ago. Decompensating rapidly during transport.</div>
+      <div class="case-meta">
+        <div class="case-meta-item"><span class="dot"></span> 48-Year-Old Male</div>
+        <div class="case-meta-item"><span class="dot"></span> VTach · Cardiomyopathy</div>
+        <div class="case-meta-item"><span class="dot"></span> High Complexity</div>
+      </div>
+      <button class="open-btn" onclick="event.stopPropagation();openCase('g3')">Open Case →</button>
+    </div>
+    <!-- Group 4 -->
+    <div class="case-card g4" onclick="openCase('g4')">
+      <div class="case-tag">◈ Group 4 Case Study</div>
+      <div class="case-title">Type A Aortic Dissection — The Masquerader</div>
+      <div class="case-desc">74-year-old male retired naval officer. Sudden tearing chest pain radiating to back. BP differential 42 mmHg between arms. Near syncope. Requires immediate surgical consultation.</div>
+      <div class="case-meta">
+        <div class="case-meta-item"><span class="dot"></span> 74-Year-Old Male</div>
+        <div class="case-meta-item"><span class="dot"></span> Type A Dissection</div>
+        <div class="case-meta-item"><span class="dot"></span> Critical</div>
+      </div>
+      <button class="open-btn" onclick="event.stopPropagation();openCase('g4')">Open Case →</button>
+    </div>
+    <!-- Bonus -->
+    <div class="case-card bonus" onclick="openCase('bonus')">
+      <div class="case-tag">★ Bonus Case — All Groups</div>
+      <div class="case-title">Complete Heart Block with Syncope & New Onset CHF</div>
+      <div class="case-desc">55-year-old female nurse. Syncope at work. Third-degree AV block discovered on 12-lead. New cardiomegaly on CXR. This is her first cardiac event. Complex ethical and clinical decision-making required.</div>
+      <div class="case-meta">
+        <div class="case-meta-item"><span class="dot"></span> 55-Year-Old Female</div>
+        <div class="case-meta-item"><span class="dot"></span> CHB · Syncope · CHF</div>
+        <div class="case-meta-item"><span class="dot"></span> Bonus Challenge</div>
+      </div>
+      <button class="open-btn" onclick="event.stopPropagation();openCase('bonus')">Open Case →</button>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:40px;font-size:12px;color:var(--muted);">
+    Carlos Cajares, DNP, FNP-C, CRNA, NRP · EMS Program Director · Paul D. Camp Community College
+  </div>
+</div>
+
+<!-- ═══ CASE VIEW ═══ -->
+<div id="case-view">
+  <div class="case-topbar">
+    <div class="topbar-left">
+      <button class="back-btn" onclick="closeCase()">← Cases</button>
+      <div class="case-topbar-title" id="cv-title">Case Study</div>
+    </div>
+    <div class="topbar-right">
+      <span class="status-pill" id="cv-status">CRITICAL</span>
+      <div id="cv-progress" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">0% Complete</div>
+    </div>
+  </div>
+
+  <div class="case-tabs" id="case-tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">📋 Dispatch & Scene</button>
+    <button class="tab-btn" onclick="switchTab(1)">🩺 Patient Assessment</button>
+    <button class="tab-btn" onclick="switchTab(2)">📊 Diagnostics <span class="tab-badge">!</span></button>
+    <button class="tab-btn" onclick="switchTab(3)">👨‍⚕️ Specialist Reports</button>
+    <button class="tab-btn" onclick="switchTab(4)">✏️ Your Analysis</button>
+    <button class="tab-btn" onclick="switchTab(5)">📚 Research Requirements</button>
+    <button class="tab-btn" onclick="switchTab(6)">📄 Executive Summary</button>
+  </div>
+
+  <div class="case-content" id="case-content">
+    <!-- Content injected by JS -->
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// CASE DATA
+// ══════════════════════════════════════════════════════════════
+
+const CASES = {
+
+// ─────────────────── GROUP 1: INFERIOR STEMI ───────────────────
+g1: {
+  id:'g1', group:'Group 1',
+  title:'Inferior STEMI — Right Ventricular Involvement',
+  status:'CRITICAL',
+  statusClass:'critical',
+  accentColor:'#ff3b5c',
+  dispatch:`
+    <div class="alert-box red"><span class="alert-icon">🚨</span><div>
+    <strong>CAD Dispatch — Priority 1</strong><br>
+    "Units respond to 2400 Industrial Blvd, Hampton Construction Site. 62-year-old male, severe chest pain, diaphoretic, possible cardiac arrest. Caller reports patient is conscious but very pale and weak. Construction site — access via Gate B."
+    </div></div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📍</span><span class="section-title">Scene Narrative</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          It is <strong>1343 hours on a hot August afternoon (92°F)</strong>. Your unit arrives at the industrial construction site to find coworkers gathered around a man seated on the ground against a concrete wall. The scene is safe. <strong>Marcus Williams</strong>, a 62-year-old Black male construction foreman, is conscious but clearly distressed — profusely diaphoretic, pale, and clutching his chest. He is speaking in short sentences.
+          <div class="highlight">His coworker states: "He's been complaining of bad indigestion since lunch. He just got paler and started sweating a lot about 15 minutes ago. He took some antacids but it didn't help."</div>
+          Primary impression: <strong>Acute cardiovascular emergency. Time is muscle.</strong>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">👤</span><span class="section-title">Patient Demographics</span></div>
+      <div class="section-body">
+        <div class="data-grid">
+          <div class="data-item"><div class="data-label">Patient Name</div><div class="data-value" style="font-size:16px">Marcus A. Williams</div></div>
+          <div class="data-item"><div class="data-label">Age</div><div class="data-value">62<span class="data-unit">years</span></div></div>
+          <div class="data-item"><div class="data-label">Sex</div><div class="data-value" style="font-size:16px">Male</div></div>
+          <div class="data-item"><div class="data-label">Race/Ethnicity</div><div class="data-value" style="font-size:14px">African American</div></div>
+          <div class="data-item"><div class="data-label">Weight</div><div class="data-value warning">224<span class="data-unit">lbs</span></div></div>
+          <div class="data-item"><div class="data-label">Height</div><div class="data-value" style="font-size:16px">5'10"</div></div>
+          <div class="data-item"><div class="data-label">BMI</div><div class="data-value warning">32.1<span class="data-unit">kg/m²</span></div></div>
+          <div class="data-item"><div class="data-label">Occupation</div><div class="data-value" style="font-size:14px">Construction Foreman</div></div>
+          <div class="data-item"><div class="data-label">Insurance</div><div class="data-value" style="font-size:13px">Anthem BlueCross PPO</div></div>
+          <div class="data-item"><div class="data-label">Next of Kin</div><div class="data-value" style="font-size:13px">Diane Williams (Wife)</div></div>
+          <div class="data-item"><div class="data-label">NOK Phone</div><div class="data-value" style="font-size:13px">(757) 555-0183</div></div>
+          <div class="data-item"><div class="data-label">Advance Directive</div><div class="data-value" style="font-size:14px">None on file</div></div>
+        </div>
+      </div>
+    </div>`,
+
+  assessment:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">⚡</span><span class="section-title">Initial Vitals — On Scene (1349)</span></div>
+      <div class="section-body">
+        <div class="vitals-monitor">
+          <div class="vital-display"><div class="vital-label">BP (Right)</div><div class="vital-value amber">88/60</div><div class="vital-unit">mmHg</div></div>
+          <div class="vital-display"><div class="vital-label">BP (Left)</div><div class="vital-value amber">90/62</div><div class="vital-unit">mmHg</div></div>
+          <div class="vital-display"><div class="vital-label">HR</div><div class="vital-value red">42</div><div class="vital-unit">bpm — Brady</div></div>
+          <div class="vital-display"><div class="vital-label">RR</div><div class="vital-value cyan">22</div><div class="vital-unit">breaths/min</div></div>
+          <div class="vital-display"><div class="vital-label">SpO₂</div><div class="vital-value amber">93</div><div class="vital-unit">% on RA</div></div>
+          <div class="vital-display"><div class="vital-label">Temp</div><div class="vital-value green">98.4</div><div class="vital-unit">°F Oral</div></div>
+          <div class="vital-display"><div class="vital-label">BGL</div><div class="vital-value green">112</div><div class="vital-unit">mg/dL</div></div>
+          <div class="vital-display"><div class="vital-label">GCS</div><div class="vital-value green">15</div><div class="vital-unit">E4V5M6</div></div>
+          <div class="vital-display"><div class="vital-label">Pain</div><div class="vital-value red">9/10</div><div class="vital-unit">Crushing</div></div>
+        </div>
+        <div class="alert-box amber" style="margin-top:16px"><span class="alert-icon">⚠️</span><div>
+          <strong>Hemodynamic Instability Noted:</strong> Hypotension with bradycardia. BP symmetric between arms. Consider RV infarction before administering nitrates or morphine.
+        </div></div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📜</span><span class="section-title">History of Present Illness (HPI)</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          Patient reports the pain began approximately <strong>2 hours ago</strong> at 1145 while eating lunch. Initially described as "bad indigestion" with a sensation of fullness in the mid-epigastric region. Over the next 90 minutes, the discomfort evolved into <strong>severe crushing substernal chest pain</strong>, which he now describes as "like an elephant sitting on my chest." 
+          <br><br>
+          Pain radiates to the <strong>left jaw and both shoulders</strong>. Associated symptoms include profound diaphoresis, nausea (one episode of emesis), lightheadedness, and general weakness. <strong>He denies shortness of breath</strong> (important clinical finding — RV involvement often spares pulmonary congestion).
+          <br><br>
+          <strong>OPQRST:</strong><br>
+          O: Gradual onset 1145, worsening progressively<br>
+          P: Nothing alleviates; antacids, rest, nitroglycerin (1 spray from coworker) — no relief<br>
+          Q: Crushing, pressure-like, "elephant on chest"<br>
+          R: Left jaw, bilateral shoulders, left arm tingling<br>
+          S: 9/10 (was 6/10 at onset)<br>
+          T: ~2 hours duration, continuous and worsening
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📋</span><span class="section-title">Medical History & Risk Factors</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>Past Medical History (PMH):</strong><br>
+          • Type 2 Diabetes Mellitus — Dx 2018 (HbA1c 8.4% — poorly controlled)<br>
+          • Hypertension — Dx 2011 (on medication, reportedly compliant)<br>
+          • Hyperlipidemia — Dx 2015 (on statin)<br>
+          • Obesity (BMI 32.1)<br>
+          • Obstructive Sleep Apnea — uses CPAP nightly (non-compliant — "doesn't like it")<br>
+          • History of occasional "indigestion" for 2 months (possible anginal equivalents)<br>
+          <br>
+          <strong>Family History:</strong><br>
+          • Father: MI age 58, died age 65 (cardiac)<br>
+          • Brother: CABG age 55<br>
+          • Mother: Hypertension, stroke at 72<br>
+          <br>
+          <strong>Social History:</strong><br>
+          • Tobacco: 30-pack-year history; quit 4 years ago<br>
+          • Alcohol: Occasional (1-2 beers/weekend)<br>
+          • Illicit substances: Denies<br>
+          • Exercise: Sedentary — physical labor at work, no formal exercise<br>
+          • Diet: High sodium, fast food 4-5x/week<br>
+          • Stress: High — supervisor role, recent project deadline pressure
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">💊</span><span class="section-title">Current Medications & Allergies</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>Current Medications:</strong><br>
+          1. Metformin 1000mg PO BID (Type 2 DM)<br>
+          2. Amlodipine 10mg PO daily (HTN)<br>
+          3. Lisinopril 40mg PO daily (HTN — last dose this AM)<br>
+          4. Atorvastatin 40mg PO nightly (Hyperlipidemia)<br>
+          5. Aspirin 81mg PO daily (cardiovascular prophylaxis — took this AM)<br>
+          6. Metoprolol Succinate 50mg PO daily (last dose this AM)<br>
+          <br>
+          <strong>Allergies:</strong><br>
+          • Penicillin — Rash (non-anaphylactic)<br>
+          • Sulfa — GI upset<br>
+          • NKDA to cardiac medications
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🔍</span><span class="section-title">Physical Examination</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>General:</strong> 62-year-old male, alert and oriented x4, in moderate-to-severe distress. Profusely diaphoretic, pale skin, anxious appearance, sitting in a position of comfort (slightly reclined). Cooperative with examination.<br><br>
+          <strong>Head/Eyes/Ears/Nose/Throat:</strong> Atraumatic. Pupils equal, round, reactive to light bilaterally (3mm → 2mm). Dry mucous membranes. JVD present at 45-degree angle (clinically significant — 6cm above sternal notch).<br><br>
+          <strong>Cardiovascular:</strong> Bradycardic, regular rhythm. S1/S2 present. No S3 or S4 auscultated. No murmurs appreciated in the field. Peripheral pulses diminished bilaterally. <strong>Capillary refill 3.5 seconds</strong> bilaterally. Skin cool, clammy, and pale.<br><br>
+          <strong>Respiratory:</strong> <strong>Lungs CLEAR to auscultation bilaterally</strong> — no crackles, wheezing, or rhonchi. Respiratory rate 22/min, tachypneic but non-labored. SpO₂ 93% on room air. This is a key clinical finding.<br><br>
+          <strong>Abdomen:</strong> Soft, mild epigastric tenderness (referred pain pattern). Non-distended. Bowel sounds present.<br><br>
+          <strong>Extremities:</strong> No peripheral edema noted. Peripheral pulses weak and thready bilaterally. No cyanosis. Right leg: chronic venous stasis changes noted (incidental finding).<br><br>
+          <strong>Neurological:</strong> GCS 15 (E4V5M6). AAOx4. No focal neurological deficits. Mild diaphoresis on forehead. Reporting dizziness when upright.
+        </div>
+      </div>
+    </div>`,
+
+  diagnostics:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📡</span><span class="section-title">12-Lead ECG — 1352 Hours</span></div>
+      <div class="section-body">
+        <div class="ecg-display">
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:#00e5ff;margin-bottom:14px;letter-spacing:2px;">
+            12-LEAD ECG · RATE: 42 BPM · INTERVALS: PR=0.20s, QRS=0.10s, QT=0.48s · Transmitted to STEMI Alert Team
+          </div>
+          <div id="ecg-canvas-g1" style="margin-bottom:16px;"></div>
+          <div class="ecg-findings" style="color:var(--text);">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#00e5ff;letter-spacing:2px;margin-bottom:10px;">MACHINE INTERPRETATION + PARAMEDIC FINDINGS</div>
+            <div class="ecg-finding-item"><strong>Inferior Leads (II, III, aVF):</strong> ST elevation ≥ 3mm in II, ≥ 4mm in III, ≥ 2.5mm in aVF — <span style="color:var(--red)">DIAGNOSTIC FOR INFERIOR STEMI</span></div>
+            <div class="ecg-finding-item"><strong>Reciprocal Changes:</strong> ST depression 2-3mm in leads I, aVL, V1-V3 — confirms inferior wall injury</div>
+            <div class="ecg-finding-item"><strong>Right-Sided Leads (V3R-V4R):</strong> ST elevation 1.5-2mm — <span style="color:var(--red)">CONFIRMS RIGHT VENTRICULAR INFARCTION</span></div>
+            <div class="ecg-finding-item"><strong>Rhythm:</strong> Sinus bradycardia at 42 bpm with 1st-degree AV block (PR 0.20s). Occasional PAC noted in V1.</div>
+            <div class="ecg-finding-item"><strong>Posterior Leads (V7-V9):</strong> ST elevation 1mm — posterior wall extension suspected</div>
+            <div class="ecg-finding-item"><strong>Axis:</strong> Left axis deviation (−45°). No LBBB. QTc prolonged at 480ms.</div>
+            <div style="margin-top:12px;padding:10px;background:rgba(255,59,92,0.1);border-radius:4px;font-size:12px;color:#ff8fa3;border-left:3px solid var(--red);">
+              ⚠️ STEMI ALERT ACTIVATED — Notify receiving hospital with 12-lead transmission. Target D2B &lt; 90 minutes. RV involvement confirmed — <strong>DO NOT give nitrates or diuretics.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🧪</span><span class="section-title">Laboratory Results — Obtained at ED (1438)</span></div>
+      <div class="section-body">
+        <div class="alert-box blue"><span class="alert-icon">ℹ️</span><div>These labs are obtained upon ED arrival and reviewed during your case analysis. Paramedic decision-making must account for field findings — labs are confirmatory in the hospital setting.</div></div>
+        <table class="lab-table">
+          <tr><th>Test</th><th>Result</th><th>Reference Range</th><th>Flag</th><th>Clinical Significance</th></tr>
+          <tr><td>Troponin I (hs-cTnI) — Initial</td><td class="lab-critical">4.2 ng/mL</td><td>&lt;0.04 ng/mL</td><td><span class="lab-flag C">CRIT</span></td><td>105× upper limit — massive myocardial injury</td></tr>
+          <tr><td>Troponin I — 3hr repeat</td><td class="lab-critical">28.7 ng/mL</td><td>&lt;0.04 ng/mL</td><td><span class="lab-flag C">CRIT</span></td><td>Rapidly rising — active ongoing necrosis</td></tr>
+          <tr><td>CK-MB</td><td class="lab-critical">187 U/L</td><td>&lt;24 U/L</td><td><span class="lab-flag H">H</span></td><td>Highly elevated, correlates with infarct size</td></tr>
+          <tr><td>BNP (Brain Natriuretic Peptide)</td><td class="lab-abnormal">820 pg/mL</td><td>&lt;100 pg/mL</td><td><span class="lab-flag H">H</span></td><td>Moderate elevation — early heart failure signal</td></tr>
+          <tr><td>Sodium (Na⁺)</td><td class="lab-normal">138 mEq/L</td><td>136-145</td><td>—</td><td>Normal</td></tr>
+          <tr><td>Potassium (K⁺)</td><td class="lab-abnormal">3.2 mEq/L</td><td>3.5-5.0</td><td><span class="lab-flag L">L</span></td><td>Hypokalemia — arrhythmia risk, supplement cautiously</td></tr>
+          <tr><td>Creatinine</td><td class="lab-abnormal">1.8 mg/dL</td><td>0.6-1.2</td><td><span class="lab-flag H">H</span></td><td>Mildly elevated — cardiorenal syndrome developing</td></tr>
+          <tr><td>eGFR</td><td class="lab-abnormal">42 mL/min</td><td>&gt;60</td><td><span class="lab-flag L">L</span></td><td>Moderate CKD stage 3 — adjust contrast dosing</td></tr>
+          <tr><td>Glucose</td><td class="lab-abnormal">218 mg/dL</td><td>70-100</td><td><span class="lab-flag H">H</span></td><td>Stress hyperglycemia + T2DM — monitor closely</td></tr>
+          <tr><td>HbA1c</td><td class="lab-abnormal">8.4%</td><td>&lt;5.7%</td><td><span class="lab-flag H">H</span></td><td>Poorly controlled DM, major CAD risk factor</td></tr>
+          <tr><td>Hemoglobin</td><td class="lab-normal">14.2 g/dL</td><td>13.5-17.5</td><td>—</td><td>Normal — no anemia</td></tr>
+          <tr><td>Platelet Count</td><td class="lab-normal">224 k/μL</td><td>150-400</td><td>—</td><td>Normal — adequate for antiplatelet therapy</td></tr>
+          <tr><td>INR</td><td class="lab-normal">1.1</td><td>0.9-1.1</td><td>—</td><td>Normal coagulation — clearance for anticoagulation</td></tr>
+          <tr><td>LDL Cholesterol</td><td class="lab-critical">198 mg/dL</td><td>&lt;100 mg/dL</td><td><span class="lab-flag H">H</span></td><td>Very high LDL despite statin — non-compliance?</td></tr>
+          <tr><td>HDL Cholesterol</td><td class="lab-abnormal">28 mg/dL</td><td>&gt;40 mg/dL</td><td><span class="lab-flag L">L</span></td><td>Critically low — major independent CV risk</td></tr>
+          <tr><td>ABG pH</td><td class="lab-abnormal">7.29</td><td>7.35-7.45</td><td><span class="lab-flag L">L</span></td><td>Metabolic acidosis — poor perfusion state</td></tr>
+          <tr><td>ABG PO₂</td><td class="lab-normal">88 mmHg</td><td>75-100</td><td>—</td><td>Low-normal</td></tr>
+          <tr><td>ABG Lactate</td><td class="lab-critical">4.8 mmol/L</td><td>&lt;2.0</td><td><span class="lab-flag C">CRIT</span></td><td>Severe tissue hypoperfusion/cardiogenic shock</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🔬</span><span class="section-title">Radiology & Imaging Results</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>Chest X-Ray (Portable AP — ED, 1448):</strong><br>
+          Clinical indication: Chest pain, rule out aortic pathology, pulmonary edema evaluation<br><br>
+          FINDINGS: Cardiomegaly present (cardiothoracic ratio 0.56). Mild prominence of pulmonary vascularity in upper lobes. <strong>No frank pulmonary edema. No pleural effusions. Aortic contour normal.</strong> No pneumothorax. Mediastinum not widened. Costophrenic angles sharp.<br>
+          IMPRESSION: Cardiomegaly. Early volume overload without overt pulmonary edema. <strong>Findings consistent with early cardiogenic shock without pulmonary congestion — consistent with RV infarction physiology.</strong><br><br>
+          <strong>Echocardiogram (Bedside — ED, 1510):</strong><br>
+          FINDINGS: Left ventricular ejection fraction (LVEF) estimated at 35% (severely reduced). <strong>Right ventricular free wall akinesis — RV dilatation and dysfunction confirmed.</strong> Inferior wall akinesis (LV). Mild mitral regurgitation. No pericardial effusion. IVC dilated (2.4cm) with minimal respiratory variation — elevated right-sided filling pressures.<br>
+          IMPRESSION: <strong>Acute inferior + RV MI with severely reduced biventricular function. Cardiogenic shock physiology.</strong>
+        </div>
+      </div>
+    </div>`,
+
+  specialists:`
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Dr. Priya Ramaswamy, MD</div><div class="specialist-dept">Interventional Cardiology — Cath Lab Director</div></div>
+        <div class="specialist-time">Consult: 1455 · Cath: 1522</div>
+      </div>
+      <div class="specialist-body">
+        <strong>Cardiac Catheterization Report:</strong><br>
+        Patient brought to cardiac catheterization laboratory emergently via STEMI protocol. Access: Right radial artery. Contrast load: 180mL Omnipaque (renal-protective protocol given CKD).<br><br>
+        <strong>Coronary Anatomy:</strong><br>
+        • Left Main: Normal. Patent.<br>
+        • LAD: 40% mid stenosis — non-culprit. No intervention required at this time.<br>
+        • LCx: Dominant vessel. 30% proximal stenosis — non-significant.<br>
+        • <strong>RCA: 100% acute thrombotic occlusion of proximal right coronary artery — CULPRIT VESSEL.</strong> Thrombus burden: high grade (TIMI 0 flow).<br><br>
+        <strong>Intervention:</strong> Successful PTCA followed by deployment of 3.5×28mm DES (drug-eluting stent) to proximal RCA. Final TIMI 3 flow. Residual stenosis &lt;10%. Patient received bivalirudin anticoagulation + GP IIb/IIIa inhibitor (eptifibatide) given high thrombus burden.<br><br>
+        <strong>Post-Cath Status:</strong> Hemodynamics improving. BP improved to 102/68 following restoration of flow. RV function expected to recover over 24-48 hours with adequate preload management. Patient admitted to Cardiac ICU for invasive monitoring.
+      </div>
+    </div>
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Dr. Samuel Okafor, MD</div><div class="specialist-dept">Critical Care Medicine — Cardiac ICU</div></div>
+        <div class="specialist-time">Consult: 1540</div>
+      </div>
+      <div class="specialist-body">
+        <strong>ICU Admission Summary:</strong><br>
+        62-year-old male admitted post-primary PCI for inferior STEMI with RV involvement and cardiogenic shock. LVEF 35% post-procedure. Current hemodynamics supported with IV fluids (preload optimization — critical for RV). Vasopressor support: Norepinephrine 0.08 mcg/kg/min. Intra-aortic balloon pump (IABP) deferred pending hemodynamic reassessment.<br><br>
+        <strong>Key Management Points:</strong><br>
+        • IV fluid challenge 250mL NS bolus — improved BP (avoid diuretics in this patient type)<br>
+        • DAPT: Aspirin 325mg + Ticagrelor 180mg loading dose → 90mg BID maintenance<br>
+        • Hold beta-blockers until hemodynamically stable<br>
+        • Hold ACE inhibitors/ARBs temporarily given cardiogenic shock, resume in 24-48 hours<br>
+        • Continuous telemetry: High risk for complete heart block, VT/VF<br>
+        • Hold metformin (contrast-related AKI concern, renal monitoring protocol)
+      </div>
+    </div>
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Susan Tran, RN, MSN</div><div class="specialist-dept">STEMI Coordinator / Patient Education</div></div>
+        <div class="specialist-time">Day 2 Discharge Planning</div>
+      </div>
+      <div class="specialist-body">
+        Patient and family counseled on diagnosis, procedure, medications, and lifestyle modifications. Cardiac rehabilitation referral placed for 6-week program. Social work consult for adherence support. Follow-up scheduled with Dr. Ramaswamy in 2 weeks. Return precautions provided. ICD evaluation discussed — patient will undergo repeat echo at 40 days to evaluate EF recovery before determining if ICD is indicated.
+      </div>
+    </div>`,
+
+  research:[
+    {topic:'Inferior STEMI Recognition',text:'Using <strong>Sanders\' Paramedic Textbook (Chapter on Cardiovascular Emergencies)</strong>, describe the anatomical reason inferior MI causes ST elevation in leads II, III, and aVF. What coronary artery is most commonly responsible?',book:true},
+    {topic:'Right Ventricular Infarction',text:'Research <strong>Right Ventricular Infarction</strong> using your paramedic textbook AND AHA/ACC guidelines. Explain the classic triad of RV infarction. Why are nitroglycerin and morphine contraindicated?',book:true},
+    {topic:'Cardiogenic Shock',text:'Define cardiogenic shock and identify the specific <strong>hemodynamic parameters</strong> used to diagnose it. Using online resources (PubMed, UpToDate, AHA), compare cardiogenic shock from LV failure vs. RV failure.',book:false},
+    {topic:'STEMI Alert System',text:'Research your local Hampton Roads region\'s <strong>STEMI system of care</strong>. What is the target door-to-balloon time? What steps does the paramedic take to activate the cath lab from the field?',book:false},
+    {topic:'Right-Sided & Posterior Leads',text:'From your textbook, explain the technique for obtaining <strong>right-sided leads (V3R-V4R)</strong> and posterior leads (V7-V9). Include electrode placement and clinical significance.',book:true},
+    {topic:'Diabetic Cardiac Risk',text:'Research why <strong>Type 2 Diabetes</strong> is considered a "coronary artery disease equivalent." Find and cite 2 peer-reviewed journal articles (published after 2020) discussing diabetic cardiomyopathy.',book:false},
+    {topic:'AHA 2025 STEMI Guidelines',text:'Find the most current <strong>AHA/ACC STEMI Management Guidelines</strong> (2024-2025 update). Identify three changes from previous guidelines that are relevant to prehospital care.',book:false},
+    {topic:'Prehospital Pharmacology',text:'Detail the <strong>prehospital pharmacological management</strong> of this patient using the current PDCC EMS protocol. Include drug names, doses, routes, mechanisms, contraindications, and expected outcomes.',book:true},
+  ],
+},
+
+// ─────────────────── GROUP 2: HYPERTENSIVE EMERGENCY / FLASH PULMONARY EDEMA ───────────────────
+g2: {
+  id:'g2', group:'Group 2',
+  title:'Hypertensive Emergency — Acute Pulmonary Edema',
+  status:'CRITICAL',
+  statusClass:'critical',
+  accentColor:'#f59e0b',
+  dispatch:`
+    <div class="alert-box red"><span class="alert-icon">🚨</span><div>
+    <strong>CAD Dispatch — Priority 1</strong><br>
+    "Units respond to 8812 Birch Lane, Suffolk. 67-year-old female, severe difficulty breathing, unable to speak in full sentences. History of heart failure. Husband called 911. Patient is reportedly upright and very distressed."
+    </div></div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📍</span><span class="section-title">Scene Narrative</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          You arrive at a well-maintained single-story home at <strong>0223 hours</strong>. Husband meets you at the door, visibly frightened. He leads you to the bedroom where <strong>Dorothy Chen</strong>, a 67-year-old Asian-American female, is sitting bolt upright in bed, leaning forward on her arms (tripod position). She is in extreme respiratory distress.
+          <div class="highlight">Husband states: "She woke up about 30 minutes ago saying she couldn't breathe. She was fine at dinner. She's been under a lot of stress lately with her sister being sick. She usually takes her blood pressure pills but she missed them yesterday — and today actually."</div>
+          <strong>First impression:</strong> Patient in severe respiratory distress. Audible wet, gurgling respirations from the doorway. Pink frothy sputum on her lips. Skin diaphoretic, gray-ashen. Time-critical intervention required. Immediate priority: oxygenation, preload reduction.
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">👤</span><span class="section-title">Patient Demographics</span></div>
+      <div class="section-body">
+        <div class="data-grid">
+          <div class="data-item"><div class="data-label">Patient Name</div><div class="data-value" style="font-size:16px">Dorothy L. Chen</div></div>
+          <div class="data-item"><div class="data-label">Age</div><div class="data-value">67<span class="data-unit">years</span></div></div>
+          <div class="data-item"><div class="data-label">Sex</div><div class="data-value" style="font-size:16px">Female</div></div>
+          <div class="data-item"><div class="data-label">Race/Ethnicity</div><div class="data-value" style="font-size:14px">Asian-American</div></div>
+          <div class="data-item"><div class="data-label">Weight</div><div class="data-value warning">168<span class="data-unit">lbs</span></div></div>
+          <div class="data-item"><div class="data-label">Height</div><div class="data-value" style="font-size:16px">5'4"</div></div>
+          <div class="data-item"><div class="data-label">BMI</div><div class="data-value warning">28.8<span class="data-unit">kg/m²</span></div></div>
+          <div class="data-item"><div class="data-label">Occupation</div><div class="data-value" style="font-size:14px">Retired Teacher</div></div>
+          <div class="data-item"><div class="data-label">Emergency Contact</div><div class="data-value" style="font-size:13px">Henry Chen (Husband)</div></div>
+          <div class="data-item"><div class="data-label">NOK Phone</div><div class="data-value" style="font-size:13px">(757) 555-0247</div></div>
+          <div class="data-item"><div class="data-label">PCP</div><div class="data-value" style="font-size:13px">Dr. Angela Morris, MD</div></div>
+          <div class="data-item"><div class="data-label">Cardiologist</div><div class="data-value" style="font-size:13px">Dr. James Hartley, MD</div></div>
+        </div>
+      </div>
+    </div>`,
+
+  assessment:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">⚡</span><span class="section-title">Initial Vitals — On Scene (0228)</span></div>
+      <div class="section-body">
+        <div class="vitals-monitor">
+          <div class="vital-display"><div class="vital-label">BP</div><div class="vital-value red">228/142</div><div class="vital-unit">mmHg — CRITICAL</div></div>
+          <div class="vital-display"><div class="vital-label">HR</div><div class="vital-value amber">118</div><div class="vital-unit">bpm — Tachy</div></div>
+          <div class="vital-display"><div class="vital-label">RR</div><div class="vital-value red">36</div><div class="vital-unit">breaths/min</div></div>
+          <div class="vital-display"><div class="vital-label">SpO₂</div><div class="vital-value red">78</div><div class="vital-unit">% on RA</div></div>
+          <div class="vital-display"><div class="vital-label">SpO₂ NRB</div><div class="vital-value amber">88</div><div class="vital-unit">% on 15L NRB</div></div>
+          <div class="vital-display"><div class="vital-label">Temp</div><div class="vital-value green">98.1</div><div class="vital-unit">°F</div></div>
+          <div class="vital-display"><div class="vital-label">BGL</div><div class="vital-value amber">164</div><div class="vital-unit">mg/dL</div></div>
+          <div class="vital-display"><div class="vital-label">Pain</div><div class="vital-value amber">6/10</div><div class="vital-unit">Pressure / Dyspnea</div></div>
+          <div class="vital-display"><div class="vital-label">GCS</div><div class="vital-value amber">12</div><div class="vital-unit">E3V4M5</div></div>
+        </div>
+        <div class="alert-box red" style="margin-top:16px"><span class="alert-icon">🚨</span><div>
+          <strong>Immediate CPAP Indications Met:</strong> SpO₂ &lt;90%, RR &gt;25, altered mental status, audible crackles, pink frothy sputum. Initiate CPAP immediately. Nitroglycerin IV drip (if available) preferred over SL due to BP level. Target BP reduction 20-25% in first 1-2 hours — DO NOT normalize BP rapidly.
+        </div></div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📜</span><span class="section-title">History of Present Illness & Medical History</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>HPI:</strong> Husband reports patient was in her usual state of health at dinner (2100). She complained of mild headache and "pressure in her chest" which she attributed to stress. She went to bed and woke at 0155 in acute respiratory distress. Husband called 911 immediately. She has not taken her blood pressure medications in 48 hours ("ran out, pharmacy was closed").<br><br>
+          <strong>PMH:</strong><br>
+          • Congestive Heart Failure (HFrEF) — EF 38% on last echo (8 months ago)<br>
+          • Hypertension — diagnosed 2008, poorly controlled despite multiple agents<br>
+          • Atrial Fibrillation — on anticoagulation with warfarin (rate-controlled with metoprolol)<br>
+          • Chronic Kidney Disease Stage 3 (eGFR 44)<br>
+          • Hypothyroidism<br>
+          • Type 2 Diabetes Mellitus — well-controlled with diet and metformin<br><br>
+          <strong>Current Medications:</strong><br>
+          1. Furosemide (Lasix) 80mg PO daily — MISSED 2 DOSES<br>
+          2. Carvedilol 25mg PO BID — MISSED 2 DOSES<br>
+          3. Lisinopril 40mg PO daily — MISSED 2 DOSES<br>
+          4. Spironolactone 25mg PO daily — MISSED 2 DOSES<br>
+          5. Warfarin 5mg PO daily (AFib anticoagulation)<br>
+          6. Levothyroxine 100mcg PO daily<br>
+          7. Metformin 500mg PO BID<br>
+          8. Potassium Chloride 20mEq PO daily<br><br>
+          <strong>Allergies:</strong> Sulfonamides (SJS reaction — SEVERE). Codeine (nausea/vomiting). NKDA to cardiac medications.<br><br>
+          <strong>Physical Exam:</strong><br>
+          General: Severely distressed female in tripod position. Unable to complete sentences. Cyanotic lips. Audible gurgling respirations. Frothy pink sputum present at lips.<br>
+          Cardiovascular: Tachycardic, irregular rhythm (known AFib). No new murmurs appreciated in field. Moderate JVD. Peripheral pulses present but weak.<br>
+          Respiratory: <strong>BILATERAL coarse crackles throughout all lung fields — base to apex.</strong> Accessory muscle use. Prolonged expiratory phase. Audible from across the room.<br>
+          Extremities: 3+ pitting edema bilateral lower extremities to knee level.
+        </div>
+      </div>
+    </div>`,
+
+  diagnostics:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📡</span><span class="section-title">12-Lead ECG — 0233 Hours</span></div>
+      <div class="section-body">
+        <div class="ecg-display">
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:#00e5ff;margin-bottom:14px;letter-spacing:2px;">
+            12-LEAD ECG · RATE: 118 BPM · QRS=0.10s · QT=0.36s · AFIB WITH RVR
+          </div>
+          <div class="ecg-findings" style="color:var(--text)">
+            <div class="ecg-finding-item"><strong>Rhythm:</strong> Atrial Fibrillation with Rapid Ventricular Response (118 bpm). Irregularly irregular. No identifiable P waves. Fibrillatory baseline.</div>
+            <div class="ecg-finding-item"><strong>ST Changes:</strong> Diffuse ST depression 1.0-1.5mm in V4-V6, I, aVL — consistent with subendocardial ischemia from demand ischemia/hypertensive crisis</div>
+            <div class="ecg-finding-item"><strong>LVH Criteria:</strong> Sokolow-Lyon criteria met (SV1 + RV5 = 42mm). Consistent with longstanding hypertensive heart disease</div>
+            <div class="ecg-finding-item"><strong>T-Wave Changes:</strong> Inverted T waves V4-V6 — strain pattern consistent with LVH and ischemia</div>
+            <div class="ecg-finding-item"><strong>No acute STEMI pattern identified.</strong> No new LBBB. No Wellens pattern.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🧪</span><span class="section-title">Laboratory Results — ED (0318)</span></div>
+      <div class="section-body">
+        <table class="lab-table">
+          <tr><th>Test</th><th>Result</th><th>Reference Range</th><th>Flag</th><th>Clinical Significance</th></tr>
+          <tr><td>Troponin I (hs-cTnI)</td><td class="lab-abnormal">0.18 ng/mL</td><td>&lt;0.04 ng/mL</td><td><span class="lab-flag H">H</span></td><td>Mildly elevated — demand ischemia / Type 2 MI</td></tr>
+          <tr><td>BNP</td><td class="lab-critical">4,280 pg/mL</td><td>&lt;100 pg/mL</td><td><span class="lab-flag C">CRIT</span></td><td>Massively elevated — severe decompensated heart failure</td></tr>
+          <tr><td>Sodium (Na⁺)</td><td class="lab-abnormal">132 mEq/L</td><td>136-145</td><td><span class="lab-flag L">L</span></td><td>Dilutional hyponatremia — poor prognostic indicator in HF</td></tr>
+          <tr><td>Potassium (K⁺)</td><td class="lab-critical">2.8 mEq/L</td><td>3.5-5.0</td><td><span class="lab-flag C">CRIT</span></td><td>Severe hypokalemia — arrhythmia risk, repletion required</td></tr>
+          <tr><td>Creatinine</td><td class="lab-critical">2.8 mg/dL</td><td>0.6-1.0</td><td><span class="lab-flag C">CRIT</span></td><td>Acute-on-chronic kidney injury — cardiorenal syndrome</td></tr>
+          <tr><td>eGFR</td><td class="lab-critical">22 mL/min</td><td>&gt;60</td><td><span class="lab-flag L">L</span></td><td>CKD stage 4 — significant deterioration from baseline</td></tr>
+          <tr><td>Magnesium</td><td class="lab-abnormal">1.4 mg/dL</td><td>1.7-2.2</td><td><span class="lab-flag L">L</span></td><td>Hypomagnesemia — exacerbates hypokalemia and arrhythmia risk</td></tr>
+          <tr><td>INR (Warfarin)</td><td class="lab-abnormal">3.8</td><td>2.0-3.0 (AFib target)</td><td><span class="lab-flag H">H</span></td><td>Supratherapeutic — elevated bleeding risk</td></tr>
+          <tr><td>TSH (Thyroid)</td><td class="lab-abnormal">12.4 mIU/L</td><td>0.4-4.0</td><td><span class="lab-flag H">H</span></td><td>Undertreated hypothyroidism — worsening HF, AFib</td></tr>
+          <tr><td>ABG pH</td><td class="lab-critical">7.21</td><td>7.35-7.45</td><td><span class="lab-flag L">L</span></td><td>Severe respiratory acidosis with metabolic component</td></tr>
+          <tr><td>ABG PaCO₂</td><td class="lab-critical">62 mmHg</td><td>35-45</td><td><span class="lab-flag H">H</span></td><td>CO₂ retention — respiratory fatigue, near intubation threshold</td></tr>
+          <tr><td>ABG PaO₂</td><td class="lab-critical">44 mmHg</td><td>75-100</td><td><span class="lab-flag L">L</span></td><td>Critical hypoxemia — P/F ratio 83 (ARDS range)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🔬</span><span class="section-title">Radiology Results</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>Chest X-Ray (Portable AP — ED, 0330):</strong><br>
+          FINDINGS: Cardiomegaly (CTR 0.64). <strong>Bilateral diffuse alveolar infiltrates in a "bat-wing" or "butterfly" pattern — classic for flash pulmonary edema.</strong> Prominent upper lobe vascular redistribution (cephalization). Bilateral pleural effusions (moderate right, small left). Kerley B lines present at lung bases. Endotracheal tube in good position (patient intubated in ED, see specialist notes).<br>
+          IMPRESSION: <strong>Severe acute pulmonary edema. Cardiomegaly. Bilateral pleural effusions. Findings consistent with acute decompensated heart failure in hypertensive crisis.</strong>
+        </div>
+      </div>
+    </div>`,
+
+  specialists:`
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Dr. James Hartley, MD</div><div class="specialist-dept">Cardiology — Heart Failure Specialist</div></div>
+        <div class="specialist-time">Consult: 0415</div>
+      </div>
+      <div class="specialist-body">
+        <strong>Cardiology Consult Note:</strong><br>
+        Mrs. Chen presents with acute decompensated heart failure (HFrEF, EF 38%) precipitated by severe hypertensive crisis following medication non-adherence × 48 hours. Concurrent AFib with RVR contributed to reduced cardiac output and further elevated filling pressures.<br><br>
+        <strong>Inpatient Management:</strong><br>
+        • IV Nicardipine drip initiated for hypertensive emergency — titrating for 20-25% BP reduction over 2 hours<br>
+        • IV Furosemide 120mg bolus → 20mg/hr continuous infusion for aggressive diuresis (target 1-2L negative in 24h)<br>
+        • IV Nitroglycerin infusion 10-200mcg/min for preload reduction<br>
+        • Rate control: IV Metoprolol for AFib RVR — target HR &lt;80 bpm<br>
+        • REPEAT echo in 48 hours to reassess EF and volume status<br>
+        • Thyroid function optimization — endocrinology consult placed<br>
+        • Patient intubated in ED given respiratory failure (PaCO₂ 62, pH 7.21, obtunded) — BiPAP failed due to obtundation<br>
+        • Restart home medications with modified doses upon extubation
+      </div>
+    </div>`,
+
+  research:[
+    {topic:'Flash Pulmonary Edema Pathophysiology',text:'Using your paramedic textbook, describe the pathophysiological mechanism by which hypertensive crisis causes <strong>flash pulmonary edema</strong>. Draw a diagram of the Frank-Starling curve and how it shifts in this scenario.',book:true},
+    {topic:'CPAP in Acute Pulmonary Edema',text:'Research the evidence for <strong>prehospital CPAP</strong> in APE. Find 2 studies (post-2018). What parameters are used to decide CPAP vs. BVM ventilation vs. RSI in the field?',book:false},
+    {topic:'Nitroglycerin Dosing Strategies',text:'Research <strong>IV vs. SL nitroglycerin</strong> for hypertensive emergency with APE. Find the current NTG dosing protocol in your PDCC EMS protocol and compare with 2024 ACEP guidelines.',book:true},
+    {topic:'Medication Non-Compliance Impact',text:'Research the clinical and public health impact of <strong>antihypertensive medication non-adherence</strong>. What systems exist in Hampton Roads to prevent this? Cite 2 studies and propose a solution.',book:false},
+    {topic:'Heart Failure with Reduced EF',text:'From your textbook, define <strong>HFrEF vs. HFpEF</strong>. What is the significance of a 38% EF? How does this change your treatment approach compared to a patient with preserved EF?',book:true},
+    {topic:'Atrial Fibrillation in HF',text:'Research the relationship between <strong>atrial fibrillation and heart failure</strong> — which comes first? How does AFib worsen HF? How does HF cause AFib? Use your textbook and 1 clinical guideline.',book:true},
+    {topic:'Cardiorenal Syndrome',text:'Define <strong>Cardiorenal Syndrome (CRS)</strong> — specifically Type 1. How does acute decompensated heart failure cause acute kidney injury? This patient\'s creatinine rose from 1.6 to 2.8 — what does this mean for treatment decisions?',book:false},
+    {topic:'Prehospital Drug Therapy',text:'Detail the complete <strong>prehospital pharmacological management</strong> for this patient per PDCC protocol. Include all agents available to paramedics, doses, routes, mechanisms, contraindications.',book:true},
+  ],
+},
+
+// ─────────────────── GROUP 3: VT / CARDIOMYOPATHY ───────────────────
+g3: {
+  id:'g3', group:'Group 3',
+  title:'Sustained VT — Ischemic Cardiomyopathy',
+  status:'CRITICAL',
+  statusClass:'critical',
+  accentColor:'#b44dff',
+  dispatch:`
+    <div class="alert-box red"><span class="alert-icon">🚨</span><div>
+    <strong>CAD Dispatch — Priority 1</strong><br>
+    "Units to 440 Harbor View Drive, Suffolk. 48-year-old male, severe palpitations and almost passed out. Wife says he's conscious but gray-looking and can barely stay awake. Has heart history. Go Priority."
+    </div></div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📍</span><span class="section-title">Scene Narrative</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          You arrive at an upscale waterfront home at <strong>1712 hours on a Thursday evening</strong>. Wife (Jennifer Bradley) answers the door crying. She leads you to the living room where <strong>Damon Bradley</strong>, a 48-year-old Black male attorney, is in a recliner. He is conscious but appears ashen-gray and diaphoretic. He appears confused and is unable to follow commands reliably.
+          <div class="highlight">"He was just sitting here watching TV and said his heart was 'going crazy.' He stood up to call me and nearly fell. He had a heart attack 3 years ago and they put a defibrillator in, but he said it didn't go off. He's been under enormous stress at work."</div>
+          You apply the monitor: <strong>Wide complex tachycardia at 168 bpm.</strong> Your partner begins assessment while you interpret the rhythm and prepare for possible synchronized cardioversion.
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">👤</span><span class="section-title">Patient Demographics & Social History</span></div>
+      <div class="section-body">
+        <div class="data-grid">
+          <div class="data-item"><div class="data-label">Patient Name</div><div class="data-value" style="font-size:16px">Damon T. Bradley</div></div>
+          <div class="data-item"><div class="data-label">Age</div><div class="data-value">48<span class="data-unit">years</span></div></div>
+          <div class="data-item"><div class="data-label">Race/Ethnicity</div><div class="data-value" style="font-size:14px">African American</div></div>
+          <div class="data-item"><div class="data-label">Weight</div><div class="data-value">195<span class="data-unit">lbs</span></div></div>
+          <div class="data-item"><div class="data-label">Occupation</div><div class="data-value" style="font-size:14px">Trial Attorney</div></div>
+          <div class="data-item"><div class="data-label">ICD Present</div><div class="data-value" style="color:var(--amber);font-size:15px">YES — St. Jude</div></div>
+          <div class="data-item"><div class="data-label">Last Cardiologist</div><div class="data-value" style="font-size:13px">Dr. Chen, SNVH</div></div>
+          <div class="data-item"><div class="data-label">Recent Stressor</div><div class="data-value" style="font-size:13px">Major litigation case</div></div>
+        </div>
+        <div class="narrative" style="margin-top:14px">
+          <strong>PMH:</strong> Anterior STEMI (2022) — PCI to LAD with DES. Ischemic cardiomyopathy (EF 28% on last echo). Hypertension. Hyperlipidemia. ICD implanted post-MI (primary prevention). Prior VT episode treated in ED 18 months ago with IV amiodarone. Sleep apnea.<br><br>
+          <strong>Medications:</strong> Carvedilol 25mg BID, Sacubitril/Valsartan (Entresto) 97/103mg BID, Empagliflozin 10mg daily, Spironolactone 25mg daily, Atorvastatin 80mg nightly, Aspirin 81mg daily, Clopidogrel 75mg daily, Amiodarone 200mg daily.<br><br>
+          <strong>Allergies:</strong> NKDA. Iodine contrast — mild reaction (premedication with methylprednisolone and diphenhydramine required)
+        </div>
+      </div>
+    </div>`,
+
+  assessment:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">⚡</span><span class="section-title">Vitals & Physical Examination</span></div>
+      <div class="section-body">
+        <div class="vitals-monitor">
+          <div class="vital-display"><div class="vital-label">BP</div><div class="vital-value red">72/44</div><div class="vital-unit">mmHg</div></div>
+          <div class="vital-display"><div class="vital-label">HR/Rhythm</div><div class="vital-value red">168</div><div class="vital-unit">bpm Wide Complex VT</div></div>
+          <div class="vital-display"><div class="vital-label">RR</div><div class="vital-value amber">24</div><div class="vital-unit">breaths/min</div></div>
+          <div class="vital-display"><div class="vital-label">SpO₂</div><div class="vital-value amber">91</div><div class="vital-unit">% on 15L NRB</div></div>
+          <div class="vital-display"><div class="vital-label">GCS</div><div class="vital-value amber">11</div><div class="vital-unit">E3V3M5</div></div>
+          <div class="vital-display"><div class="vital-label">BGL</div><div class="vital-value green">104</div><div class="vital-unit">mg/dL</div></div>
+          <div class="vital-display"><div class="vital-label">Skin</div><div class="vital-value red">Gray</div><div class="vital-unit">Diaphoretic</div></div>
+          <div class="vital-display"><div class="vital-label">Cap Refill</div><div class="vital-value amber">4 sec</div><div class="vital-unit">Delayed</div></div>
+        </div>
+        <div class="alert-box red" style="margin-top:16px"><span class="alert-icon">⚡</span><div>
+          <strong>UNSTABLE VT — IMMEDIATE CARDIOVERSION INDICATED:</strong> BP 72/44, altered mental status, signs of poor perfusion. This is hemodynamically unstable VT. Do NOT delay for drug therapy. Prepare for synchronized cardioversion: 100J (100-200J biphasic). Sedate if time permits (midazolam or ketamine). Call for ALS intercept if BLS unit.
+        </div></div>
+        <div class="narrative" style="margin-top:14px">
+          <strong>Physical Exam:</strong><br>
+          General: Middle-aged male in distress, diaphoretic, ashen, altered. Speaking in 2-3 word answers.<br>
+          Cardiovascular: Rapid regular rhythm (VT). Diminished pulses. ICD visible as subcutaneous bulge in left anterior chest. No JVD.<br>
+          Respiratory: Clear lungs bilaterally — mild tachypnea. SpO₂ improving on O₂.<br>
+          Neuro: GCS 11 — confused, slow to respond. Pupils equal, mid-dilated (sympathetic activation). No focal deficits identified.
+        </div>
+      </div>
+    </div>`,
+
+  diagnostics:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📡</span><span class="section-title">12-Lead ECG — 1717 Hours</span></div>
+      <div class="section-body">
+        <div class="ecg-display">
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:#00e5ff;margin-bottom:14px;letter-spacing:2px;">
+            12-LEAD ECG · RATE: 168 BPM · QRS WIDTH: 0.18s · REGULAR · MONOMORPHIC VT
+          </div>
+          <div class="ecg-findings" style="color:var(--text)">
+            <div class="ecg-finding-item"><strong>Rhythm:</strong> Regular wide complex tachycardia at 168 bpm. QRS 0.18s (markedly widened). No identifiable P waves. Monomorphic.</div>
+            <div class="ecg-finding-item"><strong>Morphology:</strong> LBBB morphology in V1. Positive concordance in precordial leads. Axis deviation to right (+180°).</div>
+            <div class="ecg-finding-item"><strong>Brugada Criteria for VT (ALL 4 met):</strong> (1) No RS complex in precordial leads. (2) Onset to nadir of S &gt;100ms. (3) AV dissociation (intermittent capture beat seen in V1). (4) QRS morphology not consistent with typical RBBB or LBBB.</div>
+            <div class="ecg-finding-item"><strong>Wellens Sign / AV Dissociation:</strong> Occasional fusion beats visible — confirms VT vs. SVT with aberrancy</div>
+            <div class="ecg-finding-item"><strong>Background:</strong> Existing anterior Q waves (old MI pattern) in V1-V4. Consistent with known ischemic cardiomyopathy.</div>
+            <div style="margin-top:12px;padding:10px;background:rgba(180,77,255,0.1);border-radius:4px;font-size:12px;color:#d8b4fe;border-left:3px solid var(--purple);">
+              ⚡ IMMEDIATE SYNCHRONIZED CARDIOVERSION: Unstable VT with hemodynamic compromise. 100-200J biphasic. Sedate if time/situation permits. Note: ICD present — place pads away from device (anterior-posterior placement preferred). Pre-notify receiving hospital.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🧪</span><span class="section-title">Laboratory Results — Post-Cardioversion, ED (1810)</span></div>
+      <div class="section-body">
+        <table class="lab-table">
+          <tr><th>Test</th><th>Result</th><th>Reference Range</th><th>Flag</th><th>Clinical Significance</th></tr>
+          <tr><td>Troponin I</td><td class="lab-critical">2.4 ng/mL</td><td>&lt;0.04</td><td><span class="lab-flag C">CRIT</span></td><td>Elevated — demand ischemia from sustained VT</td></tr>
+          <tr><td>Potassium (K⁺)</td><td class="lab-critical">2.9 mEq/L</td><td>3.5-5.0</td><td><span class="lab-flag C">CRIT</span></td><td>Hypokalemia — major VT trigger, immediate repletion</td></tr>
+          <tr><td>Magnesium</td><td class="lab-critical">1.2 mg/dL</td><td>1.7-2.2</td><td><span class="lab-flag L">L</span></td><td>Hypomagnesemia — proarrhythmic, replete before amiodarone</td></tr>
+          <tr><td>BNP</td><td class="lab-critical">2,840 pg/mL</td><td>&lt;100</td><td><span class="lab-flag C">CRIT</span></td><td>Severely elevated — decompensated HF, worsening cardiomyopathy</td></tr>
+          <tr><td>Amiodarone Level</td><td class="lab-abnormal">0.8 mcg/mL</td><td>1.0-2.5</td><td><span class="lab-flag L">L</span></td><td>Sub-therapeutic — possible non-compliance or drug interaction</td></tr>
+          <tr><td>Thyroid Function (TSH)</td><td class="lab-normal">2.1 mIU/L</td><td>0.4-4.0</td><td>—</td><td>Normal — amiodarone-induced thyrotoxicosis not present</td></tr>
+          <tr><td>Lactate</td><td class="lab-critical">6.2 mmol/L</td><td>&lt;2.0</td><td><span class="lab-flag C">CRIT</span></td><td>Severe — prolonged low-flow state from VT, improving post-cardioversion</td></tr>
+          <tr><td>ABG pH (post-DCCV)</td><td class="lab-abnormal">7.28</td><td>7.35-7.45</td><td><span class="lab-flag L">L</span></td><td>Metabolic acidosis from prolonged low-output state</td></tr>
+          <tr><td>Creatinine</td><td class="lab-abnormal">1.6 mg/dL</td><td>0.7-1.2</td><td><span class="lab-flag H">H</span></td><td>Mildly elevated — acute tubular injury from cardiogenic shock</td></tr>
+          <tr><td>CXR: EF Echo</td><td class="lab-critical">22%</td><td>55-70%</td><td><span class="lab-flag C">CRIT</span></td><td>Worsening cardiomyopathy from 28% baseline — disease progression</td></tr>
+        </table>
+      </div>
+    </div>`,
+
+  specialists:`
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Dr. Vanessa Chen, MD</div><div class="specialist-dept">Electrophysiology / Heart Failure</div></div>
+        <div class="specialist-time">Consult: 1830</div>
+      </div>
+      <div class="specialist-body">
+        <strong>EP Consult Note:</strong><br>
+        Mr. Bradley presents with third episode of sustained VT, now with hemodynamic instability requiring DCCV in the field. Known ischemic cardiomyopathy with EF worsening to 22% (from 28%). ICD interrogation confirms 3 VT episodes in 48 hours with ICD appropriately sensing but therapy failures noted for 2 episodes (undersensing) — device programmer ordered STAT.<br><br>
+        <strong>Electrolyte correction underway:</strong> IV KCl 40mEq + IV MgSO₄ 2g. Amiodarone level sub-therapeutic — patient admits intermittent non-compliance.<br><br>
+        <strong>Plan:</strong> IV Amiodarone load (150mg IV over 10min, then 1mg/min × 6h, then 0.5mg/min). ICD interrogation and reprogramming. Consider VT ablation if medical management fails. Advanced HF team consulted for possible LVAD evaluation given EF 22%. Urgent cardiac MRI ordered for scar mapping.
+      </div>
+    </div>`,
+
+  research:[
+    {topic:'VT vs. SVT with Aberrancy',text:'From your textbook, explain the <strong>Brugada criteria</strong> for differentiating VT from SVT with aberrant conduction. Why does this matter in prehospital treatment? What is the safest default assumption?',book:true},
+    {topic:'Synchronized Cardioversion',text:'Detail the <strong>procedure for synchronized cardioversion</strong> including energy selection, electrode placement with an ICD present, sedation options, and common errors. Cite current ACLS guidelines.',book:true},
+    {topic:'Ischemic Cardiomyopathy',text:'Research <strong>ischemic cardiomyopathy</strong> — how does post-MI remodeling lead to EF reduction, arrhythmia, and sudden cardiac death? What is the relationship between scar tissue and VT?',book:false},
+    {topic:'Amiodarone Pharmacology',text:'Provide a comprehensive review of <strong>amiodarone pharmacology</strong>: mechanism, indications, contraindications, loading doses (IV/PO), side effects (short and long-term), drug interactions, and monitoring requirements.',book:true},
+    {topic:'ICD Management in Prehospital',text:'Research <strong>ICD management by paramedics</strong>. What happens if the ICD fires during patient contact? Can you use a defibrillator on a patient with an ICD? What precautions are needed? Find current AHA guidelines.',book:false},
+    {topic:'Electrolyte-Arrhythmia Connection',text:'Explain the physiology of how <strong>hypokalemia and hypomagnesemia</strong> cause ventricular arrhythmias. What are the cellular mechanisms? What are the prehospital treatment options for electrolyte-related VT?',book:true},
+    {topic:'Advanced HF Therapies',text:'Research advanced therapies for end-stage HF: <strong>LVAD (Left Ventricular Assist Device)</strong>, cardiac transplantation candidacy criteria, palliative care considerations. What role does the paramedic play when responding to LVAD patients?',book:false},
+    {topic:'Prehospital Protocol',text:'Detail the <strong>PDCC EMS prehospital protocol</strong> for unstable tachycardia. Include the complete algorithm: assessment, cardioversion protocol, drug alternatives, post-ROSC care, transport considerations.',book:true},
+  ],
+},
+
+// ─────────────────── GROUP 4: AORTIC DISSECTION ───────────────────
+g4: {
+  id:'g4', group:'Group 4',
+  title:'Type A Aortic Dissection — The Masquerader',
+  status:'CRITICAL',
+  statusClass:'critical',
+  accentColor:'#00e5ff',
+  dispatch:`
+    <div class="alert-box red"><span class="alert-icon">🚨</span><div>
+    <strong>CAD Dispatch — Priority 1</strong><br>
+    "Respond to 1120 Veterans Memorial Drive, Franklin. 74-year-old male, severe chest pain radiating to back. Caller says it started suddenly 20 minutes ago. He's awake but very pale. History of hypertension. Go Priority."
+    </div></div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📍</span><span class="section-title">Scene Narrative & Initial Impression</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          You arrive at a military-style well-organized home at <strong>1847 hours</strong>. Wife of 47 years, Margaret, is calm but clearly frightened. She leads you to the dining room where <strong>Robert Espinoza</strong>, 74, a retired naval officer, is gripping the table edge, pale as a sheet, sweating profusely.
+          <div class="highlight">"It was like someone stabbed me in the chest and is ripping downward. I've never felt anything like this. It's not like the heart attacks my friends described. This is different — it's TEARING." — Robert Espinoza</div>
+          As you place your BP cuff: <strong>Right arm BP 178/104 mmHg. Left arm BP 136/82 mmHg — 42 mmHg differential.</strong> This single finding changes everything. Your partner notes the radial pulse is weaker on the left than right. You recognize the pattern: <strong>aortic dissection until proven otherwise.</strong>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">👤</span><span class="section-title">Patient Demographics</span></div>
+      <div class="section-body">
+        <div class="data-grid">
+          <div class="data-item"><div class="data-label">Patient Name</div><div class="data-value" style="font-size:16px">Robert J. Espinoza</div></div>
+          <div class="data-item"><div class="data-label">Age</div><div class="data-value">74<span class="data-unit">years</span></div></div>
+          <div class="data-item"><div class="data-label">Race/Ethnicity</div><div class="data-value" style="font-size:14px">Hispanic/Latino</div></div>
+          <div class="data-item"><div class="data-label">Weight</div><div class="data-value">182<span class="data-unit">lbs</span></div></div>
+          <div class="data-item"><div class="data-label">Occupation</div><div class="data-value" style="font-size:14px">Retired Naval Officer</div></div>
+          <div class="data-item"><div class="data-label">Emergency Contact</div><div class="data-value" style="font-size:13px">Margaret Espinoza (Wife)</div></div>
+          <div class="data-item"><div class="data-label">PMHx Key</div><div class="data-value" style="font-size:13px">HTN, Marfan Hx Neg, Prior CXR</div></div>
+          <div class="data-item"><div class="data-label">Surgeon on Call</div><div class="data-value" style="font-size:13px">Dr. R. Singh, Cardiothoracic</div></div>
+        </div>
+        <div class="narrative" style="margin-top:14px">
+          <strong>PMH:</strong> Hypertension × 20 years (inadequately controlled — "white coat syndrome, never takes it seriously"). Bicuspid aortic valve — known × 10 years, on surveillance. Prior aortic root dilation noted on echo 2 years ago (4.3cm). Hyperlipidemia. Former smoker (40 pack-years, quit 10 years ago). Gout. Prostate cancer — treated/remission.<br><br>
+          <strong>Family History:</strong> Father died of "rupture" (suspected aortic aneurysm) age 71.<br><br>
+          <strong>Medications:</strong> Amlodipine 10mg daily, Hydrochlorothiazide 25mg daily, Allopurinol 300mg daily, Rosuvastatin 20mg daily, Aspirin 81mg daily.<br><br>
+          <strong>Allergies:</strong> Sulfonamides (anaphylaxis). Latex (skin reaction).
+        </div>
+      </div>
+    </div>`,
+
+  assessment:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">⚡</span><span class="section-title">Vital Signs — On Scene (1851)</span></div>
+      <div class="section-body">
+        <div class="vitals-monitor">
+          <div class="vital-display"><div class="vital-label">BP Right Arm</div><div class="vital-value red">178/104</div><div class="vital-unit">mmHg</div></div>
+          <div class="vital-display"><div class="vital-label">BP Left Arm</div><div class="vital-value amber">136/82</div><div class="vital-unit">mmHg</div></div>
+          <div class="vital-display"><div class="vital-label">BP DIFF</div><div class="vital-value red">42 mmHg</div><div class="vital-unit">→ DISSECTION FLAG</div></div>
+          <div class="vital-display"><div class="vital-label">HR</div><div class="vital-value amber">108</div><div class="vital-unit">bpm Sinus Tachy</div></div>
+          <div class="vital-display"><div class="vital-label">RR</div><div class="vital-value amber">22</div><div class="vital-unit">breaths/min</div></div>
+          <div class="vital-display"><div class="vital-label">SpO₂</div><div class="vital-value amber">95</div><div class="vital-unit">% on 15L NRB</div></div>
+          <div class="vital-display"><div class="vital-label">GCS</div><div class="vital-value green">15</div><div class="vital-unit">Fully Alert</div></div>
+          <div class="vital-display"><div class="vital-label">Pain</div><div class="vital-value red">10/10</div><div class="vital-unit">Tearing/Ripping</div></div>
+        </div>
+        <div class="alert-box red" style="margin-top:16px"><span class="alert-icon">⚠️</span><div>
+          <strong>CRITICAL PREHOSPITAL PRIORITIES — AORTIC DISSECTION:</strong><br>
+          1. NO ANTICOAGULATION (do not give heparin or aspirin)<br>
+          2. HEART RATE CONTROL — target HR &lt;60 bpm (labetalol or esmolol if available)<br>
+          3. CAREFUL BP MANAGEMENT — maintain MAP 60-75 mmHg on affected side<br>
+          4. TWO LARGE-BORE IVs but do NOT give aggressive fluids<br>
+          5. PRE-NOTIFY surgical team — this patient needs the OR, not the cath lab<br>
+          6. TRANSPORT to the nearest facility with cardiothoracic surgery — DO NOT delay
+        </div></div>
+        <div class="narrative" style="margin-top:14px">
+          <strong>Physical Exam:</strong><br>
+          General: 74-year-old male, alert, oriented, in severe distress. Profusely diaphoretic. Ashen complexion. Sitting still (movement increases pain). Cooperative but frightened.<br>
+          Cardiovascular: Tachycardic regular rhythm. S1/S2 present. New early diastolic murmur noted at left sternal border (aortic regurgitation — concerning for proximal dissection). Radial pulses: right stronger than left (pulse deficit).<br>
+          Respiratory: Bilateral breath sounds present. Left base slightly diminished (hemothorax concern). SpO₂ 95%.<br>
+          Neurological: GCS 15. AAOx4. Mild confusion/anxiety from pain. No focal neurological deficits at this time (important — track for changes suggesting carotid/vertebral involvement).<br>
+          Abdomen: Soft. No pulsatile masses appreciated. Mild epigastric tenderness.
+        </div>
+      </div>
+    </div>`,
+
+  diagnostics:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📡</span><span class="section-title">12-Lead ECG — 1854 Hours</span></div>
+      <div class="section-body">
+        <div class="ecg-display">
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:#00e5ff;margin-bottom:14px;letter-spacing:2px;">
+            12-LEAD ECG · RATE: 108 BPM · QRS=0.10s · SINUS TACHYCARDIA · NO STEMI
+          </div>
+          <div class="ecg-findings" style="color:var(--text)">
+            <div class="ecg-finding-item"><strong>Rhythm:</strong> Sinus tachycardia at 108 bpm. Regular. Normal PR interval (0.16s).</div>
+            <div class="ecg-finding-item"><strong>ST Changes:</strong> Diffuse non-specific ST changes. <strong>No diagnostic STEMI pattern</strong> — this is CRITICAL in aortic dissection as it can mimic STEMI (especially inferior when dissection extends to RCA ostium)</div>
+            <div class="ecg-finding-item"><strong>LVH Pattern:</strong> Voltage criteria for LVH met — consistent with longstanding hypertension and bicuspid aortic valve</div>
+            <div class="ecg-finding-item"><strong>Q Waves:</strong> Small non-diagnostic q waves in III and aVF — nonspecific, no evolutionary changes</div>
+            <div class="ecg-finding-item"><strong>No LBBB, No dynamic ischemic changes</strong></div>
+            <div style="margin-top:12px;padding:10px;background:rgba(0,229,255,0.08);border-radius:4px;font-size:12px;color:#7dd3fc;border-left:3px solid var(--cyan);">
+              ⚠️ CRITICAL TEACHING POINT: Aortic dissection can present with ECG changes mimicking STEMI. Sending this patient to the cath lab instead of the OR would be FATAL. The BP differential, pain character, and murmur override ECG interpretation.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🧪</span><span class="section-title">Laboratory Results — ED (1940)</span></div>
+      <div class="section-body">
+        <table class="lab-table">
+          <tr><th>Test</th><th>Result</th><th>Reference</th><th>Flag</th><th>Significance</th></tr>
+          <tr><td>D-Dimer</td><td class="lab-critical">12,400 ng/mL</td><td>&lt;500</td><td><span class="lab-flag C">CRIT</span></td><td>Massively elevated — confirms thrombotic process/dissection</td></tr>
+          <tr><td>Troponin I</td><td class="lab-abnormal">0.14 ng/mL</td><td>&lt;0.04</td><td><span class="lab-flag H">H</span></td><td>Mildly elevated — demand ischemia or dissection extending to coronary</td></tr>
+          <tr><td>Hemoglobin</td><td class="lab-abnormal">10.2 g/dL</td><td>13.5-17.5</td><td><span class="lab-flag L">L</span></td><td>Acute blood loss into false lumen / hemomediastinum</td></tr>
+          <tr><td>Hematocrit</td><td class="lab-abnormal">31%</td><td>41-53%</td><td><span class="lab-flag L">L</span></td><td>Acute hemorrhage into dissection plane</td></tr>
+          <tr><td>Creatinine</td><td class="lab-abnormal">1.7 mg/dL</td><td>0.7-1.3</td><td><span class="lab-flag H">H</span></td><td>Renal artery involvement — malperfusion syndrome</td></tr>
+          <tr><td>Lactate</td><td class="lab-critical">3.8 mmol/L</td><td>&lt;2.0</td><td><span class="lab-flag H">H</span></td><td>Malperfusion of end organs from dissection</td></tr>
+          <tr><td>PT/INR</td><td class="lab-normal">1.0</td><td>0.9-1.1</td><td>—</td><td>Normal — no anticoagulation given (correct)</td></tr>
+          <tr><td>Type & Screen</td><td colspan="3" style="color:var(--amber)">O-NEGATIVE × 4 units PRBC ordered emergently</td><td>Prep for surgery</td></tr>
+          <tr><td>ABG pH</td><td class="lab-abnormal">7.32</td><td>7.35-7.45</td><td><span class="lab-flag L">L</span></td><td>Mild metabolic acidosis from malperfusion</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🔬</span><span class="section-title">CT Angiography — Chest/Abdomen/Pelvis (1958)</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>CT Angiography (Emergent — Chest/Abdomen/Pelvis with contrast):</strong><br>
+          TECHNIQUE: Gated CTA with ECG synchronization. Iohexol 300 contrast, 120mL. Premedication given (latex and sulfa allergy noted — verified latex-free protocol).<br><br>
+          FINDINGS:<br>
+          • <strong>Type A Aortic Dissection CONFIRMED.</strong> Intimal flap involving ascending aorta originating 1.5cm above the aortic annulus.<br>
+          • Dissection extends into the aortic arch, descending thoracic aorta, and into the abdominal aorta to the level of the renal arteries.<br>
+          • <strong>True lumen compromised in descending aorta</strong> — right renal artery arising from false lumen (malperfusion).<br>
+          • Hemopericardium present (small) — tamponade physiology not yet established but developing.<br>
+          • Left pleural effusion — hemothorax component, small (200mL estimated).<br>
+          • <strong>Ascending aorta diameter: 6.2cm</strong> (normal &lt;3.8cm) — massive aneurysmal dilation.<br>
+          • Aortic valve: Bicuspid morphology confirmed. Moderate aortic insufficiency.<br><br>
+          IMPRESSION: <strong>STANFORD TYPE A AORTIC DISSECTION — IMMEDIATE SURGICAL EMERGENCY. Cardiothoracic surgery activated for emergent repair (Bentall procedure anticipated). ICU holding en route to OR.</strong>
+        </div>
+      </div>
+    </div>`,
+
+  specialists:`
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Dr. Rajiv Singh, MD, FACS</div><div class="specialist-dept">Cardiothoracic Surgery</div></div>
+        <div class="specialist-time">OR: 2115 hours — Emergent Surgery</div>
+      </div>
+      <div class="specialist-body">
+        <strong>Operative Note Summary:</strong><br>
+        Patient taken emergently to OR for repair of Stanford Type A dissection. Procedure: Modified Bentall — aortic root replacement with composite valve graft (mechanical prosthesis), ascending aorta replacement, hemi-arch repair under profound hypothermic circulatory arrest (DHCA 18°C). Cross-clamp time: 142 minutes. CPB time: 196 minutes.<br><br>
+        <strong>Findings:</strong> Extensive dissection with bicuspid aortic valve and dilated aortic root (6.2cm). Entry tear found at the sino-tubular junction. Hemopericardium evacuated (~180mL). Right coronary ostium was at risk but preserved. Renal malperfusion resolved after repair.<br><br>
+        <strong>Post-op:</strong> Patient transferred to CVICU. Expected recovery 7-14 days. Mechanical valve requires lifelong anticoagulation (warfarin target INR 2.5-3.5). Genetic testing for heritable aortopathy ordered (Marfan syndrome, Loeys-Dietz, familial TAAD). Family members counseled regarding surveillance imaging.
+      </div>
+    </div>`,
+
+  research:[
+    {topic:'Stanford vs. DeBakey Classification',text:'From your textbook and online resources, explain the <strong>Stanford (A/B) and DeBakey (I/II/III) classification systems</strong> for aortic dissection. Draw a diagram. How does the classification affect treatment decisions?',book:true},
+    {topic:'Aortic Dissection vs. ACS Differentiation',text:'Research the clinical features that help differentiate <strong>aortic dissection from STEMI</strong>. Why is this distinction critical? What happens if a dissection patient is given thrombolytics or taken to the cath lab?',book:false},
+    {topic:'Risk Factors and Pathophysiology',text:'Research the <strong>pathophysiology of aortic dissection</strong>. How does chronic hypertension contribute? Explain the role of the bicuspid aortic valve. Find and summarize the key risk factors from current literature.',book:true},
+    {topic:'Blood Pressure Differential Significance',text:'Explain the clinical significance of a <strong>blood pressure differential ≥20 mmHg</strong> between arms in suspected aortic dissection. What is the sensitivity and specificity of this finding? What other causes exist?',book:false},
+    {topic:'Prehospital Management Protocol',text:'Detail the <strong>PDCC EMS prehospital management</strong> of suspected aortic dissection: BP targets, heart rate control agents, contraindicated medications, IV access guidelines, transport decisions.',book:true},
+    {topic:'Pain Control in Dissection',text:'Research <strong>opioid analgesia in aortic dissection</strong>. How do you balance pain control with hemodynamic safety? What agents are used? What are the hemodynamic effects of untreated pain vs. over-sedation?',book:false},
+    {topic:'Heritable Aortopathy Syndromes',text:'Research <strong>Marfan syndrome and Loeys-Dietz syndrome</strong> as causes of aortic dissection. How would you recognize these patients? Why does the surgical team want genetic testing done on this patient?',book:false},
+    {topic:'DHCA Surgical Procedure',text:'Research <strong>Deep Hypothermic Circulatory Arrest (DHCA)</strong> used in aortic arch surgery. What temperature is used? How does it protect the brain? What are the neurological risks? What does the paramedic need to know about post-cardiac surgery care?',book:false},
+  ],
+},
+
+// ─────────────────── BONUS: COMPLETE HEART BLOCK ───────────────────
+bonus: {
+  id:'bonus', group:'Bonus — All Groups',
+  title:'Complete Heart Block + Syncope + New Onset Heart Failure',
+  status:'URGENT',
+  statusClass:'urgent',
+  accentColor:'#00e676',
+  dispatch:`
+    <div class="alert-box amber"><span class="alert-icon">⚠️</span><div>
+    <strong>CAD Dispatch — Priority 1</strong><br>
+    "Respond to Southampton Memorial Hospital — 3rd Floor Medical/Surgical Unit. 55-year-old nurse, patient on the floor, had syncope at nurses station. Witnesses say she fell and hit her head. She's awake now but seems confused. Rapid response called."
+    </div></div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📍</span><span class="section-title">Scenario Narrative</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          An unusual scenario: You are the paramedic on the <strong>Rapid Response Team</strong> at Southampton Memorial Hospital. You are called to the 3rd floor nurses station where <strong>Patricia Nwosu</strong>, a 55-year-old Nigerian-American charge nurse and 25-year hospital employee, is seated on the floor, pale, mildly confused, with a laceration on her forehead from the fall. A colleague is holding pressure.
+          <div class="highlight">Coworker: "She was walking toward the medication room and just dropped. She hit her head on the counter. She told me earlier she's been feeling dizzy for 3 days and had some shortness of breath. She said she thought she was just tired from her shift."</div>
+          Your cardiac monitor shows: <strong>Complete (Third-Degree) AV Block. Ventricular escape rate 38 bpm. P rate 92 bpm. Total AV dissociation.</strong> She has no prior cardiac history on her chart. This is her first cardiac event — and she's at work as a nurse.
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">👤</span><span class="section-title">Patient Demographics</span></div>
+      <div class="section-body">
+        <div class="data-grid">
+          <div class="data-item"><div class="data-label">Patient Name</div><div class="data-value" style="font-size:15px">Patricia A. Nwosu, RN</div></div>
+          <div class="data-item"><div class="data-label">Age</div><div class="data-value">55<span class="data-unit">years</span></div></div>
+          <div class="data-item"><div class="data-label">Race/Ethnicity</div><div class="data-value" style="font-size:14px">Nigerian-American</div></div>
+          <div class="data-item"><div class="data-label">Weight</div><div class="data-value">152<span class="data-unit">lbs</span></div></div>
+          <div class="data-item"><div class="data-label">Height</div><div class="data-value" style="font-size:16px">5'5"</div></div>
+          <div class="data-item"><div class="data-label">Role</div><div class="data-value" style="font-size:13px">Charge RN, Med/Surg</div></div>
+          <div class="data-item"><div class="data-label">Cardiac History</div><div class="data-value" style="color:var(--green);font-size:14px">NONE — First Event</div></div>
+          <div class="data-item"><div class="data-label">Family History</div><div class="data-value" style="font-size:13px">Father: CHB + Pacemaker at 62</div></div>
+        </div>
+        <div class="narrative" style="margin-top:14px">
+          <strong>PMH:</strong> Hypertension (well-controlled). Mild hypothyroidism (levothyroxine). Iron deficiency anemia (on iron supplements). Prior ECGs in file — normal 2 years ago at employee health.<br><br>
+          <strong>Medications:</strong> Amlodipine 5mg daily, Levothyroxine 75mcg daily, Ferrous sulfate 325mg TID, Ibuprofen 400mg PRN (taking daily for 3 weeks for back pain — <strong>IMPORTANT</strong>).<br><br>
+          <strong>Allergies:</strong> Penicillin (rash). Aspirin (GI intolerance).<br><br>
+          <strong>Recent History:</strong> 3 days of progressive fatigue, intermittent lightheadedness on standing, occasional dyspnea on exertion. Attributed to a "tough stretch of shifts." Gained 8 lbs in 2 weeks (new symptom). Noticed "heart skipping" but dismissed it. New bilateral ankle edema × 1 week.
+        </div>
+      </div>
+    </div>`,
+
+  assessment:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">⚡</span><span class="section-title">Rapid Response Vitals (In-Hospital)</span></div>
+      <div class="section-body">
+        <div class="vitals-monitor">
+          <div class="vital-display"><div class="vital-label">BP</div><div class="vital-value amber">88/58</div><div class="vital-unit">mmHg — Hypotension</div></div>
+          <div class="vital-display"><div class="vital-label">Vent Rate (CHB)</div><div class="vital-value red">38</div><div class="vital-unit">bpm Escape Rhythm</div></div>
+          <div class="vital-display"><div class="vital-label">Atrial Rate</div><div class="vital-value amber">92</div><div class="vital-unit">bpm (P waves)</div></div>
+          <div class="vital-display"><div class="vital-label">RR</div><div class="vital-value amber">24</div><div class="vital-unit">breaths/min</div></div>
+          <div class="vital-display"><div class="vital-label">SpO₂</div><div class="vital-value amber">93</div><div class="vital-unit">% on RA</div></div>
+          <div class="vital-display"><div class="vital-label">Temp</div><div class="vital-value green">98.2</div><div class="vital-unit">°F</div></div>
+          <div class="vital-display"><div class="vital-label">GCS</div><div class="vital-value amber">13</div><div class="vital-unit">E3V4M6 — Confused</div></div>
+          <div class="vital-display"><div class="vital-label">BGL</div><div class="vital-value green">88</div><div class="vital-unit">mg/dL</div></div>
+          <div class="vital-display"><div class="vital-label">ETCO₂</div><div class="vital-value amber">30</div><div class="vital-unit">mmHg</div></div>
+        </div>
+        <div class="alert-box amber" style="margin-top:16px"><span class="alert-icon">⚠️</span><div>
+          <strong>SYMPTOMATIC BRADYCARDIA (CHB) — TREATMENT ALGORITHM:</strong><br>
+          Patient has symptomatic complete heart block with hemodynamic compromise (BP 88/58, altered mentation, syncope).<br>
+          Step 1: Atropine 0.5mg IV × 3 doses (may be ineffective in 3rd-degree block — try first)<br>
+          Step 2 (if no response): <strong>TRANSCUTANEOUS PACING (TCP)</strong> — rate 60-80 bpm, capture mA titrated<br>
+          Step 3: Dopamine or epinephrine drip if pacing not available/effective<br>
+          Step 4: CARDIOLOGY STAT — transvenous pacing may be required
+        </div></div>
+      </div>
+    </div>`,
+
+  diagnostics:`
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📡</span><span class="section-title">12-Lead ECG — Rapid Response</span></div>
+      <div class="section-body">
+        <div class="ecg-display">
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:#00e5ff;margin-bottom:14px;letter-spacing:2px;">
+            12-LEAD ECG · ATRIAL RATE 92 · VENTRICULAR RATE 38 · COMPLETE AV DISSOCIATION
+          </div>
+          <div class="ecg-findings" style="color:var(--text)">
+            <div class="ecg-finding-item"><strong>Third-Degree (Complete) AV Block:</strong> P waves march through QRS complexes with NO consistent relationship. Atrial rate 92 bpm (regular). Ventricular rate 38 bpm (regular). No PR interval correlation — total AV dissociation.</div>
+            <div class="ecg-finding-item"><strong>Escape Rhythm Morphology:</strong> Wide QRS (0.14s) — ventricular escape origin (infranodal block, His-Purkinje level). LBBB morphology suggests left-sided origin or fascicular escape.</div>
+            <div class="ecg-finding-item"><strong>No STEMI pattern.</strong> No acute ST elevation. Diffuse mild T-wave changes — nonspecific, possibly from slow rate and ischemia.</div>
+            <div class="ecg-finding-item"><strong>New cardiomegaly noted on CXR (see radiology)</strong> — suggests underlying structural cause for conduction disease.</div>
+            <div class="ecg-finding-item"><strong>Comparison ECG (2 years ago):</strong> Normal sinus rhythm, normal intervals. COMPLETE CHANGE. Acute conduction disease onset.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🧪</span><span class="section-title">Laboratory Results — ED Workup</span></div>
+      <div class="section-body">
+        <table class="lab-table">
+          <tr><th>Test</th><th>Result</th><th>Reference</th><th>Flag</th><th>Significance</th></tr>
+          <tr><td>Troponin I</td><td class="lab-abnormal">0.22 ng/mL</td><td>&lt;0.04</td><td><span class="lab-flag H">H</span></td><td>Mild elevation — myocarditis? Demand ischemia from CHB?</td></tr>
+          <tr><td>BNP</td><td class="lab-critical">3,100 pg/mL</td><td>&lt;100</td><td><span class="lab-flag C">CRIT</span></td><td>Severely elevated — new HF onset</td></tr>
+          <tr><td>Potassium</td><td class="lab-normal">4.2 mEq/L</td><td>3.5-5.0</td><td>—</td><td>Normal — not electrolyte-related block</td></tr>
+          <tr><td>Lyme Disease Ab (IgG/IgM)</td><td class="lab-critical">POSITIVE</td><td>Negative</td><td><span class="lab-flag C">CRIT</span></td><td><strong>LYME CARDITIS — Most likely etiology of CHB!</strong></td></tr>
+          <tr><td>Lyme Western Blot</td><td class="lab-critical">CONFIRMED</td><td>Negative</td><td><span class="lab-flag C">CRIT</span></td><td>Confirmed Borrelia burgdorferi infection</td></tr>
+          <tr><td>CRP (Inflammatory)</td><td class="lab-critical">88 mg/L</td><td>&lt;10</td><td><span class="lab-flag H">H</span></td><td>Significant inflammation — active infectious/autoimmune process</td></tr>
+          <tr><td>ESR</td><td class="lab-abnormal">82 mm/hr</td><td>&lt;20</td><td><span class="lab-flag H">H</span></td><td>Elevated — active infection/inflammation</td></tr>
+          <tr><td>TSH</td><td class="lab-normal">2.4 mIU/L</td><td>0.4-4.0</td><td>—</td><td>Thyroid well-controlled — not the cause</td></tr>
+          <tr><td>CBC — WBC</td><td class="lab-abnormal">14.2 k/μL</td><td>4.5-11.0</td><td><span class="lab-flag H">H</span></td><td>Leukocytosis — immune response to Lyme</td></tr>
+          <tr><td>Hemoglobin</td><td class="lab-abnormal">10.4 g/dL</td><td>12-16</td><td><span class="lab-flag L">L</span></td><td>Iron deficiency anemia — worsening with disease</td></tr>
+          <tr><td>NSAID Screen</td><td class="lab-abnormal">Elevated ibuprofen level</td><td>Therapeutic</td><td><span class="lab-flag H">H</span></td><td>Chronic NSAID use — may mask fever, contribute to fluid retention</td></tr>
+        </table>
+        <div class="alert-box blue" style="margin-top:14px"><span class="alert-icon">💡</span><div>
+          <strong>CLINICAL REVELATION:</strong> This is <strong>Lyme Carditis</strong> presenting as complete heart block in a healthcare worker who likely acquired the infection during recent outdoor activities (she works in her garden). Lyme carditis accounts for 1-4% of all Lyme disease cases and can cause high-degree AV block. Treatment: IV Ceftriaxone + temporary pacemaker. Prognosis is excellent if treated promptly.
+        </div></div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🔬</span><span class="section-title">Radiology — Cardiology Workup</span></div>
+      <div class="section-body">
+        <div class="narrative">
+          <strong>CXR (Portable — Rapid Response Unit):</strong> Cardiomegaly (CTR 0.56 — new compared to CXR 14 months ago showing CTR 0.48). Mild pulmonary vascular prominence. Small bilateral pleural effusions. No frank pulmonary edema. <strong>New cardiomegaly + CHB in a previously normal 55-year-old = rule out myocarditis until proven otherwise.</strong><br><br>
+          <strong>Echocardiogram (Bedside, Cardiology):</strong> New dilated cardiomyopathy. LVEF 30% (previously estimated normal on a routine exam 3 years ago). Global hypokinesis. Mild pericardial effusion (6mm). Moderate mitral regurgitation. Dilated LV (LVED 6.2cm).<br><br>
+          <strong>Cardiac MRI (Day 2 — After Stabilization):</strong> Late gadolinium enhancement in mid-myocardial distribution — pattern consistent with <strong>inflammatory/infectious myocarditis</strong> (not ischemic pattern). Confirms Lyme myocarditis affecting conduction system and global function.
+        </div>
+      </div>
+    </div>`,
+
+  specialists:`
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Dr. Faith Oyelaran, MD</div><div class="specialist-dept">Cardiology / Electrophysiology</div></div>
+        <div class="specialist-time">Consult: Same day admission</div>
+      </div>
+      <div class="specialist-body">
+        <strong>EP Consult Note:</strong><br>
+        Ms. Nwosu presents with hemodynamically compromising third-degree AV block of infranodal origin, new dilated cardiomyopathy (EF 30%), and confirmed Lyme carditis. TCP applied successfully in field (rate 70, capture at 55mA). Patient transported to CCU for transvenous pacing placement pending antibiotic therapy.<br><br>
+        <strong>Management:</strong> IV Ceftriaxone 2g daily × 21 days (IV for high-degree block — PO not adequate). Transvenous pacemaker placed (temporary). Daily ECG monitoring. Anticipate AV block recovery within days to weeks with treatment. Permanent pacemaker DEFERRED pending treatment response — Lyme CHB usually reversible if caught early. LVAD/transplant discussion premature — watchful waiting on EF recovery with treatment.<br><br>
+        <strong>Prognostic Note to Team:</strong> This case illustrates why Lyme disease must be in the differential for new conduction disease, especially in Virginia/Mid-Atlantic region. Patient should make a complete recovery with appropriate treatment. Educate on tick prevention.
+      </div>
+    </div>
+    <div class="specialist-card">
+      <div class="specialist-header">
+        <div><div class="specialist-name">Dr. Marcus Webb, MD</div><div class="specialist-dept">Infectious Disease</div></div>
+        <div class="specialist-time">Consult: Day 1</div>
+      </div>
+      <div class="specialist-body">
+        <strong>ID Consult — Lyme Carditis:</strong><br>
+        Confirmed Lyme disease (Borrelia burgdorferi) with cardiac manifestations in a previously healthy 55-year-old healthcare worker in Southampton County, Virginia — an endemic area. History reveals outdoor gardening activity without tick precautions. Patient noted a "pimple" on her thigh 6 weeks ago that she didn't think much of (likely erythema migrans — missed).<br><br>
+        <strong>Treatment Plan:</strong> IV Ceftriaxone 2g IV q24h × 21 days (inpatient until PR normalizes, then step down to oral doxycycline if needed). Monitor CBC, LFTs, renal function. Jarisch-Herxheimer reaction may occur in first 24h of treatment. Notify Virginia Department of Health — reportable disease.<br><br>
+        <strong>NSAID Note:</strong> Daily ibuprofen was masking inflammation markers and low-grade fever that may have prompted earlier presentation. Discontinue all NSAIDs.
+      </div>
+    </div>`,
+
+  research:[
+    {topic:'AV Block Classification',text:'From your textbook, describe the <strong>three degrees of AV block</strong> in detail. For each: ECG criteria, clinical presentation, hemodynamic impact, prehospital treatment algorithm, and transport considerations.',book:true},
+    {topic:'Lyme Carditis',text:'Research <strong>Lyme carditis</strong> — this uncommon but serious presentation. What percentage of Lyme disease cases affect the heart? What are the ECG manifestations? How is it treated? Why is it relevant to Virginia paramedics?',book:false},
+    {topic:'Transcutaneous Pacing',text:'From your paramedic textbook, describe the <strong>complete procedure for TCP</strong>: indications, electrode placement, rate selection, output titration, capture assessment, and sedation/analgesia for awake patients.',book:true},
+    {topic:'Atropine Limitations',text:'Why is atropine often <strong>ineffective in high-degree AV block</strong>? Explain the pharmacological reason. When should you move on to pacing? Find the ACLS bradycardia algorithm and annotate it.',book:true},
+    {topic:'New Onset Cardiomyopathy Workup',text:'Research the <strong>diagnostic workup for new onset cardiomyopathy</strong> in a previously healthy adult. Include: echo findings, cardiac MRI, labs, biopsy indications, and the differential diagnosis.',book:false},
+    {topic:'Dilated Cardiomyopathy Causes',text:'Research the causes of <strong>dilated cardiomyopathy (DCM)</strong>. List at least 10 causes. How does myocarditis lead to DCM? What is the natural history if treated vs. untreated?',book:false},
+    {topic:'Medication-Induced Conduction Disease',text:'Research <strong>medication-induced AV block and cardiomyopathy</strong>. This patient takes amlodipine — is it relevant? What medications are common culprits for conduction disease?',book:true},
+    {topic:'Ethical Considerations',text:'As a healthcare provider and paramedic, address the <strong>unique ethical considerations</strong> when a healthcare worker becomes the patient. How do you approach a nurse who may try to give self-directed care? How do you manage a patient who knows "too much"?',book:false},
+  ],
+},
+}; // end CASES
+
+// ══════════════════════════════════════════════════════════════
+// APPLICATION STATE & LOGIC
+// ══════════════════════════════════════════════════════════════
+
+let currentCase = null;
+let currentTab = 0;
+const savedData = {};
+
+function getSaveKey(caseId, field) { return `cs_${caseId}_${field}`; }
+
+function saveField(caseId, field, value) {
+  if (!savedData[caseId]) savedData[caseId] = {};
+  savedData[caseId][field] = value;
+  try { localStorage.setItem('pdcc_cs_'+caseId+'_'+field, value); } catch(e){}
+  updateProgress(caseId);
+}
+
+function loadField(caseId, field) {
+  try { return localStorage.getItem('pdcc_cs_'+caseId+'_'+field) || ''; } catch(e){return '';}
+}
+
+function updateProgress(caseId) {
+  const inputs = document.querySelectorAll('textarea.student-input, input.student-input-short');
+  let filled = 0;
+  inputs.forEach(el => { if (el.value && el.value.trim().length > 10) filled++; });
+  const total = inputs.length || 1;
+  const pct = Math.round((filled/total)*100);
+  const el = document.getElementById('cv-progress');
+  if (el) el.textContent = pct + '% Complete';
+}
+
+function openCase(caseId) {
+  currentCase = caseId;
+  currentTab = 0;
+  const cs = CASES[caseId];
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('case-view').style.display = 'block';
+  document.getElementById('cv-title').textContent = cs.group + ' — ' + cs.title.split('—')[0].trim();
+  const statusEl = document.getElementById('cv-status');
+  statusEl.textContent = cs.status;
+  statusEl.className = 'status-pill ' + cs.statusClass;
+  renderTabContent(caseId, 0);
+  window.scrollTo(0,0);
+}
+
+function closeCase() {
+  document.getElementById('case-view').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+  currentCase = null;
+  window.scrollTo(0,0);
+}
+
+function switchTab(idx) {
+  currentTab = idx;
+  const btns = document.querySelectorAll('.tab-btn');
+  btns.forEach((b,i) => b.classList.toggle('active', i===idx));
+  renderTabContent(currentCase, idx);
+  document.getElementById('case-content').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderTabContent(caseId, tabIdx) {
+  const cs = CASES[caseId];
+  const container = document.getElementById('case-content');
+  let html = '';
+
+  if (tabIdx === 0) {
+    html = `<div class="tab-panel active">${cs.dispatch}</div>`;
+  } else if (tabIdx === 1) {
+    html = `<div class="tab-panel active">${cs.assessment}</div>`;
+  } else if (tabIdx === 2) {
+    html = `<div class="tab-panel active">${cs.diagnostics}</div>`;
+  } else if (tabIdx === 3) {
+    html = `<div class="tab-panel active">${cs.specialists}</div>`;
+  } else if (tabIdx === 4) {
+    html = renderAnalysisTab(caseId, cs);
+  } else if (tabIdx === 5) {
+    html = renderResearchTab(caseId, cs);
+  } else if (tabIdx === 6) {
+    html = renderSummaryTab(caseId, cs);
+  }
+
+  container.innerHTML = html;
+  restoreInputs(caseId);
+  addInputListeners(caseId);
+  updateProgress(caseId);
+}
+
+function renderAnalysisTab(caseId, cs) {
+  return `<div class="tab-panel active">
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">👥</span><span class="section-title">Group & Team Information</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label" style="margin-bottom:12px;">Group Members</div>
+          <div class="member-grid">
+            ${[1,2,3,4,5].map(n => `
+              <div class="member-field">
+                <div class="member-num">STUDENT ${n}</div>
+                <div class="input-field-group">
+                  <label class="input-field-label">Full Name</label>
+                  <input class="student-input-short" data-field="member${n}name" placeholder="Full name" data-caseid="${caseId}">
+                </div>
+                <div class="input-field-group" style="margin-top:8px">
+                  <label class="input-field-label">Role in Group</label>
+                  <select class="student-select" data-field="member${n}role" data-caseid="${caseId}">
+                    <option value="">Select role...</option>
+                    <option>Team Lead / Presenter</option>
+                    <option>Paramedic (Scene)</option>
+                    <option>Paramedic (Transport)</option>
+                    <option>Documentation / Research Lead</option>
+                    <option>ECG / Diagnostics Lead</option>
+                    <option>Pharmacology Lead</option>
+                  </select>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🔍</span><span class="section-title">Primary Assessment Analysis</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label">Initial Scene Size-Up & General Impression</div>
+          <div class="input-hint">Describe what your general impression of the patient is on arrival. What are your immediate priorities? What life threats have you identified? What additional resources would you request?</div>
+          <textarea class="student-input" data-field="initial_impression" data-caseid="${caseId}" placeholder="Write your complete initial assessment and general impression here..."></textarea>
+        </div>
+        <div class="input-block">
+          <div class="input-label">Life-Threatening Conditions Identified</div>
+          <div class="input-hint">List ALL life threats in order of priority. Reference your Primary Assessment (ABCDE) framework.</div>
+          <textarea class="student-input" data-field="life_threats" data-caseid="${caseId}" placeholder="1. Airway status...\n2. Breathing compromise...\n3. Circulation findings...\n4. Disability assessment...\n5. Exposure findings..." style="min-height:100px"></textarea>
+        </div>
+        <div class="input-block">
+          <div class="input-label">Differential Diagnosis (Top 5)</div>
+          <div class="input-hint">Based on the information provided at scene, list your top 5 differential diagnoses in order of likelihood. Provide a brief rationale for each.</div>
+          <textarea class="student-input" data-field="differential" data-caseid="${caseId}" placeholder="1. (Most likely) Diagnosis: Rationale...\n2. Second differential: Rationale...\n3. Third differential: Rationale...\n4. Fourth differential: Rationale...\n5. Rule out: Rationale..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🩺</span><span class="section-title">Pathophysiology Analysis</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label">Pathophysiology Explanation</div>
+          <div class="input-hint">Explain in detail the underlying pathophysiology of this patient's condition. Describe what is happening at the cellular, organ, and systemic level. Use your paramedic textbook and online resources to support your explanation.</div>
+          <textarea class="student-input" data-field="pathophysiology" data-caseid="${caseId}" placeholder="Describe the pathophysiology in detail. Include: cellular mechanisms, hemodynamic effects, compensatory responses, and how the disease process leads to the clinical presentation you are seeing..." style="min-height:180px"></textarea>
+        </div>
+        <div class="input-block">
+          <div class="input-label">ECG Interpretation (Complete)</div>
+          <div class="input-hint">Perform a systematic 12-lead ECG interpretation. Use the 5-step method: Rate → Rhythm → Axis → Intervals → ST/T-wave changes. Explain the clinical significance of each abnormality.</div>
+          <textarea class="student-input" data-field="ecg_interp" data-caseid="${caseId}" placeholder="Rate:\nRhythm:\nAxis:\nIntervals (PR, QRS, QTc):\nST changes:\nT-wave changes:\nOther findings:\nClinical significance:"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">💊</span><span class="section-title">Prehospital Treatment Plan</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label">Complete Prehospital Treatment Protocol</div>
+          <div class="input-hint">Write out the complete prehospital treatment plan following PDCC EMS protocols. Include: airway management, positioning, IV/IO access, medications (name, dose, route, indication, contraindications), monitoring, and transport decisions. Reference your protocols explicitly.</div>
+          <textarea class="student-input" data-field="treatment_plan" data-caseid="${caseId}" placeholder="AIRWAY MANAGEMENT:\n\nPOSITIONING:\n\nIV ACCESS:\n\nMEDICATIONS:\n  1. Drug name — Dose — Route — Indication — Contraindication — Expected outcome\n  2.\n  3.\n\nMONITORING:\n\nTRANSPORT DECISION:\n\nHOSPITAL PRE-NOTIFICATION:\n\nPEDIATRIC/SPECIAL CONSIDERATIONS (if applicable):" style="min-height:280px"></textarea>
+        </div>
+        <div class="input-block">
+          <div class="input-label">Medications Contraindicated — Explain Why</div>
+          <div class="input-hint">List all medications that are specifically CONTRAINDICATED in this patient's scenario and explain the physiological reason why.</div>
+          <textarea class="student-input" data-field="contraindicated_meds" data-caseid="${caseId}" placeholder="1. Medication name — Reason contraindicated — What harm would it cause\n2.\n3." style="min-height:100px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📊</span><span class="section-title">Lab & Diagnostic Analysis</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label">Laboratory Results Interpretation</div>
+          <div class="input-hint">For each abnormal laboratory value, explain: (1) why it is abnormal in this patient, (2) the clinical significance, and (3) how it changes your treatment approach.</div>
+          <textarea class="student-input" data-field="lab_interp" data-caseid="${caseId}" placeholder="CRITICAL VALUES:\n\nABNORMAL VALUES AND SIGNIFICANCE:\n\nHOW LABS AFFECT TREATMENT DECISIONS:\n\nVALUES TO MONITOR SERIALLY AND WHY:" style="min-height:180px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🚨</span><span class="section-title">Critical Decisions & Clinical Pearls</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label">Most Critical Prehospital Decision in This Case</div>
+          <div class="input-hint">Identify the single most critical decision the paramedic must make in this scenario and explain why getting it wrong would be catastrophic for the patient.</div>
+          <textarea class="student-input" data-field="critical_decision" data-caseid="${caseId}" placeholder="The most critical prehospital decision in this case is..." style="min-height:100px"></textarea>
+        </div>
+        <div class="input-block">
+          <div class="input-label">Clinical Pearls — What Your Group Learned</div>
+          <div class="input-hint">List at least 5 clinical pearls (key learning points) that your group identified from this case study. These should be actionable insights that will make you a better paramedic.</div>
+          <textarea class="student-input" data-field="clinical_pearls" data-caseid="${caseId}" placeholder="1. Clinical Pearl:\n2. Clinical Pearl:\n3. Clinical Pearl:\n4. Clinical Pearl:\n5. Clinical Pearl:" style="min-height:140px"></textarea>
+        </div>
+        <div class="input-block">
+          <div class="input-label">What Could Have Been Done Differently? (Reflection)</div>
+          <div class="input-hint">Critically analyze this case. What was done well? What could have been improved in the prehospital setting? If you were the medical director, what system changes would you recommend?</div>
+          <textarea class="student-input" data-field="reflection" data-caseid="${caseId}" placeholder="What was done well...\nWhat could be improved...\nSystemic recommendations..." style="min-height:120px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">🎯</span><span class="section-title">Presentation Plan</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label">Group Presentation Outline (10-15 minutes)</div>
+          <div class="input-hint">Create a structured outline for your group presentation. Include: who presents each section, visual aids you will use, key teaching points for your classmates, and 2-3 discussion questions you will pose to the class.</div>
+          <textarea class="student-input" data-field="presentation_outline" data-caseid="${caseId}" placeholder="PRESENTATION STRUCTURE:\n\nSlide 1 — Presenter: ___ — Topic: ___\nSlide 2 — Presenter: ___ — Topic: ___\n[continue...]\n\nKEY TEACHING POINTS FOR CLASSMATES:\n1.\n2.\n3.\n\nDISCUSSION QUESTIONS FOR CLASS:\n1.\n2.\n3." style="min-height:200px"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderResearchTab(caseId, cs) {
+  const items = cs.research.map((r,i) => `
+    <div class="research-item">
+      <input type="checkbox" class="research-checkbox" id="rc_${caseId}_${i}" 
+        ${loadField(caseId,'rcheck_'+i)==='1' ? 'checked' : ''}
+        onchange="saveField('${caseId}','rcheck_${i}',this.checked?'1':'')">
+      <div class="research-text">
+        <strong>${i+1}. ${r.topic}</strong>${r.book ? ' <em>📖 Textbook Required</em>' : ' <em>🌐 Online Research</em>'}<br>
+        ${r.text}
+        <div style="margin-top:8px">
+          <textarea class="student-input" data-field="research_${i}" data-caseid="${caseId}" 
+            style="min-height:80px;font-size:13px" placeholder="Write your research findings here (cite your sources)..."></textarea>
+        </div>
+      </div>
+    </div>`).join('');
+
+  return `<div class="tab-panel active">
+    <div class="alert-box blue"><span class="alert-icon">📚</span><div>
+      <strong>Research Requirements:</strong> Complete ALL research prompts before generating your executive summary. Check the box when you have completed each item. Both textbook and online sources are required where indicated. Cite all sources using APA format.
+    </div></div>
+    <div class="research-block">
+      <div class="research-title">📚 Required Research Items — ${cs.group}</div>
+      ${items}
+    </div>
+    <div class="section-block">
+      <div class="section-header"><span class="section-icon">📎</span><span class="section-title">References & Citations</span></div>
+      <div class="section-body">
+        <div class="input-block">
+          <div class="input-label">Bibliography (APA Format)</div>
+          <div class="input-hint">List all sources consulted for this case study in APA 7th edition format. Minimum 5 sources required including your paramedic textbook and at least 2 peer-reviewed journal articles published after 2020.</div>
+          <textarea class="student-input" data-field="bibliography" data-caseid="${caseId}" placeholder="1. Sanders, M.J. (2023). Sanders' Paramedic Textbook (5th ed.)...\n2. American Heart Association. (2024)...\n3. (Peer-reviewed article)...\n4.\n5." style="min-height:180px"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSummaryTab(caseId, cs) {
+  return `<div class="tab-panel active">
+    <div class="summary-section">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:8px">
+        Executive Summary Generator
+      </div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6">
+        When your group has completed all analysis and research sections, click the button below to generate a professional executive summary. This summary will compile all your inputs into a formatted report suitable for presentation and submission.
+      </div>
+      <button class="generate-btn" onclick="generateSummary('${caseId}')">
+        ⚡ Generate Executive Summary
+      </button>
+      <button class="print-btn" onclick="window.print()">
+        🖨️ Print / Save as PDF
+      </button>
+    </div>
+
+    <div id="executive-summary">
+      <div id="summary-content"></div>
+    </div>
+
+    <div class="section-block" style="margin-top:24px">
+      <div class="section-header"><span class="section-icon">🎯</span><span class="section-title">Presentation Mode</span></div>
+      <div class="section-body">
+        <div style="font-size:14px;color:var(--muted);margin-bottom:16px">
+          Use this section to organize your final group presentation. Your instructor will evaluate based on the criteria below.
+        </div>
+        <div class="data-grid">
+          <div class="data-item"><div class="data-label">Pathophysiology</div><div class="data-value" style="font-size:15px">25 pts</div></div>
+          <div class="data-item"><div class="data-label">Treatment Protocol</div><div class="data-value" style="font-size:15px">25 pts</div></div>
+          <div class="data-item"><div class="data-label">ECG Interpretation</div><div class="data-value" style="font-size:15px">15 pts</div></div>
+          <div class="data-item"><div class="data-label">Research Quality</div><div class="data-value" style="font-size:15px">20 pts</div></div>
+          <div class="data-item"><div class="data-label">Clinical Pearls</div><div class="data-value" style="font-size:15px">10 pts</div></div>
+          <div class="data-item"><div class="data-label">Presentation</div><div class="data-value" style="font-size:15px">5 pts</div></div>
+        </div>
+        <div class="input-block" style="margin-top:16px">
+          <div class="input-label">Final Notes for Presentation Day</div>
+          <textarea class="student-input" data-field="final_notes" data-caseid="${caseId}" placeholder="Any final preparation notes, questions for the instructor, or additional insights to share with the class..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function generateSummary(caseId) {
+  const cs = CASES[caseId];
+  const members = [1,2,3,4,5].map(n => {
+    const name = loadField(caseId, 'member'+n+'name');
+    const role = loadField(caseId, 'member'+n+'role');
+    return name ? `${name} — ${role || 'Member'}` : null;
+  }).filter(Boolean);
+
+  const impression = loadField(caseId, 'initial_impression') || '[Not completed]';
+  const pathophys = loadField(caseId, 'pathophysiology') || '[Not completed]';
+  const treatment = loadField(caseId, 'treatment_plan') || '[Not completed]';
+  const ecg = loadField(caseId, 'ecg_interp') || '[Not completed]';
+  const pearls = loadField(caseId, 'clinical_pearls') || '[Not completed]';
+  const reflection = loadField(caseId, 'reflection') || '[Not completed]';
+  const differential = loadField(caseId, 'differential') || '[Not completed]';
+  const contraindicated = loadField(caseId, 'contraindicated_meds') || '[Not completed]';
+  const labInterp = loadField(caseId, 'lab_interp') || '[Not completed]';
+  const critDecision = loadField(caseId, 'critical_decision') || '[Not completed]';
+  const bibliography = loadField(caseId, 'bibliography') || '[Not completed]';
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+
+  const summaryEl = document.getElementById('executive-summary');
+  const contentEl = document.getElementById('summary-content');
+
+  contentEl.innerHTML = `
+    <div style="text-align:center;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:8px">Paul D. Camp Community College · EMS Program</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--white);margin-bottom:6px">Cardiology Case Study</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;color:var(--text);margin-bottom:10px">${cs.title}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">
+        ${cs.group} · Submitted: ${dateStr} · Program Director: Carlos Cajares, DNP, FNP-C, CRNA, NRP
+      </div>
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px">Group Members</div>
+      ${members.length ? members.map(m => `<div style="font-size:14px;padding:4px 0;color:var(--text)">• ${m}</div>`).join('') : '<div style="color:var(--muted);font-size:14px">No members entered</div>'}
+    </div>
+
+    ${summarySection('Initial Assessment & General Impression', impression)}
+    ${summarySection('Differential Diagnosis', differential)}
+    ${summarySection('Pathophysiology', pathophys)}
+    ${summarySection('12-Lead ECG Interpretation', ecg)}
+    ${summarySection('Prehospital Treatment Protocol', treatment)}
+    ${summarySection('Contraindicated Medications & Rationale', contraindicated)}
+    ${summarySection('Laboratory Results Analysis', labInterp)}
+    ${summarySection('Most Critical Prehospital Decision', critDecision)}
+    ${summarySection('Clinical Pearls — Key Learning Points', pearls)}
+    ${summarySection('Reflection & Quality Improvement', reflection)}
+    ${summarySection('References & Bibliography', bibliography)}
+
+    <div style="margin-top:30px;padding-top:20px;border-top:1px solid var(--border);text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">
+      Generated ${dateStr} · Paul D. Camp Community College EMS Program · Advanced Paramedic Education
+    </div>`;
+
+  summaryEl.style.display = 'block';
+  summaryEl.scrollIntoView({behavior:'smooth'});
+}
+
+function summarySection(title, content) {
+  return `<div style="margin-bottom:22px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--white);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:6px">${title}</div>
+    <div style="font-size:14px;line-height:1.8;color:var(--text);white-space:pre-wrap;">${content}</div>
+  </div>`;
+}
+
+function restoreInputs(caseId) {
+  document.querySelectorAll('[data-caseid="'+caseId+'"]').forEach(el => {
+    const field = el.dataset.field;
+    if (!field) return;
+    const val = loadField(caseId, field);
+    if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') el.value = val;
+    else if (el.tagName === 'SELECT') el.value = val;
+  });
+}
+
+function addInputListeners(caseId) {
+  document.querySelectorAll('[data-caseid="'+caseId+'"]').forEach(el => {
+    const field = el.dataset.field;
+    if (!field) return;
+    el.addEventListener('input', () => saveField(caseId, field, el.value));
+    el.addEventListener('change', () => saveField(caseId, field, el.value));
+  });
+}
+</script>
+</body>
+</html>
