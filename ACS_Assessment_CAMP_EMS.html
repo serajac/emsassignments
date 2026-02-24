@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ACS & Cardiovascular Emergencies — CAMP EMS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#0d1f38;color:#f0f4f8;min-height:100vh}
+.scr{display:none}.scr.on{display:block}
+#pg-land{min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px}
+#pg-land.on{display:flex}
+.card{background:#1a2d4a;border:1px solid #2a4060;border-radius:12px;padding:32px;max-width:520px;width:100%}
+.card h2{font-size:11px;color:#4ab8c8;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.card h1{font-size:26px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.card .sub{font-size:14px;color:#7a90a8;margin-bottom:20px}
+.chips{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.chip{background:#0d1f38;border:1px solid #2a4060;border-radius:20px;padding:4px 12px;font-size:13px;color:#7a90a8}
+.chip b{color:#f0f4f8}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#7a90a8;margin-bottom:6px}
+.field input{width:100%;background:#0d1f38;border:1.5px solid #2a4060;border-radius:8px;padding:11px 14px;font-size:15px;color:#f0f4f8;font-family:Arial,sans-serif;outline:none}
+.field input:focus{border-color:#1a7a8a}
+#err{color:#ff7070;font-size:13px;min-height:18px;margin-bottom:8px}
+.btn-start{width:100%;background:#1a7a8a;color:#fff;border:none;border-radius:8px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;margin-top:4px}
+.btn-start:hover{background:#1d8fa0}
+.hint{font-size:12px;color:#7a90a8;text-align:center;margin-top:12px}
+/* HEADER */
+.hdr{position:sticky;top:0;background:rgba(13,31,56,.97);border-bottom:1px solid #2a4060;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;z-index:100}
+.hdr-title{flex:1;font-size:14px;font-weight:700}
+.hdr-sub{font-size:11px;color:#7a90a8}
+.prog-wrap{flex:1;min-width:160px;max-width:300px}
+.prog-lbl{display:flex;justify-content:space-between;font-size:11px;color:#7a90a8;margin-bottom:4px}
+.prog-bar{height:5px;background:#2a4060;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:#1a7a8a;border-radius:3px;width:0%;transition:width .3s}
+.hdr-stu{font-size:12px;color:#7a90a8;text-align:right}
+.hdr-stu b{display:block;color:#f0f4f8}
+/* BODY */
+.qbody{max-width:820px;margin:0 auto;padding:28px 16px 80px}
+.sec-hdr{text-align:center;margin:36px 0 18px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4ab8c8;border-bottom:1px solid #2a4060;padding-bottom:10px}
+.qcard{background:#1a2d4a;border:1.5px solid #2a4060;border-radius:10px;padding:22px;margin-bottom:14px}
+.qcard.ok{border-color:#2d7a50}.qcard.bad{border-color:#7a3030}
+.q-top{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.q-num{font-family:monospace;font-size:11px;font-weight:700;color:#4ab8c8;background:#0d1f38;padding:3px 8px;border-radius:4px}
+.badge-mc{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4ab8c8;background:#1a3a4a;padding:3px 8px;border-radius:4px}
+.badge-ord{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#d4a017;background:#3a2a0a;padding:3px 8px;border-radius:4px}
+.badge-mat{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b88fd8;background:#2a1a3a;padding:3px 8px;border-radius:4px}
+.q-txt{font-size:17px;line-height:1.6;color:#e8eef5}
+/* OPTIONS */
+.opts{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;background:#0d1f38;border:1.5px solid #2a4060;border-radius:8px;padding:11px 14px;cursor:pointer}
+.opt:hover{border-color:#1a7a8a;background:#162840}
+.opt.locked{cursor:default}.opt.locked:hover{border-color:#2a4060;background:#0d1f38}
+.opt.ans-ok{background:#0d2518;border-color:#2d7a50;cursor:default}
+.opt.ans-ok:hover{background:#0d2518;border-color:#2d7a50}
+.opt.ans-bad{background:#200f0f;border-color:#7a3030;cursor:default}
+.opt.ans-bad:hover{background:#200f0f;border-color:#7a3030}
+.opt-let{width:26px;height:26px;border-radius:5px;background:#2a4060;color:#7a90a8;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:monospace}
+.opt.ans-ok .opt-let{background:#2d7a50;color:#fff}
+.opt.ans-bad .opt-let{background:#7a3030;color:#fff}
+.opt-txt{font-size:14px;line-height:1.5;padding-top:4px}
+/* EXPLANATION */
+.expln{display:none;margin-top:12px;padding:10px 14px;background:#0d2535;border-left:3px solid #1a7a8a;border-radius:0 6px 6px 0;font-size:13px;color:#a0b8c8;line-height:1.6}
+.expln.show{display:block}
+.expln b{color:#4ab8c8}
+/* ORDERING */
+.ord-list{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.ord-item{display:flex;align-items:center;gap:10px;background:#0d1f38;border:1.5px solid #2a4060;border-radius:8px;padding:10px 12px;cursor:grab}
+.ord-item.dragging{opacity:.4;border-color:#d4a017}
+.ord-item.dragover{border-color:#d4a017;background:#1a1500}
+.ord-pos{width:22px;height:22px;border-radius:4px;background:#3a2a0a;color:#d4a017;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:monospace}
+.ord-txt{font-size:14px;flex:1;line-height:1.4}
+.ord-btns{display:flex;flex-direction:column;gap:2px}
+.arr{background:#3a2a0a;border:1px solid #d4a01740;color:#d4a017;border-radius:3px;width:20px;height:18px;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-family:Arial,sans-serif}
+.arr:hover{background:#5a4010}
+.ord-chk{margin-top:10px;background:#3a2a0a;border:1px solid #d4a017;color:#d4a017;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.ord-chk:hover{background:#5a4010}.ord-chk:disabled{opacity:.5;cursor:default}
+.ord-res{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:13px;font-weight:500;display:none}
+.ord-ok{background:#0d2518;border:1px solid #2d7a50;color:#6fcf97;display:block}
+.ord-bad{background:#200f0f;border:1px solid #7a3030;color:#ff8a80;display:block}
+/* MATCHING */
+.mat-rows{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.mat-row{display:grid;grid-template-columns:1fr 24px 1fr;gap:8px;align-items:center}
+.mat-left{background:#0d1f38;border:1px solid #2a4060;border-radius:6px;padding:9px 12px;font-size:13px;line-height:1.4}
+.mat-arr{text-align:center;color:#7a90a8}
+.mat-sel{background:#0d1f38;border:1.5px solid #2a406080;border-radius:6px;padding:8px 10px;font-size:13px;color:#f0f4f8;font-family:Arial,sans-serif;cursor:pointer;outline:none;width:100%}
+.mat-sel:focus{border-color:#b88fd8}
+.mat-sel option{background:#1a2d4a}
+.mat-sel.ok{border-color:#2d7a50;background:#0d2518}
+.mat-sel.bad{border-color:#7a3030;background:#200f0f}
+.mat-chk{margin-top:10px;background:#2a1a3a;border:1px solid #b88fd8;color:#b88fd8;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.mat-chk:hover{background:#3a2050}.mat-chk:disabled{opacity:.5;cursor:default}
+/* SUBMIT */
+.sub-zone{text-align:center;padding:36px 20px;background:#1a2d4a;border:1px solid #2a4060;border-radius:10px;margin-top:36px}
+.sub-zone h3{font-size:22px;margin-bottom:8px}
+.sub-zone p{color:#7a90a8;margin-bottom:20px;font-size:15px}
+.btn-sub{background:#8b1a1a;color:#fff;border:none;border-radius:8px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.btn-sub:hover{background:#a02020}
+/* RESULTS */
+#pg-res{padding:40px 16px;min-height:100vh}
+.res-wrap{max-width:580px;margin:0 auto;background:#1a2d4a;border:1px solid #2a4060;border-radius:12px;padding:36px;text-align:center}
+.res-icon{font-size:48px;margin-bottom:12px}
+.res-score{font-size:56px;font-weight:700;margin:16px 0 4px}
+.pass-c{color:#4ecf80}.fail-c{color:#ff7070}
+.res-stats{display:flex;gap:12px;justify-content:center;margin:20px 0 24px;flex-wrap:wrap}
+.rstat{background:#0d1f38;border:1px solid #2a4060;border-radius:8px;padding:16px 24px;flex:1;min-width:100px}
+.rstat-n{font-size:28px;font-weight:700}
+.rstat-l{font-size:11px;color:#7a90a8;margin-top:2px}
+.btn-dl{background:#1a2d4a;border:1.5px solid #2a4060;color:#f0f4f8;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;margin:5px}
+.btn-dl:hover{background:#223848}
+.dl-note{font-size:12px;color:#7a90a8;margin-top:14px}
+@media(max-width:560px){.mat-row{grid-template-columns:1fr;gap:4px}.mat-arr{display:none}}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="pg-land" class="scr on">
+  <div class="card">
+    <h2>Paul D. Camp Community College &mdash; EMS Program</h2>
+    <h1>ACS &amp; Cardiovascular Emergencies</h1>
+    <p class="sub">100-question comprehensive competency assessment covering ACS, dysrhythmias, and cardiac emergencies.</p>
+    <div class="chips">
+      <div class="chip"><b>100</b> Questions</div>
+      <div class="chip"><b>~60</b> min</div>
+      <div class="chip">Pass: <b>70%</b></div>
+      <div class="chip">MC + Ordering + Matching</div>
+    </div>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="iname" placeholder="Enter your full name" autocomplete="name">
+    </div>
+    <div class="field">
+      <label>Student ID</label>
+      <input type="text" id="iid" placeholder="Enter your student ID">
+    </div>
+    <div id="err"></div>
+    <button class="btn-start" onclick="startAssessment()">Begin Assessment &rarr;</button>
+    <p class="hint">Includes PDF certificate &amp; score report upon completion.</p>
+  </div>
+</div>
+
+<!-- ASSESSMENT -->
+<div id="pg-test" class="scr">
+  <div class="hdr">
+    <div>
+      <div class="hdr-title">ACS &amp; Cardiovascular Emergencies</div>
+      <div class="hdr-sub">Paul D. Camp Community College</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-lbl"><span id="progTxt">0 / 100</span><span id="progPct">0%</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+    </div>
+    <div class="hdr-stu"><b id="hdrName">&nbsp;</b><span id="hdrId">&nbsp;</span></div>
+  </div>
+  <div class="qbody" id="qbody"></div>
+</div>
+
+<!-- RESULTS -->
+<div id="pg-res" class="scr">
+  <div class="res-wrap">
+    <div class="res-icon" id="resIcon">&#127885;</div>
+    <div id="resName" style="color:#7a90a8;font-size:13px;margin-bottom:4px"></div>
+    <div id="resTitle" style="font-size:22px;font-weight:700;margin-bottom:4px">Assessment Complete</div>
+    <div class="res-score" id="resScore">-</div>
+    <div id="resLbl" style="color:#7a90a8;font-size:14px;margin-bottom:20px"></div>
+    <div class="res-stats">
+      <div class="rstat"><div class="rstat-n pass-c" id="resCorr">-</div><div class="rstat-l">Correct</div></div>
+      <div class="rstat"><div class="rstat-n fail-c" id="resWrong">-</div><div class="rstat-l">Incorrect</div></div>
+      <div class="rstat"><div class="rstat-n" style="color:#4ab8c8">100</div><div class="rstat-l">Total</div></div>
+    </div>
+    <button class="btn-dl" style="border-color:#d4a01760" onclick="dlCert()">&#127885; Download Certificate</button>
+    <button class="btn-dl" style="border-color:#1a7a8a60" onclick="dlReport()">&#128202; Download Score Report</button>
+    <p class="dl-note">PDFs require an internet connection to load the library.</p>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ==================== SECTION 1: MULTIPLE CHOICE (Q1-70) ====================
+  {id:1,type:'mc',section:'Section 1 — Acute Coronary Syndromes: Fundamentals',
+   text:'What is the FIRST intervention that should be administered to a conscious patient with suspected Acute Coronary Syndrome (ACS)?',
+   options:['Nitroglycerin 0.4 mg sublingual','Aspirin 324 mg (non-enteric coated, chewed)','Oxygen via non-rebreather mask','Morphine 2–4 mg IV'],
+   answer:1,
+   explanation:'Aspirin irreversibly inhibits platelet aggregation via COX-1 inhibition. Non-enteric coated aspirin that is chewed (not swallowed whole) achieves faster absorption. This is a Class I recommendation for all suspected ACS patients.'
+  },
+  {id:2,type:'mc',section:null,
+   text:'ST-elevation myocardial infarction (STEMI) is defined by ST elevation of at least how many millimeters in two or more contiguous leads?',
+   options:['0.5 mm in all leads','1 mm in limb leads (or 2 mm in V1–V3 for men ≥40 years)','3 mm in any lead','2 mm in all precordial leads'],
+   answer:1,
+   explanation:'STEMI criteria: ≥1 mm in ≥2 contiguous limb leads, or ≥2 mm in V1–V3 for men ≥40 years (≥2.5 mm for men <40 years). New LBBB with ischemic symptoms also meets STEMI equivalent criteria per Sgarbossa criteria.'
+  },
+  {id:3,type:'mc',section:null,
+   text:'Which coronary artery is most commonly occluded in an inferior wall STEMI?',
+   options:['Left anterior descending (LAD)','Left circumflex (LCX)','Right coronary artery (RCA)','Left main coronary artery'],
+   answer:2,
+   explanation:'The RCA supplies the inferior wall of the left ventricle (II, III, aVF) in approximately 80–85% of patients (right-dominant circulation). The LCX supplies the inferior wall in the remaining 15–20% (left-dominant). This distinction matters because RCA occlusion may also involve the right ventricle.'
+  },
+  {id:4,type:'mc',section:null,
+   text:'What is the recommended "door-to-balloon" time for primary percutaneous coronary intervention (PCI) in STEMI?',
+   options:['30 minutes','60 minutes','90 minutes','120 minutes'],
+   answer:2,
+   explanation:'AHA/ACC guidelines recommend door-to-balloon time of ≤90 minutes for primary PCI. If PCI cannot be achieved within 120 minutes of first medical contact, fibrinolysis should be considered if no contraindications exist.'
+  },
+  {id:5,type:'mc',section:null,
+   text:'A patient presents with chest pain. The 12-lead ECG shows ST depression and T-wave inversion in leads V1–V4, with upright tall R waves in V1–V2. Which MI location should be suspected?',
+   options:['Anterior STEMI','Right ventricular MI','Posterior MI','High lateral MI'],
+   answer:2,
+   explanation:'Posterior MI presents with reciprocal changes in the anterior leads (V1–V3): tall R waves (mirror image of Q waves), ST depression (mirror of ST elevation), and upright T waves. Confirm by placing posterior leads V7–V9 looking for ST elevation ≥0.5 mm.'
+  },
+  {id:6,type:'mc',section:null,
+   text:'Troponin levels typically begin to rise above normal within how many hours after the onset of myocardial injury?',
+   options:['0–30 minutes','1–2 hours','3–6 hours','12–24 hours'],
+   answer:2,
+   explanation:'Troponin I and Troponin T typically begin to rise 3–6 hours after the onset of myocardial injury, peak at 18–24 hours, and remain elevated for 7–10 days. High-sensitivity troponin assays may detect elevation earlier (1–3 hours). CK-MB rises earlier (3–6 hours) but is less specific.'
+  },
+  {id:7,type:'mc',section:null,
+   text:'Which of the following correctly differentiates NSTEMI from Unstable Angina (UA)?',
+   options:['NSTEMI has ST elevation; UA does not','NSTEMI has positive troponin; UA does not','UA always requires immediate PCI; NSTEMI does not','UA has reciprocal ST changes; NSTEMI does not'],
+   answer:1,
+   explanation:'Both NSTEMI and UA present without ST elevation (hence "non-ST-elevation ACS"). The key differentiator is biomarker elevation: NSTEMI results in myocardial necrosis with measurable troponin rise, while UA represents ischemia without necrosis and negative troponins.'
+  },
+  {id:8,type:'mc',section:null,
+   text:'Which ECG lead should be monitored to detect right ventricular myocardial infarction (RVMI)?',
+   options:['V1','V4R','aVR','III'],
+   answer:1,
+   explanation:'ST elevation ≥1 mm in lead V4R (right-sided V4) is the most sensitive and specific finding for RVMI. RVMI occurs in ~30–50% of inferior STEMI due to RCA occlusion. Critical management implication: avoid nitrates and diuretics (preload-dependent RV).'
+  },
+  {id:9,type:'mc',section:null,
+   text:'Beck\'s Triad is the classic clinical presentation of cardiac tamponade. Which combination correctly identifies all three components?',
+   options:['Chest pain, dyspnea, and tachycardia','Hypotension, jugular venous distension (JVD), and muffled heart sounds','Fever, friction rub, and ST elevation','Bradycardia, hypertension, and widened pulse pressure'],
+   answer:1,
+   explanation:'Beck\'s Triad: (1) Hypotension — decreased cardiac output due to pericardial compression; (2) JVD — elevated venous pressure due to obstructed venous return; (3) Muffled heart sounds — fluid around the heart dampens sounds. Pulsus paradoxus (>10 mmHg drop in SBP during inspiration) is also a key finding.'
+  },
+  {id:10,type:'mc',section:null,
+   text:'According to Killip classification, which class describes cardiogenic shock?',
+   options:['Killip Class I','Killip Class II','Killip Class III','Killip Class IV'],
+   answer:3,
+   explanation:'Killip Class IV = Cardiogenic shock: SBP <90 mmHg with signs of peripheral hypoperfusion. 30-day mortality ~80%. Class I = No signs of heart failure; Class II = Mild HF (S3, rales in lower lung fields); Class III = Severe HF (pulmonary edema, frank rales).'
+  },
+  {id:11,type:'mc',section:null,
+   text:'Why are nitrates CONTRAINDICATED in right ventricular myocardial infarction (RVMI)?',
+   options:['They cause reflex tachycardia that worsens ischemia','The RV is preload-dependent; nitrates cause venodilation and can precipitate severe hypotension','They increase coronary vasospasm','They inhibit platelet aggregation too aggressively'],
+   answer:1,
+   explanation:'The infarcted RV relies on adequate preload (filling pressure) to maintain cardiac output. Nitrates cause systemic venodilation, reducing preload and potentially causing severe hemodynamic collapse. Fluid resuscitation with IV normal saline (250 mL boluses) is the treatment for hypotension in RVMI.'
+  },
+  {id:12,type:'mc',section:null,
+   text:'Wellens\' syndrome is characterized by specific T-wave patterns in which leads?',
+   options:['Leads II, III, and aVF','Leads V1–V2','Leads V2–V3','Leads I and aVL'],
+   answer:2,
+   explanation:'Wellens\' syndrome (critical proximal LAD stenosis) presents with: Type A — biphasic T waves in V2–V3, and Type B — deep symmetric T-wave inversions in V2–V3. This occurs during a pain-free interval and indicates high risk for massive anterior MI. Urgent catheterization is indicated.'
+  },
+  {id:13,type:'mc',section:null,
+   text:'De Winter T-waves on a 12-lead ECG suggest occlusion of which coronary artery?',
+   options:['Right coronary artery (RCA)','Left circumflex (LCX)','Left anterior descending (LAD)','Left main coronary artery'],
+   answer:2,
+   explanation:'De Winter T-waves are a STEMI-equivalent pattern indicating proximal LAD occlusion. Pattern: ST depression at J-point (1–3 mm) in V1–V6 with upsloping to peaked tall T-waves. No ST elevation is seen. Requires immediate catheterization as standard STEMI alert.'
+  },
+  {id:14,type:'mc',section:null,
+   text:'What is the Sgarbossa Criteria primarily used to assess?',
+   options:['Severity of aortic stenosis','Presence of STEMI in the setting of left bundle branch block (LBBB)','Risk stratification in NSTEMI','Hemodynamic stability in cardiogenic shock'],
+   answer:1,
+   explanation:'The modified Sgarbossa Criteria identifies MI in the presence of LBBB: (1) Concordant ST elevation ≥1 mm (5 points), (2) Concordant ST depression ≥1 mm in V1–V3 (3 points), (3) Disproportionate discordant ST elevation ≥25% of preceding S-wave (2 points). Score ≥3 = high specificity for MI.'
+  },
+  {id:15,type:'mc',section:null,
+   text:'ST elevation in lead aVR along with diffuse ST depression in multiple leads suggests:',
+   options:['Inferior STEMI','Right ventricular MI','Left main or proximal LAD occlusion','Pericarditis'],
+   answer:2,
+   explanation:'ST elevation in aVR (≥1 mm) with diffuse ST depression indicates global subendocardial ischemia from left main coronary artery or proximal LAD occlusion, or severe triple-vessel disease. This pattern carries very high mortality and warrants emergent catheterization.'
+  },
+  {id:16,type:'mc',section:null,
+   text:'Which ECG finding is MOST characteristic of pericarditis?',
+   options:['Focal ST elevation with reciprocal changes','Diffuse saddle-shaped ST elevation with PR depression','Tall peaked T waves in precordial leads','New Q waves with ST elevation'],
+   answer:1,
+   explanation:'Pericarditis ECG: (1) Diffuse/widespread saddle-shaped ST elevation in most leads, (2) PR depression (pathognomonic when present), (3) NO reciprocal changes (except aVR and V1 which show PR elevation), (4) Evolves through 4 stages. The absence of reciprocal changes helps distinguish from STEMI.'
+  },
+  {id:17,type:'mc',section:'Section 2 — Dysrhythmias & ECG Interpretation',
+   text:'What is the normal duration of the PR interval on ECG?',
+   options:['0.04–0.08 seconds (40–80 ms)','0.12–0.20 seconds (120–200 ms)','0.20–0.30 seconds (200–300 ms)','0.06–0.10 seconds (60–100 ms)'],
+   answer:1,
+   explanation:'Normal PR interval = 0.12–0.20 seconds (3–5 small squares on standard ECG paper at 25 mm/sec). <0.12 sec suggests pre-excitation (WPW) or accelerated junctional rhythm. >0.20 sec indicates first-degree AV block. The PR represents atrial activation + AV node conduction + His-Purkinje to ventricular activation onset.'
+  },
+  {id:18,type:'mc',section:null,
+   text:'A patient presents with progressive prolongation of the PR interval followed by a dropped QRS complex that then resets. This pattern is called:',
+   options:['First-degree AV block','Mobitz Type I (Wenckebach)','Mobitz Type II','Third-degree (complete) AV block'],
+   answer:1,
+   explanation:'Mobitz Type I (Wenckebach): Progressive PR prolongation until a P wave is non-conducted (dropped QRS), then cycle resets. The PR before the dropped beat is longest. Location: AV node. Usually benign; common in inferior MI (RCA occlusion) due to AV nodal ischemia. Generally responds to atropine.'
+  },
+  {id:19,type:'mc',section:null,
+   text:'A rhythm strip shows constant PR intervals with occasional sudden non-conducted P waves (dropped QRS complex) without preceding PR prolongation. This is:',
+   options:['Wenckebach block','Mobitz Type II AV block','Junctional escape rhythm','Complete heart block'],
+   answer:1,
+   explanation:'Mobitz Type II: Fixed PR interval with sudden, unpredictable dropped QRS. Location: Below the AV node (His-Purkinje system). Significance: High risk of progression to complete heart block; unstable. Requires transcutaneous pacing immediately and permanent pacemaker. May not respond to atropine.'
+  },
+  {id:20,type:'mc',section:null,
+   text:'In third-degree (complete) AV block, what is the relationship between P waves and QRS complexes?',
+   options:['1:1 ratio with normal PR interval','Progressive PR prolongation until no QRS','No consistent relationship — P waves and QRS fire independently','Every other P wave is conducted'],
+   answer:2,
+   explanation:'Third-degree AV block: Complete dissociation between atria and ventricles. The atria fire at the sinus rate, ventricles fire at the escape pacemaker rate (junctional ~40–60 bpm producing narrow QRS; ventricular ~20–40 bpm producing wide QRS). Requires immediate transcutaneous pacing and permanent pacemaker.'
+  },
+  {id:21,type:'mc',section:null,
+   text:'What is the first-line treatment for sustained, hemodynamically unstable ventricular tachycardia (VT)?',
+   options:['Adenosine 6 mg rapid IV push','Amiodarone 150 mg IV over 10 minutes','Synchronized cardioversion with 100 J','Defibrillation with 200 J'],
+   answer:2,
+   explanation:'Hemodynamically unstable VT (with pulse) = immediate synchronized cardioversion. The synchronization feature delivers the shock on the R wave to avoid the vulnerable T-wave period (which could trigger VF). Energy: 100–200 J biphasic. If pulseless VT → defibrillation (unsynchronized).'
+  },
+  {id:22,type:'mc',section:null,
+   text:'What is the recommended first-line medication for stable paroxysmal SVT (narrow complex tachycardia) resistant to vagal maneuvers?',
+   options:['Amiodarone 150 mg IV','Adenosine 6 mg rapid IV push','Metoprolol 5 mg IV','Lidocaine 1 mg/kg IV'],
+   answer:1,
+   explanation:'Adenosine 6 mg rapid IV push followed by 20 mL NS flush (given as close to the heart as possible). If unsuccessful, repeat with 12 mg (can give second 12 mg dose). Adenosine blocks AV nodal conduction transiently, terminating reentrant SVT. Half-life: ~10 seconds. Warn patient of transient chest tightness/sense of doom.'
+  },
+  {id:23,type:'mc',section:null,
+   text:'Torsades de Pointes is associated with prolonged QT interval. What is the FIRST-LINE treatment for this arrhythmia?',
+   options:['Amiodarone 150 mg IV','Lidocaine 1 mg/kg IV','Magnesium sulfate 2 g IV over 15 minutes','Synchronized cardioversion'],
+   answer:2,
+   explanation:'Magnesium sulfate 2 g IV over 15 minutes (1–2 g over 1–2 min if unstable). Magnesium shortens the action potential duration and suppresses early afterdepolarizations that trigger TdP. If hemodynamically unstable (pulseless), immediate defibrillation. Also address underlying cause (electrolyte abnormalities, QT-prolonging drugs).'
+  },
+  {id:24,type:'mc',section:null,
+   text:'What ECG changes does hyperkalemia (elevated potassium) typically cause?',
+   options:['Prolonged QT interval and U waves','Short PR interval and delta waves','Peaked T waves, widened QRS, and eventually sine wave pattern','Atrial fibrillation with rapid ventricular response'],
+   answer:2,
+   explanation:'Hyperkalemia ECG progression: (1) Peaked symmetric T waves (first sign), (2) Flattened P waves, prolonged PR, (3) Widened QRS, (4) Sine wave pattern, (5) VF/asystole. Treatment: Calcium gluconate (membrane stabilization), insulin+dextrose, sodium bicarbonate, kayexalate, dialysis.'
+  },
+  {id:25,type:'mc',section:null,
+   text:'The Brugada pattern on ECG is characterized by which finding?',
+   options:['ST depression in V1–V6 with upright T waves','Coved-type (Type 1) ST elevation in V1–V2 with right bundle branch morphology','Diffuse ST elevation with PR depression','Deep Q waves in II, III, and aVF'],
+   answer:1,
+   explanation:'Brugada Type 1 (diagnostic): Coved-type ST elevation ≥2 mm with negative T wave in ≥1 of V1–V2. Associated with sodium channelopathy and risk of sudden cardiac death from VF. ICD placement is indicated in symptomatic patients. Avoid Na-channel blockers, fever, alcohol excess.'
+  },
+  {id:26,type:'mc',section:null,
+   text:'What is the normal QRS complex duration?',
+   options:['<0.06 seconds','0.06–0.10 seconds (60–100 ms)','0.10–0.12 seconds','0.12–0.20 seconds'],
+   answer:1,
+   explanation:'Normal QRS = 0.06–0.10 seconds (1.5–2.5 small squares). >0.12 seconds (3 small squares) = bundle branch block (LBBB or RBBB). 0.10–0.12 = incomplete BBB. Wide QRS can also be caused by ventricular pacing, hyperkalemia, sodium channel blocker toxicity, or ventricular origin rhythms.'
+  },
+  {id:27,type:'mc',section:null,
+   text:'Which arrhythmia is characterized by irregularly irregular rhythm with no discernible P waves and variable ventricular rate?',
+   options:['Atrial flutter','Atrial fibrillation (AFib)','Multifocal atrial tachycardia','Junctional tachycardia'],
+   answer:1,
+   explanation:'Atrial fibrillation: Multiple chaotic re-entrant wavelets in atria → fibrillatory baseline (400–600 bpm atrial rate) → irregularly irregular QRS. Key risks: stroke (CHADS₂-VASc score determines anticoagulation), cardiomyopathy (from rapid rate), hemodynamic compromise. Unstable AFib → immediate cardioversion.'
+  },
+  {id:28,type:'mc',section:null,
+   text:'What energy level is recommended for the FIRST defibrillation attempt in ventricular fibrillation using a biphasic defibrillator?',
+   options:['100 J','150 J','200 J (or device-specific)','360 J'],
+   answer:2,
+   explanation:'AHA 2020 guidelines: 200 J biphasic (or device-specific manufacturer recommendation, typically 120–200 J). Monophasic defibrillators use 360 J for all shocks. After each shock, immediately resume CPR (2 minutes) before reassessing rhythm. Do NOT delay CPR to check rhythm post-shock.'
+  },
+  {id:29,type:'mc',section:null,
+   text:'What is the correct compression rate for high-quality CPR in adult cardiac arrest?',
+   options:['60–80 compressions per minute','80–100 compressions per minute','100–120 compressions per minute','120–140 compressions per minute'],
+   answer:2,
+   explanation:'AHA 2020: 100–120 compressions per minute. Compression depth ≥2 inches (5 cm) but no more than 2.4 inches (6 cm). Allow full chest recoil between compressions. Minimize interruptions (<10 seconds). Compress hard and fast. A metronome improves rate consistency.'
+  },
+  {id:30,type:'mc',section:null,
+   text:'Which medication is given FIRST in the ACLS algorithm for pulseless ventricular fibrillation (VF)?',
+   options:['Amiodarone 300 mg IV','Epinephrine 1 mg IV every 3–5 minutes','Lidocaine 1.5 mg/kg IV','Vasopressin 40 units IV'],
+   answer:1,
+   explanation:'After the FIRST defibrillation attempt and 2 minutes of CPR, epinephrine 1 mg IV/IO every 3–5 minutes is the vasopressor of choice. Vasopressin was removed from the 2015 ACLS algorithm. Antiarrhythmics (amiodarone 300 mg or lidocaine 1–1.5 mg/kg) are added after 2–3 shocks and doses of epinephrine.'
+  },
+  {id:31,type:'mc',section:'Section 3 — Heart Failure & Cardiogenic Shock',
+   text:'An S3 gallop (third heart sound) heard during cardiac auscultation indicates:',
+   options:['Decreased ventricular compliance from hypertrophy','Volume overload and/or heart failure (increased preload)','Pericardial friction','Mitral valve prolapse'],
+   answer:1,
+   explanation:'S3 (Kentucky — "ken-TUC-ky") occurs in early diastole from rapid ventricular filling into a dilated, poorly compliant ventricle. Pathological S3 indicates elevated filling pressures = heart failure, dilated cardiomyopathy, or valvular disease. Physiological S3 is normal in young adults/athletes/pregnancy.'
+  },
+  {id:32,type:'mc',section:null,
+   text:'Which Killip class describes bilateral pulmonary rales (crackles) and/or evidence of pulmonary edema?',
+   options:['Killip Class I','Killip Class II','Killip Class III','Killip Class IV'],
+   answer:2,
+   explanation:'Killip Class III = Frank pulmonary edema with diffuse bilateral rales >1/2 of the lung fields. 30-day mortality approximately 40%. Treatment: diuretics, nitrates (if not RVMI), CPAP/BiPAP, consider inotropic support. Class II = mild HF (rales in lower ≤1/2 of lung fields, S3).'
+  },
+  {id:33,type:'mc',section:null,
+   text:'Cardiogenic shock is hemodynamically defined by which blood pressure and cardiac index parameters?',
+   options:['SBP <80 mmHg for any duration','SBP <90 mmHg for >30 minutes despite adequate volume, with CI <2.2 L/min/m² and PCWP >18 mmHg','SBP <100 mmHg with heart rate >120 bpm','SBP <90 mmHg with PCWP <12 mmHg'],
+   answer:1,
+   explanation:'Cardiogenic shock hemodynamic definition: SBP <90 mmHg for >30 minutes (or vasopressor-dependent), cardiac index (CI) <2.2 L/min/m², pulmonary capillary wedge pressure (PCWP) >18 mmHg indicating elevated left-sided filling pressure. Key distinction from hypovolemic shock (low PCWP) and distributive shock.'
+  },
+  {id:34,type:'mc',section:null,
+   text:'What is the preferred first-line vasopressor/inotrope for cardiogenic shock?',
+   options:['Pure vasopressors: phenylephrine','Norepinephrine (vasopressor) + dobutamine (inotrope) as needed','High-dose dopamine ≥20 mcg/kg/min','Vasopressin 0.03–0.04 units/min'],
+   answer:1,
+   explanation:'Current evidence (SOAP II trial): Norepinephrine is preferred over dopamine (less arrhythmias, lower mortality in cardiogenic shock subgroup). Dobutamine is added for inotropic support. For severe refractory cardiogenic shock, consider mechanical circulatory support (IABP, Impella, ECMO).'
+  },
+  {id:35,type:'mc',section:null,
+   text:'BNP (B-type natriuretic peptide) is released primarily from which cardiac structure in response to what stimulus?',
+   options:['Atria in response to increased pressure','Ventricular myocytes in response to increased wall stress/volume overload','Pericardium in response to inflammation','SA node in response to hypoxia'],
+   answer:1,
+   explanation:'BNP is synthesized and released from ventricular myocytes in response to increased wall stress from volume or pressure overload. BNP >100 pg/mL suggests heart failure; >400 pg/mL highly specific. NT-proBNP (inactive fragment) has longer half-life. Used for diagnosis, monitoring, and prognostication in heart failure.'
+  },
+  {id:36,type:'mc',section:null,
+   text:'Which class of medications is the primary treatment for reducing preload in acute decompensated heart failure with pulmonary edema?',
+   options:['Beta-blockers','ACE inhibitors','Loop diuretics (furosemide)','Calcium channel blockers'],
+   answer:2,
+   explanation:'Loop diuretics (furosemide IV) are first-line for acute decompensated heart failure to reduce preload via diuresis. IV furosemide also has a rapid vasodilatory effect before diuresis begins. Combined with nitroglycerin (venodilation reduces preload further) and supplemental oxygen/CPAP for pulmonary edema management.'
+  },
+  {id:37,type:'mc',section:null,
+   text:'Post-MI ACE inhibitor therapy is indicated primarily because:',
+   options:['It prevents arrhythmias by lengthening the QT interval','It reduces afterload and prevents adverse ventricular remodeling, reducing mortality','It increases heart rate to compensate for reduced stroke volume','It promotes coronary vasodilation'],
+   answer:1,
+   explanation:'ACE inhibitors reduce afterload (vasodilation), decrease preload, prevent adverse ventricular remodeling (dilation/hypertrophy), and reduce neurohormonal activation. Class I recommendation for all post-MI patients with EF <40%, heart failure symptoms, diabetes, or hypertension. Start within 24 hours if no contraindications (hypotension, renal failure).'
+  },
+  {id:38,type:'mc',section:null,
+   text:'Pulsus paradoxus, an exaggerated decrease in systolic blood pressure (>10 mmHg) during normal inspiration, is a hallmark of:',
+   options:['Hypertrophic cardiomyopathy','Cardiac tamponade','Tension pneumothorax','Severe aortic stenosis'],
+   answer:1,
+   explanation:'Pulsus paradoxus in cardiac tamponade: Inspiration increases venous return to RV → pericardial constraint causes ventricular interdependence → LV compressed, reducing stroke volume → BP falls >10 mmHg. Measure with sphygmomanometer; >10 mmHg is abnormal. Also seen in severe asthma, COPD, tension pneumothorax.'
+  },
+  {id:39,type:'mc',section:'Section 4 — Medications & Pharmacology',
+   text:'What is the recommended loading dose of aspirin for ACS?',
+   options:['81 mg enteric-coated tablet swallowed','162 mg enteric-coated tablet swallowed','324 mg (325 mg) non-enteric coated, chewed','600 mg crushed and dissolved in water'],
+   answer:2,
+   explanation:'324 mg (one adult 325 mg aspirin) non-enteric coated, chewed (not swallowed whole). Chewing enhances buccal absorption for faster platelet inhibition onset. Enteric coating delays gastric absorption by 1–2 hours, defeating the purpose in the acute setting. Subsequent dosing: 81 mg daily (maintenance).'
+  },
+  {id:40,type:'mc',section:null,
+   text:'Clopidogrel (Plavix) is a P2Y12 receptor antagonist. What is its mechanism of action?',
+   options:['Irreversibly inhibits COX-1 and reduces thromboxane A2','Irreversibly blocks ADP-mediated platelet aggregation via P2Y12 receptor','Reversibly inhibits GP IIb/IIIa receptor on platelets','Inhibits thrombin-induced platelet activation via PAR-1'],
+   answer:1,
+   explanation:'Clopidogrel is a thienopyridine prodrug that is metabolized by CYP2C19 to its active form, which irreversibly binds the P2Y12 ADP receptor on platelets. This blocks ADP-mediated platelet activation and aggregation. Loading dose: 300–600 mg PO. Duration post-stent: 12 months (DES) or 1 month (BMS) minimum. Aspirin + clopidogrel = DAPT.'
+  },
+  {id:41,type:'mc',section:null,
+   text:'Which contraindication to fibrinolytic therapy in STEMI represents an ABSOLUTE contraindication?',
+   options:['Age >75 years','Active internal bleeding or recent stroke','Uncontrolled hypertension (SBP >180)','Surgery within the last 3 months'],
+   answer:1,
+   explanation:'Absolute contraindications to fibrinolytics: Prior intracranial hemorrhage, ischemic stroke within 3 months (NOT previous TIA), known intracranial neoplasm, suspected aortic dissection, active internal bleeding, significant head/facial trauma within 3 months, any prior hemorrhagic stroke. Relative contraindications include uncontrolled hypertension, recent surgery, and anticoagulant therapy.'
+  },
+  {id:42,type:'mc',section:null,
+   text:'The recommended IV atropine dose for symptomatic bradycardia is:',
+   options:['0.1 mg IV every 5 minutes','0.5 mg IV; may repeat every 3–5 min (max 3 mg)','1.0 mg IV single dose','2 mg IV over 10 minutes'],
+   answer:1,
+   explanation:'Atropine 0.5 mg IV, may repeat every 3–5 minutes to maximum of 3 mg total. Doses <0.5 mg may cause paradoxical bradycardia. Used for hemodynamically significant bradycardia with adequate perfusion. Ineffective for Mobitz II and complete heart block; prepare for transcutaneous pacing. ACLS: atropine is first while preparing pacing.'
+  },
+  {id:43,type:'mc',section:null,
+   text:'Amiodarone\'s mechanism of action includes blocking which ion channels/receptors?',
+   options:['Potassium channels only (Class III)','Sodium channels only (Class I)','Potassium, sodium, calcium channels AND beta-adrenergic receptors (mixed Class I/II/III/IV)','Calcium channels and AV node only (Class IV)'],
+   answer:2,
+   explanation:'Amiodarone is a "dirty drug" with multi-channel blockade: Class I (Na+ channel), Class II (beta-blockade), Class III (K+ channel — primary mechanism, prolongs QT), Class IV (Ca2+ channel). This explains its broad spectrum efficacy for both atrial and ventricular arrhythmias. Multiple adverse effects: pulmonary toxicity, thyroid dysfunction, hepatotoxicity, photosensitivity.'
+  },
+  {id:44,type:'mc',section:null,
+   text:'Nitroglycerin causes vasodilation primarily by which mechanism?',
+   options:['Direct smooth muscle relaxation via alpha-1 receptor blockade','Metabolized to nitric oxide (NO) → activates guanylyl cyclase → ↑ cGMP → smooth muscle relaxation','Calcium channel blockade in vascular smooth muscle','Prostaglandin synthesis inhibition'],
+   answer:1,
+   explanation:'Nitroglycerin → nitric oxide (NO) via enzymatic conversion → activates soluble guanylyl cyclase → ↑ cyclic GMP → PKG activation → smooth muscle relaxation. Primarily venodilation at low doses (reduces preload), arterial dilation at higher doses (reduces afterload). Tolerance develops with continuous use (provide 8–12 hour nitrate-free period).'
+  },
+  {id:45,type:'mc',section:null,
+   text:'High-intensity statin therapy post-ACS is recommended regardless of baseline LDL cholesterol. Which regimen is considered high-intensity?',
+   options:['Simvastatin 20 mg daily','Atorvastatin 10 mg or rosuvastatin 5 mg daily','Atorvastatin 40–80 mg or rosuvastatin 20–40 mg daily','Any statin that reduces LDL by ≥20%'],
+   answer:2,
+   explanation:'High-intensity statin therapy reduces LDL by ≥50%: Atorvastatin 40–80 mg or Rosuvastatin 20–40 mg. AHA/ACC 2019 guidelines: all ACS patients should receive high-intensity statin regardless of baseline LDL. Target: LDL reduction ≥50% and ideally LDL <70 mg/dL. Add ezetimibe if LDL remains >70 mg/dL at maximum tolerated statin.'
+  },
+  {id:46,type:'mc',section:'Section 5 — Advanced Cardiovascular Concepts',
+   text:'Cardiac output (CO) is calculated using which formula?',
+   options:['CO = MAP × SVR / 80','CO = Heart Rate (HR) × Stroke Volume (SV)','CO = (SBP - DBP) / 3','CO = PCWP × CVP / HR'],
+   answer:1,
+   explanation:'CO = HR × SV. Normal adult CO: 4–8 L/min. Cardiac Index (CI) = CO / BSA; normal 2.2–4.0 L/min/m². Stroke volume is affected by preload (Frank-Starling), afterload (SVR, wall stress), and contractility (inotropic state). CO measured by thermodilution via PA catheter or estimated by echocardiography.'
+  },
+  {id:47,type:'mc',section:null,
+   text:'Normal ejection fraction (EF) is typically in which range?',
+   options:['30–45%','45–55%','55–70%','70–85%'],
+   answer:2,
+   explanation:'Normal LVEF = 55–70%. HFrEF (heart failure with reduced EF): EF <40%; HFmrEF (mildly reduced): 40–49%; HFpEF (preserved): EF ≥50%. EF is calculated as: EF = (EDV - ESV)/EDV × 100%. Measured by echocardiography, nuclear MUGA, or MRI. Post-MI EF is the strongest predictor of mortality.'
+  },
+  {id:48,type:'mc',section:null,
+   text:'Normal pulmonary capillary wedge pressure (PCWP) is:',
+   options:['0–5 mmHg','6–12 mmHg','15–20 mmHg','20–25 mmHg'],
+   answer:1,
+   explanation:'Normal PCWP = 6–12 mmHg. PCWP reflects left atrial pressure (LAP) and indirectly LVEDP. >18 mmHg = pulmonary congestion/pulmonary edema. Used in PA catheter (Swan-Ganz) hemodynamic profiling to differentiate cardiogenic from non-cardiogenic pulmonary edema (ALI/ARDS typically <18 mmHg).'
+  },
+  {id:49,type:'mc',section:null,
+   text:'An aortic dissection classically presents with which symptom?',
+   options:['Crushing substernal chest pain with ST elevation','Sudden onset severe tearing or ripping pain radiating to the back or interscapular region','Pleuritic chest pain worse with inspiration','Gradual onset chest pressure with exertion'],
+   answer:1,
+   explanation:'Aortic dissection: Sudden onset severe tearing/ripping pain that is maximal from onset (not crescendo). Radiation to back/interscapular (descending aorta) or anterior chest (ascending aorta). Associated findings: BP differential between arms >20 mmHg, new aortic regurgitation murmur, neurological deficits. CXR: widened mediastinum. CT angiography is diagnostic.'
+  },
+  {id:50,type:'mc',section:null,
+   text:'The S1Q3T3 pattern on ECG is associated with which condition?',
+   options:['Left ventricular hypertrophy','Anterior STEMI','Pulmonary embolism (right heart strain)','Pericarditis'],
+   answer:2,
+   explanation:'S1Q3T3 (McGinn-White sign): S wave in Lead I, Q wave in Lead III, inverted T wave in Lead III. Present in only ~20% of PE patients but highly specific. More common ECG findings in PE: sinus tachycardia (most common), new RBBB, right axis deviation, P pulmonale, T-wave inversions in V1–V4 (right heart strain pattern). CT-PA is the gold standard diagnostic test.'
+  },
+  {id:51,type:'mc',section:null,
+   text:'Hypertensive emergency is defined as severely elevated BP with evidence of acute target organ damage. Which BP threshold is typically used?',
+   options:['SBP ≥140 or DBP ≥90 mmHg','SBP ≥160 or DBP ≥100 mmHg','SBP ≥180 or DBP ≥120 mmHg with target organ damage','SBP ≥200 mmHg alone'],
+   answer:2,
+   explanation:'Hypertensive emergency: SBP ≥180 AND/OR DBP ≥120 mmHg WITH acute target organ damage (encephalopathy, ACS, aortic dissection, pulmonary edema, acute kidney injury, eclampsia). Without end-organ damage = hypertensive urgency. Goal: reduce MAP by no more than 25% in the first hour to avoid ischemia from rapid BP reduction.'
+  },
+  {id:52,type:'mc',section:null,
+   text:'Left ventricular hypertrophy (LVH) by Sokolow-Lyon criteria is defined by:',
+   options:['R wave in aVL ≥12 mm','S in V1 + R in V5 or V6 ≥35 mm','R in V5 ≥27 mm','QRS duration ≥0.12 sec in lead V5'],
+   answer:1,
+   explanation:'Sokolow-Lyon criteria: S in V1 + largest R in V5 or V6 ≥35 mm (sensitivity ~55%, specificity ~85%). Other criteria: Cornell (R aVL + S V3 ≥28 mm men, ≥20 mm women), Romhilt-Estes point system. LVH indicates chronic pressure/volume overload (hypertension, aortic stenosis). Associated with strain pattern: ST depression + T-wave inversion in lateral leads (V5, V6, I, aVL).'
+  },
+  {id:53,type:'mc',section:null,
+   text:'A patient with suspected massive pulmonary embolism who is hemodynamically unstable should receive:',
+   options:['Anticoagulation with heparin only','Surgical embolectomy as first-line','Systemic thrombolytics (e.g., alteplase 100 mg IV over 2 hours)','Inferior vena cava (IVC) filter'],
+   answer:2,
+   explanation:'Massive (high-risk) PE: SBP <90 mmHg despite resuscitation → systemic thrombolytics (alteplase 100 mg IV over 2 hours) is Class I recommendation. If thrombolytics contraindicated or fail: surgical embolectomy or catheter-directed thrombolysis. Anticoagulation alone is insufficient for massive PE. Heparin should be given concurrently.'
+  },
+  {id:54,type:'mc',section:null,
+   text:'Which electrolyte abnormality causes a shortened QT interval on ECG?',
+   options:['Hyperkalemia','Hypomagnesemia','Hypercalcemia','Hyponatremia'],
+   answer:2,
+   explanation:'Hypercalcemia shortens the QT interval by shortening phase 2 of the cardiac action potential (calcium plateau). Conversely, hypocalcemia prolongs QT. Hypokalemia and hypomagnesemia prolong QT (U waves prominent in hypokalemia). Hyperkalemia causes peaked T waves and widened QRS without significant QT change.'
+  },
+  {id:55,type:'mc',section:null,
+   text:'What is the primary concern with nitroprusside infusion in hypertensive emergencies?',
+   options:['Methemoglobinemia','Cyanide toxicity (especially with prolonged high-dose infusion)','Hypersensitivity reactions','Severe bradycardia'],
+   answer:1,
+   explanation:'Sodium nitroprusside is metabolized to cyanide, which is then converted to thiocyanate by rhodanase (requires hepatic and renal function). Risk factors for cyanide toxicity: prolonged infusion >72 hours, high doses >2 mcg/kg/min, renal/hepatic insufficiency. Signs: metabolic acidosis, elevated lactate, altered mental status. Treatment: hydroxocobalamin (Cyanokit) or thiosulfate.'
+  },
+  {id:56,type:'mc',section:null,
+   text:'Which ECG pattern indicates left bundle branch block (LBBB)?',
+   options:['rSR\' (rabbit ears) in V1, wide S wave in V6','Broad, notched R wave in V5–V6 (QRS ≥0.12 sec), absence of septal Q waves in lateral leads','ST elevation in V1–V2 with negative T waves','Deep symmetric T-wave inversions in V2–V3'],
+   answer:1,
+   explanation:'LBBB: QRS ≥0.12 sec, broad notched/slurred R wave in lateral leads (I, aVL, V5–V6), no septal Q waves in lateral leads, ST and T-wave changes opposite to QRS direction (discordant). New LBBB with chest pain = STEMI equivalent until proven otherwise (use Sgarbossa criteria). LBBB obscures ischemia assessment.'
+  },
+  {id:57,type:'mc',section:null,
+   text:'Digoxin toxicity manifests on ECG with which CLASSIC finding?',
+   options:['Prolonged QT with polymorphic VT','Sagging ST depression ("digitalis effect"), AV blocks, and bradyarrhythmias; bidirectional VT with toxicity','Diffuse ST elevation','Peaked T waves in precordial leads'],
+   answer:1,
+   explanation:'Digitalis effect (therapeutic): Sagging or "scooped" ST depression ("Salvador Dali\'s mustache"), T-wave changes, shortened QT, first-degree AV block. Toxicity: AV blocks (all degrees), PAT with block, accelerated junctional rhythm, bidirectional VT (pathognomonic), bradycardia. Treatment: digoxin Fab (Digibind), correct electrolytes (avoid calcium in hyperkalemia).'
+  },
+  {id:58,type:'mc',section:null,
+   text:'The TIMI risk score is used for which clinical purpose?',
+   options:['Predicting 30-day survival in STEMI','Risk stratification for adverse outcomes in unstable angina and NSTEMI','Calculating appropriate thrombolytic dose','Determining need for permanent pacemaker'],
+   answer:1,
+   explanation:'TIMI Risk Score for UA/NSTEMI (0–7 points): 7 criteria: age ≥65, ≥3 CAD risk factors, known CAD (stenosis ≥50%), ST deviation ≥0.5 mm, ≥2 anginal events in 24 hrs, aspirin use in past 7 days, elevated cardiac markers. Score ≥3 = high risk (>20% 14-day adverse events) → early invasive strategy. Score 0–2 = low risk → conservative management.'
+  },
+  {id:59,type:'mc',section:null,
+   text:'Which NYHA functional classification describes symptoms (dyspnea, fatigue) with MILD exertion?',
+   options:['NYHA Class I','NYHA Class II','NYHA Class III','NYHA Class IV'],
+   answer:2,
+   explanation:'NYHA Classification: Class I = No symptoms with any activity; Class II = Slight limitation, comfortable at rest, symptoms with ordinary activity; Class III = Marked limitation, comfortable at rest, symptoms with less than ordinary activity; Class IV = Symptoms at rest, unable to perform any activity without discomfort. Guides therapy and prognosis in heart failure.'
+  },
+  {id:60,type:'mc',section:null,
+   text:'In obstructive shock, which of the following correctly identifies a potential cause?',
+   options:['Severe sepsis causing systemic vasodilation','Hemorrhage causing decreased intravascular volume','Cardiac tamponade preventing ventricular filling','Right ventricular failure from ACS'],
+   answer:2,
+   explanation:'Obstructive shock: Mechanical obstruction to blood flow → decreased CO despite adequate volume. Causes: Cardiac tamponade, tension pneumothorax, massive pulmonary embolism, constrictive pericarditis, severe aortic stenosis, LVOT obstruction. Hemodynamic profile: ↑CVP, ↓CO, ↑SVR, normal PCWP (unless tamponade compresses both sides).'
+  },
+  {id:61,type:'mc',section:null,
+   text:'Aortic stenosis is most commonly caused in elderly patients by:',
+   options:['Rheumatic fever','Congenital bicuspid aortic valve','Calcific (degenerative) aortic stenosis from progressive calcium deposition','Infective endocarditis'],
+   answer:2,
+   explanation:'Calcific aortic stenosis is the most common cause in adults >70 years (from progressive calcium deposition on the aortic valve leaflets). Classic triad of severe AS: Syncope, angina, and heart failure (SAD mnemonic — Syncope, Angina, Dyspnea). Once symptoms develop, prognosis worsens rapidly. Surgical or transcatheter AVR (TAVR) is definitive treatment.'
+  },
+  {id:62,type:'mc',section:null,
+   text:'Epsilon waves on ECG are a pathognomonic finding in which condition?',
+   options:['Brugada syndrome','Arrhythmogenic Right Ventricular Cardiomyopathy (ARVC)','Long QT syndrome','Hypertrophic cardiomyopathy'],
+   answer:1,
+   explanation:'ARVC (now ARVC/D — arrhythmogenic RV cardiomyopathy/dysplasia): Epsilon waves are small positive deflections at the end of QRS in V1–V3, representing delayed activation of areas of fibrofatty replacement. Other findings: T-wave inversions in V1–V4, RBBB, late potentials on SAECG. Risk of VT/VF with exercise. ICD placement; avoid competitive athletics.'
+  },
+  {id:63,type:'mc',section:null,
+   text:'P pulmonale is a marker of right atrial enlargement. How does it appear on ECG?',
+   options:['Biphasic P wave in V1 with terminal negativity','Wide notched P wave >0.12 sec in lead II','Peaked P wave ≥2.5 mm in height in lead II','Inverted P wave in lead I and aVL'],
+   answer:2,
+   explanation:'P pulmonale: Tall, peaked P wave ≥2.5 mm in leads II, III, aVF — indicates right atrial enlargement from conditions causing increased RA pressure (COPD, cor pulmonale, tricuspid stenosis, pulmonary hypertension). P mitrale (left atrial enlargement): Wide notched P wave >0.12 sec (>3 small squares) in II with biphasic P in V1 (terminal negativity).'
+  },
+  {id:64,type:'mc',section:null,
+   text:'Which condition is characterized by asymmetric septal hypertrophy causing left ventricular outflow tract obstruction and is a major cause of sudden death in young athletes?',
+   options:['Dilated cardiomyopathy','Hypertrophic obstructive cardiomyopathy (HOCM)','Restrictive cardiomyopathy','Takotsubo (stress) cardiomyopathy'],
+   answer:1,
+   explanation:'HOCM: Autosomal dominant mutation (sarcomere proteins) causing asymmetric septal hypertrophy → dynamic LVOT obstruction. Dynamic murmur increases with Valsalva/standing. ECG: LVH, septal Q waves in V4–V6. Risk of sudden death from VF during exercise. Treatment: beta-blockers, avoid dehydration/nitrates/digoxin. ICD for high-risk patients.'
+  },
+  {id:65,type:'mc',section:null,
+   text:'Which hemodynamic profile correctly describes classic (cold and wet) cardiogenic shock from left ventricular failure?',
+   options:['↓CO, ↓PCWP, ↓SVR (warm and dry)','↓CO, ↑PCWP, ↑SVR (cold and wet)','↑CO, ↓PCWP, ↓SVR (warm and wet)','↓CO, ↓PCWP, ↑SVR (cold and dry)'],
+   answer:1,
+   explanation:'Cardiogenic shock hemodynamics: ↓CO (pump failure), ↑PCWP (elevated LV filling pressure → pulmonary congestion = "wet"), ↑SVR (compensatory vasoconstriction = "cold"). Forrester Class IV = "cold and wet." Treatment: diuretics (reduce PCWP), vasodilators (reduce SVR), inotropes (increase CO). Mechanical support for refractory cases.'
+  },
+  {id:66,type:'mc',section:null,
+   text:'Synchronized electrical cardioversion is indicated for which arrhythmia in the hemodynamically unstable patient?',
+   options:['Ventricular fibrillation','Pulseless ventricular tachycardia','Stable atrial fibrillation with adequate rate control','Unstable supraventricular tachycardia with a pulse'],
+   answer:3,
+   explanation:'Synchronized cardioversion is used for rhythms WITH a pulse but causing hemodynamic instability: unstable SVT, atrial flutter, atrial fibrillation, or stable (monomorphic) VT with deteriorating hemodynamics. Synchronization delivers shock on R-wave to avoid T-wave (avoid VF). VF and pulseless VT require UNSYNCHRONIZED defibrillation.'
+  },
+  {id:67,type:'mc',section:null,
+   text:'What is the correct energy setting for synchronized cardioversion in atrial flutter with hemodynamic instability?',
+   options:['50–100 J (biphasic); flutter often converts at lower energy','200–360 J','10–25 J','360 J monophasic required'],
+   answer:0,
+   explanation:'Atrial flutter is highly organized and typically converts with low energy: 50–100 J biphasic (or 200 J monophasic). Atrial fibrillation requires higher energy: 120–200 J biphasic. Stable monomorphic VT: 100 J. Unstable SVT: 50–100 J. Always start with the lowest effective energy to minimize myocardial injury.'
+  },
+  {id:68,type:'mc',section:null,
+   text:'Which hemodynamic pattern on a pulmonary artery catheter would you expect in a patient with tension pneumothorax?',
+   options:['↑PCWP, ↓CO, ↑SVR','↓PCWP, ↓CO, ↑CVP, ↑PA pressures, ↑SVR (obstructive pattern)','↓PCWP, ↑CO, ↓SVR','↑PCWP, ↑CO, ↓SVR'],
+   answer:1,
+   explanation:'Tension pneumothorax causes obstructive shock: compressed heart limits filling → ↓CO, ↑CVP (JVD), ↑PA pressures (right-sided backup), ↑SVR (compensatory), but PCWP may be normal or low. Clinically: unilateral absent breath sounds, tracheal deviation, JVD, hypotension. Treatment: immediate needle decompression then thoracostomy.'
+  },
+  {id:69,type:'mc',section:null,
+   text:'The Epsilon wave in ARVC/D is best seen in which leads?',
+   options:['Leads II, III, and aVF','Leads V1–V3','Leads V4–V6','Lead I and aVL'],
+   answer:1,
+   explanation:'Epsilon waves in ARVC are small positive deflections appearing after the QRS in leads V1–V3 (right precordial leads). Represents delayed activation of the RV due to fibrofatty replacement of myocardium. Also associated with T-wave inversions in V1–V4, RBBB, and premature ventricular contractions with LBBB morphology (arising from RV).'
+  },
+  {id:70,type:'mc',section:null,
+   text:'Which of the following correctly describes the ABCDE approach for hemodynamic monitoring targets in cardiogenic shock?',
+   options:['Maintain SBP ≥90 mmHg, MAP ≥65 mmHg, CI ≥2.2 L/min/m², ScvO₂ ≥65%','Maintain SBP ≥120, HR <60, CI ≥4.0, normal troponin','Maintain MAP ≥90, HR <100, EF >50%','Maintain SBP ≥150, high-dose vasopressors, Hb >12 g/dL'],
+   answer:0,
+   explanation:'Cardiogenic shock hemodynamic targets: MAP ≥65 mmHg (perfusion pressure), SBP ≥90 mmHg, Cardiac Index ≥2.2 L/min/m² (adequate forward flow), Mixed/central venous O₂ saturation ≥65% (adequate O₂ delivery), urine output ≥0.5 mL/kg/hr. Lactate clearance is a key resuscitation endpoint. Avoid excessive catecholamines (worsen myocardial oxygen demand).'
+  },
+
+  // ==================== SECTION 2: ORDERING QUESTIONS (Q71-85) ====================
+  {id:71,type:'order',section:'Section 6 — Ordering & Sequencing',
+   text:'Place the following STEMI management steps in the correct sequence from patient arrival to reperfusion:',
+   items:[
+     'Administer aspirin 324 mg (chewed) + nitroglycerin if not RVMI',
+     'Activate cardiac catheterization lab (cath lab)',
+     'Obtain 12-lead ECG (within 10 minutes of arrival)',
+     'IV access + oxygen + cardiac monitoring + vital signs',
+     'Primary PCI — door-to-balloon <90 minutes'
+   ],
+   order:[2,3,0,1,4],
+   explanation:'Correct order: (1) IV/O₂/monitor/VS, (2) 12-lead ECG within 10 min, (3) Aspirin + nitro, (4) Activate cath lab (STEMI alert), (5) Primary PCI <90 min. The 12-lead ECG is the pivotal diagnostic step that drives all subsequent decisions.'
+  },
+  {id:72,type:'order',section:null,
+   text:'Sequence the ACLS Cardiac Arrest Algorithm steps for Ventricular Fibrillation (VF) in the correct order:',
+   items:[
+     'Administer epinephrine 1 mg IV/IO every 3–5 minutes',
+     'Defibrillate immediately — 200 J biphasic',
+     'Resume CPR immediately (2 minutes) after shock',
+     'Consider antiarrhythmics (amiodarone or lidocaine) if VF persists',
+     'Identify and treat reversible causes (H\'s and T\'s)'
+   ],
+   order:[1,2,0,3,4],
+   explanation:'VF algorithm: (1) Defibrillate 200J, (2) Immediate CPR 2 min, (3) Epinephrine 1 mg q3-5 min (with rhythm check), (4) Amiodarone 300 mg or lidocaine if refractory VF, (5) Treat reversible H\'s and T\'s throughout. Minimize interruptions to CPR.'
+  },
+  {id:73,type:'order',section:null,
+   text:'Order the layers of the heart wall from outermost to innermost:',
+   items:[
+     'Myocardium (cardiac muscle)',
+     'Visceral pericardium (epicardium)',
+     'Endocardium',
+     'Parietal pericardium',
+     'Fibrous pericardium'
+   ],
+   order:[4,3,1,0,2],
+   explanation:'Outside to inside: (1) Fibrous pericardium (tough outer sac), (2) Parietal pericardium (serous outer layer), (3) Epicardium/Visceral pericardium (serous inner layer, pericardial space between), (4) Myocardium (cardiac muscle), (5) Endocardium (inner lining). Pericardial effusion accumulates between visceral and parietal pericardium.'
+  },
+  {id:74,type:'order',section:null,
+   text:'Sequence the pathophysiology of atherosclerotic ACS from earliest to final event:',
+   items:[
+     'Myocardial infarction — irreversible cell death',
+     'Endothelial dysfunction and LDL oxidation',
+     'Atherosclerotic plaque formation (fatty streak → lipid core)',
+     'Plaque rupture or erosion → thrombus formation',
+     'Vulnerable plaque with thin fibrous cap and large lipid core'
+   ],
+   order:[1,2,4,3,0],
+   explanation:'Pathophysiology sequence: (1) Endothelial injury + LDL oxidation, (2) Foam cell formation → fatty streak → fibrous plaque, (3) Vulnerable plaque develops, (4) Plaque rupture/erosion → platelet activation → thrombus, (5) Complete occlusion → MI. This process takes years (1-4) but the final events (plaque rupture → MI) can be seconds to hours.'
+  },
+  {id:75,type:'order',section:null,
+   text:'Order the Killip Classification from least severe (Class I) to most severe (Class IV):',
+   items:[
+     'Cardiogenic shock (SBP <90, signs of peripheral hypoperfusion)',
+     'Pulmonary edema (diffuse bilateral rales, SpO₂ markedly reduced)',
+     'Mild heart failure (S3 gallop, rales in lower lung fields)',
+     'No signs of heart failure (clear lungs, no S3)'
+   ],
+   order:[3,2,1,0],
+   explanation:'Killip I (no HF, ~5% mortality) → II (mild HF, ~10% mortality) → III (pulmonary edema, ~40% mortality) → IV (cardiogenic shock, ~80% mortality). Killip class at presentation is an independent predictor of 30-day mortality after MI. Modern reperfusion therapy has improved all-class mortality.'
+  },
+  {id:76,type:'order',section:null,
+   text:'Place the following steps of systematic 12-lead ECG interpretation in the correct order:',
+   items:[
+     'Assess ST-T wave changes (elevation, depression, inversion)',
+     'Determine rhythm and rate',
+     'Measure intervals (PR, QRS, QT)',
+     'Assess axis (normal, left axis deviation, right axis deviation)',
+     'Look for chamber enlargement (P waves for atrial, voltage for ventricular)'
+   ],
+   order:[1,2,3,4,0],
+   explanation:'Systematic approach: (1) Rate/Rhythm, (2) Intervals (PR/QRS/QT), (3) Axis, (4) Chamber enlargement, (5) ST-T changes. A consistent systematic approach prevents missing subtle findings. Always compare with prior ECGs. Remember: "Rate, Rhythm, Intervals, Axis, Hypertrophy, Ischemia/Infarction."'
+  },
+  {id:77,type:'order',section:null,
+   text:'Sequence the evolution of ECG changes following acute STEMI from earliest to latest:',
+   items:[
+     'Deep Q waves with normalized ST (old MI, permanent)',
+     'Hyperacute T waves (tall, peaked — minutes to hours)',
+     'ST elevation with T wave changes (hours after onset)',
+     'T wave inversion (hours to days)',
+     'ST resolution with persistent Q waves (days to weeks)'
+   ],
+   order:[1,2,3,4,0],
+   explanation:'ECG evolution: (1) Hyperacute T waves (very early ischemia), (2) ST elevation (injury current), (3) T-wave inversion (ischemia/reperfusion), (4) ST resolution with Q waves, (5) Permanent Q waves (necrosis/scar). Q waves typically persist permanently. T-waves may normalize over months. New Q waves ≥0.04 sec (>1 small square) + >25% of R-wave height = pathological.'
+  },
+  {id:78,type:'order',section:null,
+   text:'Order the components of the Chain of Survival for out-of-hospital cardiac arrest (OHCA) from first to last:',
+   items:[
+     'Advanced life support (ALS) — medications, advanced airway',
+     'Dispatch-assisted CPR and recognition of cardiac arrest',
+     'Post-cardiac arrest care (targeted temperature management, PCI)',
+     'High-quality CPR — early and effective',
+     'Defibrillation as soon as AED is available'
+   ],
+   order:[1,3,4,0,2],
+   explanation:'2020 AHA Chain of Survival (OHCA): (1) Dispatch-assisted recognition + CPR instructions, (2) High-quality bystander CPR, (3) Rapid defibrillation (AED), (4) Advanced EMS life support, (5) Post-cardiac arrest care. Each link is critical; delay at any link worsens outcomes. Survival rate decreases 7–10% per minute without CPR+defibrillation.'
+  },
+  {id:79,type:'order',section:null,
+   text:'Order the following cardiac arrhythmias from slowest to fastest typical ventricular rate:',
+   items:[
+     'Atrial fibrillation with rapid ventricular response (~150 bpm)',
+     'Ventricular escape rhythm (~20–40 bpm)',
+     'Junctional rhythm (~40–60 bpm)',
+     'Normal sinus rhythm (~60–100 bpm)',
+     'Ventricular tachycardia (>100 bpm)'
+   ],
+   order:[1,2,3,4,0],
+   explanation:'Rate order: (1) Ventricular escape 20–40 bpm, (2) Junctional rhythm 40–60 bpm, (3) Normal sinus 60–100 bpm, (4) VT >100 bpm, (5) AFib with RVR ~120–170 bpm. Understanding typical rates helps identify rhythms. Lower escape rhythms are less reliable pacemakers and require external support. Higher rates (VT, SVT) may compromise hemodynamics.'
+  },
+  {id:80,type:'order',section:null,
+   text:'Place the NYHA Heart Failure Classification from LEAST symptomatic (Class I) to MOST symptomatic (Class IV):',
+   items:[
+     'Comfortable at rest; symptoms with less than ordinary activity',
+     'No limitations; ordinary activity does not cause symptoms',
+     'Symptoms at rest; unable to carry on any activity without discomfort',
+     'Slight limitation; symptoms with ordinary activity; comfortable at rest'
+   ],
+   order:[1,3,0,2],
+   explanation:'NYHA: Class I = No symptoms any activity; Class II = Slight limitation, symptoms with ordinary activity; Class III = Marked limitation, symptoms with less than ordinary activity; Class IV = Symptoms at rest. Guides medical therapy: NYHA II-III → GDMT (BB, ACEi, MRA, SGLT2i); Class IV → consider VAD/transplant.'
+  },
+  {id:81,type:'order',section:null,
+   text:'Sequence the management steps for acute pulmonary edema (heart failure with respiratory distress) in priority order:',
+   items:[
+     'IV furosemide (diuretic therapy)',
+     'Supplemental oxygen / non-invasive positive pressure ventilation (CPAP/BiPAP)',
+     'IV nitroglycerin infusion (vasodilation/preload reduction)',
+     'Position patient upright (legs dangling)',
+     'Establish IV access, cardiac monitoring, 12-lead ECG'
+   ],
+   order:[3,4,1,2,0],
+   explanation:'Pulmonary edema management priority: (1) Position upright (reduces preload immediately), (2) IV/monitor/ECG, (3) O₂/NPPV (treat hypoxia, reduce work of breathing), (4) Nitroglycerin infusion (immediate venodilation reduces preload), (5) Furosemide IV (diuresis over 30–60 min). NPPV (CPAP/BiPAP) reduces intubation rates significantly.'
+  },
+  {id:82,type:'order',section:null,
+   text:'Sequence the steps of synchronized cardioversion for unstable SVT:',
+   items:[
+     'Perform synchronized shock at 50–100 J biphasic',
+     'Consider conscious sedation (midazolam/propofol) if patient is conscious',
+     'Reassess rhythm; if SVT persists, escalate energy and repeat',
+     'Confirm synchronization mode is active (R-wave markers visible)',
+     'Attach defibrillator pads and initiate continuous ECG monitoring'
+   ],
+   order:[4,3,1,0,2],
+   explanation:'Synchronized cardioversion steps: (1) Pads + ECG monitoring, (2) Confirm sync mode active (look for R-wave sync markers), (3) Sedate if time allows and patient is conscious, (4) Deliver shock, (5) Reassess; escalate if needed. Press sync button each time before charging — most defibrillators revert to unsynchronized mode after each shock.'
+  },
+  {id:83,type:'order',section:null,
+   text:'Order the following risk factors for coronary artery disease from NON-MODIFIABLE to MODIFIABLE:',
+   items:[
+     'Hypertension',
+     'Age (men >45, women >55)',
+     'Cigarette smoking',
+     'Family history of premature CAD',
+     'Dyslipidemia (elevated LDL, low HDL)'
+   ],
+   order:[1,3,0,4,2],
+   explanation:'Non-modifiable: Age, male sex, family history/genetics. Modifiable: Hypertension, dyslipidemia, diabetes, smoking, obesity, sedentary lifestyle, stress. Smoking is the most important modifiable risk factor for premature atherosclerosis. Cessation reduces cardiovascular risk by 50% within 1 year and approaches non-smoker risk after 5–15 years.'
+  },
+  {id:84,type:'order',section:null,
+   text:'Sequence the correct steps for performing external transcutaneous pacing (TCP) in symptomatic bradycardia:',
+   items:[
+     'Increase rate to 60–80 bpm and output until capture (electrical and mechanical)','Apply pacing pads (anterior-posterior preferred)','Start at minimum output and increase by 10 mA increments until capture','Confirm mechanical capture by palpating pulse','Select pacing mode (demand or asynchronous) and set rate'
+   ],
+   order:[1,4,2,0,3],
+   explanation:'TCP steps: (1) Apply pads (AP position preferred — better capture threshold), (2) Select demand mode, set rate 60–80 bpm, (3) Start low, increase mA by 10 until electrical capture (wide paced QRS after spike), (4) Confirm mechanical capture by palpating pulse (do not rely on ECG alone), (5) Maintain at 10 mA above threshold. Sedate for comfort — very painful.'
+  },
+  {id:85,type:'order',section:null,
+   text:'Place the following interventions in the CORRECT sequence for management of suspected massive pulmonary embolism with cardiac arrest:',
+   items:[
+     'Systemic thrombolytics (alteplase 50–100 mg IV) — administer and continue CPR 60–90 min','High-quality CPR + ACLS protocol initiation','Emergent CT-PA or bedside echocardiography if brief pause allows','Definitive care: mechanical embolectomy or catheter-directed therapy if thrombolytics fail','IV heparin bolus to prevent clot propagation'],
+   order:[1,4,2,0,3],
+   explanation:'PE with cardiac arrest: (1) Immediate CPR + ACLS, (2) Heparin (if no fibrinolytic planned yet), (3) Echo/CT if feasible without delay, (4) Thrombolytics (alteplase) + continue CPR 60–90 min, (5) Mechanical embolectomy if thrombolytics fail. Fibrinolysis during CPR is recommended for suspected PE arrest — CPR mechanical action may help distribute drug.'
+  },
+
+  // ==================== SECTION 3: MATCHING QUESTIONS (Q86-100) ====================
+  {id:86,type:'match',section:'Section 7 — Matching',
+   text:'Match each MI location to its corresponding ECG leads showing ST elevation:',
+   pairs:[
+     {left:'Anterior MI', right:'V1–V4'},
+     {left:'Inferior MI', right:'II, III, aVF'},
+     {left:'Lateral MI', right:'I, aVL, V5–V6'},
+     {left:'Posterior MI (reciprocal)', right:'ST depression V1–V3 (mirror image)'},
+   ],
+   explanation:'Coronary anatomy: Anterior (V1–V4) = LAD; Inferior (II, III, aVF) = RCA (or LCX); Lateral (I, aVL, V5–V6) = LCX; High lateral (I, aVL) = diagonal or OM; Posterior (V7–V9 or reciprocal in V1–V3) = LCX or RCA.'
+  },
+  {id:87,type:'match',section:null,
+   text:'Match each cardiac arrhythmia to its FIRST-LINE treatment:',
+   pairs:[
+     {left:'Ventricular fibrillation (pulseless)', right:'Unsynchronized defibrillation 200 J'},
+     {left:'Symptomatic bradycardia (sinus)', right:'Atropine 0.5 mg IV'},
+     {left:'Stable SVT (narrow complex)', right:'Vagal maneuvers → Adenosine 6 mg'},
+     {left:'Torsades de Pointes', right:'Magnesium sulfate 2 g IV'},
+   ],
+   explanation:'Key treatment matching: VF = defibrillation (unsynchronized); Bradycardia = atropine; SVT = vagal + adenosine; TdP = magnesium (addresses prolonged QT substrate). Know both the first-line and alternatives for each arrhythmia in ACLS.'
+  },
+  {id:88,type:'match',section:null,
+   text:'Match each heart sound or murmur to its associated cardiac condition:',
+   pairs:[
+     {left:'S3 gallop (early diastole)', right:'Heart failure / volume overload'},
+     {left:'S4 gallop (late diastole, pre-systolic)', right:'Decreased ventricular compliance / LVH'},
+     {left:'Harsh systolic ejection murmur (crescendo-decrescendo)', right:'Aortic stenosis'},
+     {left:'Holosystolic murmur radiating to axilla', right:'Mitral regurgitation'},
+   ],
+   explanation:'Heart sounds: S3 (ken-TUC-ky) = CHF/dilated CM; S4 (TENN-es-see) = HTN/HCM/post-MI. Murmurs: AS = harsh SEM, loudest RUSB, radiates to carotids; MR = holosystolic at apex radiating to axilla; AR = blowing diastolic murmur LLSB; MS = low-pitched diastolic rumble at apex.'
+  },
+  {id:89,type:'match',section:null,
+   text:'Match each cardiac biomarker to its approximate rise time after myocardial injury:',
+   pairs:[
+     {left:'High-sensitivity Troponin (hsTnI/T)', right:'1–3 hours'},
+     {left:'Standard Troponin I or T', right:'3–6 hours'},
+     {left:'CK-MB (creatine kinase MB fraction)', right:'3–6 hours (peaks 12–24 hrs, normalizes 36–72 hrs)'},
+     {left:'Myoglobin', right:'1–4 hours (early but nonspecific)'},
+   ],
+   explanation:'Biomarker timing: Myoglobin fastest (1–4 hr) but nonspecific; hsTn fastest specific (1–3 hr) — drives 0/1-hr and 0/2-hr rule-out protocols; Standard Tn (3–6 hr, peaks 18–24 hr, persists 7–10 days); CK-MB (3–6 hr, earlier peak, normalizes 36–72 hr — useful for detecting reinfarction).'
+  },
+  {id:90,type:'match',section:null,
+   text:'Match each cardiovascular drug class to its PRIMARY mechanism of action:',
+   pairs:[
+     {left:'Beta-blockers (metoprolol)', right:'Block β1-adrenergic receptors → ↓HR, ↓contractility, ↓renin'},
+     {left:'ACE inhibitors (lisinopril)', right:'Block angiotensin-converting enzyme → ↓Angiotensin II → vasodilation + ↓aldosterone'},
+     {left:'Loop diuretics (furosemide)', right:'Inhibit Na-K-2Cl cotransporter in thick ascending loop → diuresis'},
+     {left:'Calcium channel blockers (amlodipine)', right:'Block L-type voltage-gated Ca²⁺ channels → vascular/cardiac relaxation'},
+   ],
+   explanation:'Drug mechanisms: Beta-blockers reduce HR and contractility (reduce O₂ demand); ACEi prevent Ang II effects (vasodilation, anti-remodeling); Loop diuretics produce rapid diuresis (acute HF, hypertension); CCB relax vascular smooth muscle (dihydropyridines) or slow AV conduction (non-DHP: diltiazem, verapamil).'
+  },
+  {id:91,type:'match',section:null,
+   text:'Match each coronary artery to its primary myocardial territory:',
+   pairs:[
+     {left:'Left Anterior Descending (LAD)', right:'Anterior LV wall, interventricular septum, apex'},
+     {left:'Right Coronary Artery (RCA)', right:'Inferior LV wall, RV free wall, SA and AV nodes'},
+     {left:'Left Circumflex (LCX)', right:'Lateral and posterior LV wall'},
+     {left:'Left Main Coronary Artery (LMCA)', right:'Most of LV (LAD + LCX territory combined)'},
+   ],
+   explanation:'Coronary territories: LAD = "widow maker" (anterior wall, septum); RCA = inferior wall (II,III,aVF), RV, conduction system; LCX = lateral wall (I, aVL, V5-V6); LMCA occlusion = catastrophic (vast majority of LV). In right-dominant circulation (85%), RCA gives posterior descending artery (PDA) → inferior and posterior wall.'
+  },
+  {id:92,type:'match',section:null,
+   text:'Match each antiarrhythmic drug class (Vaughan-Williams) to a representative drug:',
+   pairs:[
+     {left:'Class Ia — Na+ channel block (intermediate dissociation)', right:'Procainamide, quinidine'},
+     {left:'Class Ib — Na+ channel block (fast dissociation)', right:'Lidocaine, mexiletine'},
+     {left:'Class III — K+ channel block (prolongs repolarization)', right:'Amiodarone, sotalol, dofetilide'},
+     {left:'Class IV — Ca²⁺ channel block (AV nodal)', right:'Diltiazem, verapamil'},
+   ],
+   explanation:'Vaughan-Williams: Ia (quinidine, procainamide, disopyramide) — VT, AFib/flutter; Ib (lidocaine, mexiletine) — ventricular arrhythmias only; Ic (flecainide, propafenone) — supraventricular, avoid post-MI; II (beta-blockers); III (amiodarone, sotalol) — broad spectrum; IV (diltiazem, verapamil) — SVT, rate control. Adenosine is not classified in VW system.'
+  },
+  {id:93,type:'match',section:null,
+   text:'Match each type of shock to its HEMODYNAMIC PROFILE (CO = Cardiac Output, PCWP = filling pressure, SVR = resistance):',
+   pairs:[
+     {left:'Cardiogenic shock', right:'↓CO, ↑PCWP, ↑SVR'},
+     {left:'Hypovolemic shock', right:'↓CO, ↓PCWP, ↑SVR'},
+     {left:'Distributive (septic) shock', right:'↑CO (early), ↓PCWP, ↓SVR'},
+     {left:'Obstructive shock', right:'↓CO, ↑CVP, ↑SVR (↑/normal PCWP)'},
+   ],
+   explanation:'Shock hemodynamics: Cardiogenic = pump failure (↓CO, ↑PCWP, ↑SVR); Hypovolemic = low volume (↓CO, ↓PCWP, ↑SVR); Distributive = vasodilation (↑CO early, ↓SVR, ↓PCWP); Obstructive = mechanical obstruction (↓CO, ↑CVP/JVD, ↑SVR). This differentiation guides targeted therapy — wrong treatment can worsen outcome.'
+  },
+  {id:94,type:'match',section:null,
+   text:'Match each ECG change to the electrolyte disturbance that causes it:',
+   pairs:[
+     {left:'Peaked symmetric T waves → sine wave → VF', right:'Hyperkalemia'},
+     {left:'Prolonged QT + U waves + T-U fusion', right:'Hypokalemia'},
+     {left:'Shortened QT interval', right:'Hypercalcemia'},
+     {left:'Prolonged QT, widened QRS, low-amplitude T waves', right:'Hypomagnesemia'},
+   ],
+   explanation:'Electrolyte ECG changes: K+ high = peaked T, wide QRS, sine wave; K+ low = flattened T, prominent U waves, prolonged QT; Ca++ high = short QT; Ca++ low = prolonged QT; Mg++ low = prolonged QT (increases TdP risk, often co-exists with hypokalemia); Na+ disorders primarily affect neurologic status more than ECG.'
+  },
+  {id:95,type:'match',section:null,
+   text:'Match each clinical finding to the specific type of ACS it most strongly suggests:',
+   pairs:[
+     {left:'ST elevation in ≥2 contiguous leads + positive troponin', right:'ST-Elevation MI (STEMI)'},
+     {left:'ST depression or T-wave inversion + elevated troponin, no ST elevation', right:'Non-ST-Elevation MI (NSTEMI)'},
+     {left:'Ischemic symptoms at rest + dynamic ECG changes but troponin negative', right:'Unstable Angina (UA)'},
+     {left:'Exertional chest pain that resolves with rest; no ECG or troponin changes', right:'Stable angina (not ACS)'},
+   ],
+   explanation:'ACS spectrum: STEMI (ST elevation + biomarkers) → immediate reperfusion; NSTEMI (no ST elevation + biomarkers) → early invasive or conservative strategy; UA (no ST elevation, no biomarkers) → risk stratify + antiplatelet/anticoagulation; Stable angina (predictable, provoked, ECG/troponin negative) → outpatient management, stress testing.'
+  },
+  {id:96,type:'match',section:null,
+   text:'Match each hemodynamic intervention to its primary mechanism in cardiogenic shock:',
+   pairs:[
+     {left:'Dobutamine', right:'β1-agonist inotrope — increases contractility and CO'},
+     {left:'Norepinephrine', right:'α1 + β1 agonist — increases SVR and MAP (vasopressor)'},
+     {left:'Intra-aortic balloon pump (IABP)', right:'Counterpulsation — reduces afterload, augments diastolic coronary perfusion'},
+     {left:'IV furosemide', right:'Loop diuretic — reduces preload (PCWP) by promoting diuresis'},
+   ],
+   explanation:'Cardiogenic shock therapy targets: Dobutamine = ↑CO (inotrope, some vasodilation); Norepinephrine = ↑MAP (vasopressor, preferred over dopamine); IABP = diastolic augmentation + systolic unloading; Furosemide = decongest lungs (reduce PCWP). For severe shock, Impella provides higher mechanical support than IABP.'
+  },
+  {id:97,type:'match',section:null,
+   text:'Match each cardiomyopathy type to its characteristic feature:',
+   pairs:[
+     {left:'Dilated cardiomyopathy (DCM)', right:'Enlarged, thin-walled ventricle with globally reduced EF (<40%)'},
+     {left:'Hypertrophic cardiomyopathy (HCM)', right:'Asymmetric septal hypertrophy + dynamic LVOT obstruction'},
+     {left:'Restrictive cardiomyopathy', right:'Non-dilated, thick/stiff walls with normal EF but impaired filling'},
+     {left:'Takotsubo (stress) cardiomyopathy', right:'Apical ballooning after emotional/physical stress; usually reversible'},
+   ],
+   explanation:'Cardiomyopathy characteristics: DCM = most common (idiopathic, ischemic, alcohol, viral), systolic dysfunction; HCM = genetic (sarcomere mutations), dynamic obstruction, sudden death risk; Restrictive = infiltrative (amyloidosis, sarcoidosis, hemochromatosis), diastolic dysfunction; Takotsubo = catecholamine surge, spares base, recovers in weeks, mimics anterior MI.'
+  },
+  {id:98,type:'match',section:null,
+   text:'Match each right-sided vs. left-sided heart failure characteristic to the CORRECT side:',
+   pairs:[
+     {left:'Bilateral leg edema, JVD, hepatomegaly, ascites', right:'Right-sided heart failure'},
+     {left:'Orthopnea, PND, pulmonary edema, S3 gallop', right:'Left-sided heart failure'},
+     {left:'Elevated PCWP (>18 mmHg) with pulmonary hypertension', right:'Left-sided heart failure'},
+     {left:'Elevated CVP (>12 mmHg), peripheral fluid retention', right:'Right-sided heart failure'},
+   ],
+   explanation:'Left heart failure: backward failure → pulmonary venous hypertension → dyspnea, orthopnea, PND, pulmonary edema. Right heart failure: backward failure → systemic venous hypertension → JVD, hepatomegaly, peripheral edema, ascites. Most common cause of RHF is left heart failure (pulmonary HTN from elevated PCWP). Pure RHF causes: RVMI, cor pulmonale, PE.'
+  },
+  {id:99,type:'match',section:null,
+   text:'Match each valvular lesion to its classic auscultatory murmur characteristic:',
+   pairs:[
+     {left:'Aortic Stenosis (AS)', right:'Crescendo-decrescendo systolic ejection murmur, RUSB, radiates to carotids'},
+     {left:'Mitral Regurgitation (MR)', right:'Holosystolic murmur, loudest at cardiac apex, radiates to left axilla'},
+     {left:'Aortic Regurgitation (AR)', right:'High-pitched blowing diastolic murmur, LLSB (decrescendo)'},
+     {left:'Mitral Stenosis (MS)', right:'Low-pitched diastolic rumble with opening snap at cardiac apex'},
+   ],
+   explanation:'Valve murmur memory: AS = "harsh crescendo-decrescendo, RUSB, carotids" (right 2nd ICS); MR = "holo-systolic apex to axilla"; AR = "blowing diastolic LLSB" (heard best leaning forward, Erb\'s point); MS = "rumble with opening snap" (post-rheumatic, left lateral decubitus position). Systolic: AS, MR, VSD, TR; Diastolic: AR, PR, MR, TS.'
+  },
+  {id:100,type:'match',section:null,
+   text:'Match each clinical scenario to the MOST APPROPRIATE immediate EMS intervention:',
+   pairs:[
+     {left:'STEMI patient with BP 80/50 and inferior ST elevation', right:'IV fluid bolus 250 mL NS (suspect RVMI), avoid nitrates'},
+     {left:'Unstable VT with pulse, BP 60 mmHg', right:'Synchronized cardioversion (sedation if time permits)'},
+     {left:'Pulseless VF rhythm on monitor', right:'Immediate unsynchronized defibrillation 200 J biphasic'},
+     {left:'Conscious SVT, rate 180, BP 88/60', right:'Synchronized cardioversion (hemodynamically unstable)'},
+   ],
+   explanation:'Clinical decisions: Hypotensive inferior STEMI → RVMI until proven otherwise → fluids, NO nitrates; Unstable VT (with pulse) → synchronized cardioversion; Pulseless VF → immediate unsynchronized defibrillation (do not delay for IV); Unstable SVT → synchronized cardioversion (despite conscious state, BP <90 = unstable = immediate electrical therapy).'
+  }
+];
+
+var sName='', sId='', answers={}, nAnswered=0, finalPct=0, PASS=70;
+
+function ge(id){return document.getElementById(id);}
+
+function startAssessment(){
+  var n=(ge('iname').value||'').trim();
+  var i=(ge('iid').value||'').trim();
+  if(!n||!i){ge('err').textContent='Please enter your name and student ID.';return;}
+  ge('err').textContent='';
+  sName=n; sId=i;
+  ge('hdrName').textContent=n;
+  ge('hdrId').textContent='ID: '+i;
+  ge('pg-land').classList.remove('on');
+  ge('pg-test').classList.add('on');
+  buildAll();
+}
+
+function buildAll(){
+  var html='', lastSec=null;
+  for(var i=0;i<QUESTIONS.length;i++){
+    var q=QUESTIONS[i];
+    if(q.section&&q.section!==lastSec){
+      lastSec=q.section;
+      html+='<div class="sec-hdr">'+q.section+'</div>';
+    }
+    if(q.type==='mc') html+=buildMC(q);
+    else if(q.type==='order') html+=buildOrder(q);
+    else if(q.type==='match') html+=buildMatch(q);
+  }
+  html+='<div class="sub-zone"><h3>Submit Your Assessment</h3><p>Unanswered questions will be marked incorrect.</p><button class="btn-sub" onclick="submitAll()">Submit &amp; See Results &rarr;</button></div>';
+  ge('qbody').innerHTML=html;
+  initDrag();
+}
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function buildMC(q){
+  var L=['A','B','C','D'], opts='';
+  for(var i=0;i<q.options.length;i++){
+    opts+='<div class="opt" id="o_'+q.id+'_'+i+'" onclick="pickMC('+q.id+','+i+')">'
+         +'<div class="opt-let">'+L[i]+'</div>'
+         +'<div class="opt-txt">'+esc(q.options[i])+'</div></div>';
+  }
+  return '<div class="qcard" id="qc_'+q.id+'">'
+        +'<div class="q-top"><span class="q-num">Q'+q.id+'</span><span class="badge-mc">Multiple Choice</span></div>'
+        +'<div class="q-txt">'+esc(q.text)+'</div>'
+        +'<div class="opts">'+opts+'</div>'
+        +'<div class="expln" id="ex_'+q.id+'"><b>Explanation:</b> '+esc(q.explanation)+'</div></div>';
+}
+
+function pickMC(qid,idx){
+  if(answers[qid]!==undefined)return;
+  var q=QUESTIONS.find(function(x){return x.id===qid;});
+  var correct=idx===q.answer;
+  for(var i=0;i<q.options.length;i++){
+    var el=ge('o_'+qid+'_'+i);
+    el.classList.add('locked');
+    el.onclick=null;
+    if(i===q.answer) el.classList.add('ans-ok');
+    else if(i===idx&&!correct) el.classList.add('ans-bad');
+  }
+  ge('qc_'+qid).classList.add(correct?'ok':'bad');
+  ge('ex_'+qid).classList.add('show');
+  answers[qid]={correct:correct,type:'mc'};
+  nAnswered++;
+  updateProg();
+}
+
+function buildOrder(q){
+  var idxs=[];
+  for(var i=0;i<q.items.length;i++) idxs.push(i);
+  for(var i=idxs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idxs[i];idxs[i]=idxs[j];idxs[j]=t;}
+  var items='';
+  for(var p=0;p<idxs.length;p++){
+    var oi=idxs[p];
+    items+='<div class="ord-item" draggable="true" data-oi="'+oi+'">'
+          +'<span style="color:#d4a017;font-size:16px">&#8942;</span>'
+          +'<div class="ord-pos">'+(p+1)+'</div>'
+          +'<div class="ord-txt">'+esc(q.items[oi])+'</div>'
+          +'<div class="ord-btns">'
+          +'<button class="arr" onclick="moveItem(this,-1)">&#9650;</button>'
+          +'<button class="arr" onclick="moveItem(this,1)">&#9660;</button>'
+          +'</div></div>';
+  }
+  return '<div class="qcard" id="qc_'+q.id+'">'
+        +'<div class="q-top"><span class="q-num">Q'+q.id+'</span><span class="badge-ord">Ordering</span></div>'
+        +'<div class="q-txt">'+esc(q.text)+'</div>'
+        +'<p style="font-size:12px;color:#7a90a8;margin-top:8px">Use &#9650;&#9660; buttons or drag to reorder.</p>'
+        +'<div class="ord-list" id="ol_'+q.id+'">'+items+'</div>'
+        +'<button class="ord-chk" id="ock_'+q.id+'" onclick="checkOrder('+q.id+')">Check Order &#10003;</button>'
+        +'<div class="ord-res" id="or_'+q.id+'"></div>'
+        +'<div class="expln" id="ex_'+q.id+'"><b>Explanation:</b> '+esc(q.explanation)+'</div></div>';
+}
+
+function moveItem(btn,dir){
+  var item=btn.closest('.ord-item'), list=item.parentNode;
+  if(dir===-1&&item.previousElementSibling) list.insertBefore(item,item.previousElementSibling);
+  else if(dir===1&&item.nextElementSibling) list.insertBefore(item.nextElementSibling,item);
+  renum(list);
+}
+function renum(list){var ns=list.querySelectorAll('.ord-pos');for(var i=0;i<ns.length;i++)ns[i].textContent=i+1;}
+
+function checkOrder(qid){
+  if(answers[qid]!==undefined)return;
+  var q=QUESTIONS.find(function(x){return x.id===qid;});
+  var items=ge('ol_'+qid).querySelectorAll('.ord-item');
+  var cur=[];
+  for(var i=0;i<items.length;i++) cur.push(parseInt(items[i].dataset.oi));
+  var ok=JSON.stringify(cur)===JSON.stringify(q.order);
+  var res=ge('or_'+qid);
+  res.className='ord-res '+(ok?'ord-ok':'ord-bad');
+  res.textContent=ok?'Correct order!':'Incorrect. Correct: '+q.order.map(function(oi,p){return (p+1)+'. '+q.items[oi];}).join(' > ');
+  ge('ex_'+qid).classList.add('show');
+  ge('qc_'+qid).classList.add(ok?'ok':'bad');
+  ge('ock_'+qid).disabled=true;
+  answers[qid]={correct:ok,type:'order'};
+  nAnswered++;
+  updateProg();
+}
+
+function buildMatch(q){
+  var ridxs=[];
+  for(var i=0;i<q.pairs.length;i++) ridxs.push(i);
+  for(var i=ridxs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=ridxs[i];ridxs[i]=ridxs[j];ridxs[j]=t;}
+  var rows='';
+  for(var i=0;i<q.pairs.length;i++){
+    var opts='<option value="">&#8212; select &#8212;</option>';
+    for(var r=0;r<ridxs.length;r++) opts+='<option value="'+ridxs[r]+'">'+esc(q.pairs[ridxs[r]].right)+'</option>';
+    rows+='<div class="mat-row">'
+         +'<div class="mat-left">'+esc(q.pairs[i].left)+'</div>'
+         +'<div class="mat-arr">&#8594;</div>'
+         +'<select class="mat-sel" id="ms_'+q.id+'_'+i+'">'+opts+'</select></div>';
+  }
+  return '<div class="qcard" id="qc_'+q.id+'">'
+        +'<div class="q-top"><span class="q-num">Q'+q.id+'</span><span class="badge-mat">Matching</span></div>'
+        +'<div class="q-txt">'+esc(q.text)+'</div>'
+        +'<div class="mat-rows">'+rows+'</div>'
+        +'<button class="mat-chk" id="mck_'+q.id+'" onclick="checkMatch('+q.id+')">Check Matches &#10003;</button>'
+        +'<div class="expln" id="ex_'+q.id+'"><b>Explanation:</b> '+esc(q.explanation)+'</div></div>';
+}
+
+function checkMatch(qid){
+  if(answers[qid]!==undefined)return;
+  var q=QUESTIONS.find(function(x){return x.id===qid;});
+  for(var i=0;i<q.pairs.length;i++){
+    var s=ge('ms_'+qid+'_'+i);
+    if(!s||s.value===''){
+      var btn=ge('mck_'+qid);
+      var orig=btn.textContent;
+      btn.textContent='Select all first!';
+      setTimeout(function(b,t){return function(){b.textContent=t;};}(btn,orig),2000);
+      return;
+    }
+  }
+  var allOk=true;
+  for(var i=0;i<q.pairs.length;i++){
+    var sel=ge('ms_'+qid+'_'+i);
+    var ok2=parseInt(sel.value)===i;
+    if(!ok2) allOk=false;
+    sel.classList.add(ok2?'ok':'bad');
+    sel.disabled=true;
+  }
+  ge('ex_'+qid).classList.add('show');
+  ge('qc_'+qid).classList.add(allOk?'ok':'bad');
+  ge('mck_'+qid).disabled=true;
+  answers[qid]={correct:allOk,type:'match'};
+  nAnswered++;
+  updateProg();
+}
+
+function updateProg(){
+  var p=Math.round(nAnswered/QUESTIONS.length*100);
+  ge('progFill').style.width=p+'%';
+  ge('progTxt').textContent=nAnswered+' / '+QUESTIONS.length;
+  ge('progPct').textContent=p+'%';
+}
+
+function submitAll(){
+  for(var i=0;i<QUESTIONS.length;i++){
+    var q=QUESTIONS[i];
+    if(answers[q.id]===undefined) answers[q.id]={correct:false,type:q.type,skipped:true};
+  }
+  var corr=0;
+  for(var k in answers) if(answers[k].correct) corr++;
+  finalPct=Math.round(corr/QUESTIONS.length*100);
+  var passed=finalPct>=PASS;
+  ge('pg-test').classList.remove('on');
+  ge('pg-res').classList.add('on');
+  ge('resIcon').textContent=passed?'🏅':'📋';
+  ge('resName').textContent=sName+' | ID: '+sId;
+  ge('resTitle').textContent=passed?'Congratulations!':'Assessment Complete';
+  ge('resScore').textContent=finalPct+'%';
+  ge('resScore').className='res-score '+(passed?'pass-c':'fail-c');
+  ge('resLbl').textContent=passed?'PASSED — '+corr+'/100 correct':'NOT PASSED — '+corr+'/100 correct (need 70%)';
+  ge('resCorr').textContent=corr;
+  ge('resWrong').textContent=100-corr;
+  window.scrollTo(0,0);
+}
+
+/* ── DRAG & DROP ── */
+function initDrag(){
+  var drag=null;
+  document.addEventListener('dragstart',function(e){
+    var item=e.target.closest('.ord-item');
+    if(!item)return;
+    drag=item;
+    setTimeout(function(){if(drag)drag.classList.add('dragging');},0);
+  });
+  document.addEventListener('dragend',function(){
+    if(drag){drag.classList.remove('dragging');drag=null;}
+    document.querySelectorAll('.dragover').forEach(function(el){el.classList.remove('dragover');});
+  });
+  document.addEventListener('dragover',function(e){
+    e.preventDefault();
+    if(!drag)return;
+    var tgt=e.target.closest('.ord-item');
+    if(!tgt||tgt===drag||tgt.parentNode!==drag.parentNode)return;
+    document.querySelectorAll('.dragover').forEach(function(el){el.classList.remove('dragover');});
+    tgt.classList.add('dragover');
+    var list=tgt.parentNode,kids=Array.from(list.children);
+    var di=kids.indexOf(drag),ti=kids.indexOf(tgt);
+    if(di<ti) list.insertBefore(drag,tgt.nextSibling);
+    else list.insertBefore(drag,tgt);
+    renum(list);
+  });
+}
+
+/* ── PDF ── */
+var pdfReady=false,pdfLoading=false;
+function loadPDF(cb){
+  if(pdfReady&&window.jspdf){cb(true);return;}
+  if(pdfLoading){setTimeout(function(){loadPDF(cb);},300);return;}
+  pdfLoading=true;
+  var s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload=function(){pdfReady=true;pdfLoading=false;cb(true);};
+  s.onerror=function(){pdfLoading=false;cb(false);};
+  document.head.appendChild(s);
+}
+
+function dlCert(){
+  loadPDF(function(ok){
+    if(!ok||!window.jspdf){ge('pg-res').querySelector('.dl-note').textContent='PDF library failed to load. Check internet connection.';return;}
+    var jsPDF=window.jspdf.jsPDF;
+    var doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+    var W=297,H=210,passed=finalPct>=PASS;
+    doc.setFillColor(13,31,56);doc.rect(0,0,W,H,'F');
+    doc.setDrawColor(26,122,138);doc.setLineWidth(3);doc.rect(8,8,W-16,H-16);
+    doc.setDrawColor(212,160,23);doc.setLineWidth(0.8);doc.rect(13,13,W-26,H-26);
+    doc.setFillColor(26,122,138);doc.rect(8,8,W-16,12,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('PAUL D. CAMP COMMUNITY COLLEGE — EMERGENCY MEDICAL SERVICES PROGRAM',W/2,16,{align:'center'});
+    doc.setFontSize(11);doc.setTextColor(26,122,138);doc.setFont('helvetica','normal');
+    doc.text('CERTIFICATE OF',W/2,36,{align:'center'});
+    doc.setFontSize(28);doc.setFont('helvetica','bold');doc.setTextColor(212,160,23);
+    doc.text(passed?'ACHIEVEMENT':'COMPLETION',W/2,52,{align:'center'});
+    doc.setDrawColor(212,160,23);doc.setLineWidth(0.5);doc.line(60,57,W-60,57);
+    doc.setFontSize(10);doc.setTextColor(136,146,164);doc.setFont('helvetica','normal');
+    doc.text('This certifies that',W/2,68,{align:'center'});
+    doc.setFontSize(24);doc.setFont('helvetica','bold');doc.setTextColor(240,244,248);
+    doc.text(sName,W/2,80,{align:'center'});
+    doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(136,146,164);
+    doc.text('Student ID: '+sId,W/2,88,{align:'center'});
+    doc.setFontSize(11);doc.setTextColor(200,210,220);
+    doc.text('has completed the assessment in',W/2,99,{align:'center'});
+    doc.setFontSize(14);doc.setFont('helvetica','bold');doc.setTextColor(240,244,248);
+    doc.text('ACS & Cardiovascular Emergencies',W/2,109,{align:'center'});
+    doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(200,210,220);
+    doc.text('100-Question Comprehensive Competency Assessment',W/2,117,{align:'center'});
+    var bx=W/2-28,by=126;
+    doc.setFillColor(18,45,76);doc.roundedRect(bx,by,56,26,3,3,'F');
+    doc.setDrawColor(passed?39:192,passed?174:57,passed?96:43);doc.setLineWidth(1.2);doc.roundedRect(bx,by,56,26,3,3,'D');
+    doc.setFontSize(20);doc.setFont('helvetica','bold');
+    doc.setTextColor(passed?39:231,passed?174:76,passed?96:60);
+    doc.text(finalPct+'%',W/2,by+12,{align:'center'});
+    doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(136,146,164);
+    doc.text(passed?'PASSED':'SCORE',W/2,by+20,{align:'center'});
+    var today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+    doc.setFontSize(8);doc.setTextColor(136,146,164);
+    doc.text('Date: '+today,W/2-44,168,{align:'center'});
+    doc.text('Pass Threshold: 70%',W/2+44,168,{align:'center'});
+    doc.setDrawColor(70,85,100);doc.setLineWidth(0.4);
+    doc.line(42,180,118,180);doc.line(179,180,255,180);
+    doc.setFontSize(7.5);
+    doc.text('Program Director, CAMP EMS',80,185,{align:'center'});
+    doc.text('Student: '+sName,217,185,{align:'center'});
+    doc.setFontSize(6.5);doc.setTextColor(60,80,100);
+    doc.text('Paul D. Camp Community College | EMS Program | Suffolk, Franklin & Smithfield Campuses',W/2,198,{align:'center'});
+    doc.save('ACS_Certificate_'+sName.replace(/\s+/g,'_')+'.pdf');
+  });
+}
+
+function dlReport(){
+  loadPDF(function(ok){
+    if(!ok||!window.jspdf){ge('pg-res').querySelector('.dl-note').textContent='PDF library failed to load. Check internet connection.';return;}
+    var jsPDF=window.jspdf.jsPDF;
+    var doc=new jsPDF({unit:'mm',format:'a4'});
+    var W=210,PH=297,M=15,CW=W-M*2,y=0;
+    var passed=finalPct>=PASS,corr=0;
+    for(var k in answers) if(answers[k].correct) corr++;
+    function np(){doc.addPage();y=18;doc.setFillColor(13,31,56);doc.rect(0,0,W,12,'F');doc.setFontSize(6.5);doc.setFont('helvetica','normal');doc.setTextColor(136,146,164);doc.text('ACS & Cardiovascular Emergencies — Score Report',M,8);doc.text(sName+' | '+sId,W-M,8,{align:'right'});}
+    function chk(n){if(y+n>PH-14)np();}
+    doc.setFillColor(13,31,56);doc.rect(0,0,W,38,'F');
+    doc.setFillColor(26,122,138);doc.rect(0,38,W,4,'F');
+    doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(26,122,138);
+    doc.text('PAUL D. CAMP COMMUNITY COLLEGE — EMS PROGRAM',M,13);
+    doc.setFontSize(15);doc.setTextColor(240,244,248);doc.text('ACS & Cardiovascular Emergencies',M,24);
+    doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(136,146,164);doc.text('Detailed Score Report — 100 Question Assessment',M,31);
+    y=50;
+    doc.setFillColor(22,45,80);doc.roundedRect(M,y,CW,24,2,2,'F');
+    doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(136,146,164);
+    doc.text('Student:',M+4,y+7);doc.text('ID:',M+4,y+14);doc.text('Date:',M+4,y+21);
+    doc.setFont('helvetica','bold');doc.setTextColor(240,244,248);
+    doc.text(sName,M+24,y+7);doc.text(sId,M+24,y+14);
+    doc.text(new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),M+24,y+21);
+    doc.setFontSize(15);doc.setTextColor(passed?39:231,passed?174:76,passed?96:60);
+    doc.text(finalPct+'%',W-M-3,y+10,{align:'right'});
+    doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(136,146,164);
+    doc.text(passed?'PASSED':'NOT PASSED',W-M-3,y+17,{align:'right'});
+    doc.text(corr+'/100 correct',W-M-3,y+22,{align:'right'});
+    y+=32;
+    var sw=(CW-8)/3;
+    var st=[['Correct',corr,[39,174,96]],['Incorrect',100-corr,[231,76,60]],['Threshold','70%',[26,122,138]]];
+    for(var si=0;si<3;si++){var sx=M+si*(sw+4);doc.setFillColor(22,45,80);doc.roundedRect(sx,y,sw,14,2,2,'F');doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor(st[si][2][0],st[si][2][1],st[si][2][2]);doc.text(String(st[si][1]),sx+sw/2,y+9,{align:'center'});doc.setFontSize(5.5);doc.setFont('helvetica','normal');doc.setTextColor(136,146,164);doc.text(st[si][0],sx+sw/2,y+13,{align:'center'});}
+    y+=22;
+    doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(26,122,138);
+    doc.text('QUESTION BREAKDOWN',M,y);y+=4;
+    doc.setDrawColor(26,122,138);doc.setLineWidth(0.3);doc.line(M,y,W-M,y);y+=5;
+    for(var qi=0;qi<QUESTIONS.length;qi++){
+      var q=QUESTIONS[qi],ua=answers[q.id];
+      var qok=ua&&ua.correct,skip=ua&&ua.skipped;
+      chk(22);
+      doc.setFillColor(qok?15:28,qok?35:15,qok?60:25);doc.roundedRect(M,y,CW,7,1,1,'F');
+      doc.setDrawColor(qok?39:192,qok?174:57,qok?96:43);doc.setLineWidth(0.7);doc.line(M,y,M,y+7);
+      doc.setFontSize(7);doc.setFont('helvetica','bold');doc.setTextColor(qok?39:231,qok?174:76,qok?96:60);
+      doc.text((qok?'✓':'✗')+' Q'+q.id,M+2.5,y+5);
+      doc.setFont('helvetica','normal');doc.setTextColor(200,210,220);
+      doc.text({mc:'Multiple Choice',order:'Ordering',match:'Matching'}[q.type]||'',M+15,y+5);
+      doc.setTextColor(qok?39:231,qok?174:76,qok?96:60);
+      doc.text(qok?'CORRECT':(skip?'SKIPPED':'INCORRECT'),W-M-2,y+5,{align:'right'});
+      y+=9;
+      chk(7);
+      var lines=doc.splitTextToSize(q.text,CW);
+      doc.setFontSize(6.5);doc.setFont('helvetica','normal');doc.setTextColor(215,222,232);
+      doc.text(lines.slice(0,2),M,y);y+=Math.min(lines.length,2)*3.5+1;
+      if(q.type==='mc'){
+        if(!qok&&!skip&&ua!==undefined){chk(5);var LL=['A','B','C','D'];doc.setFontSize(6);doc.setFont('helvetica','bold');doc.setTextColor(231,76,60);doc.text('Your: '+(LL[ua.userAnswer]||'?')+'. ',M+2,y);doc.setFont('helvetica','normal');doc.setTextColor(180,180,180);var ul=doc.splitTextToSize(q.options[ua.userAnswer]||'',CW-20);doc.text(ul[0],M+18,y);y+=4;}
+        chk(5);var LL2=['A','B','C','D'];doc.setFontSize(6);doc.setFont('helvetica','bold');doc.setTextColor(39,174,96);doc.text('Correct: '+LL2[q.answer]+'. ',M+2,y);doc.setFont('helvetica','normal');doc.setTextColor(170,200,170);var cl=doc.splitTextToSize(q.options[q.answer],CW-22);doc.text(cl[0],M+20,y);y+=4;
+      }
+      if(q.type==='order'&&!qok){chk(5);doc.setFontSize(6);doc.setFont('helvetica','bold');doc.setTextColor(39,174,96);doc.text('Correct:',M+2,y);y+=3.5;for(var oi=0;oi<q.order.length;oi++){chk(4);doc.setFont('helvetica','normal');doc.setTextColor(170,200,170);var ot=doc.splitTextToSize((oi+1)+'. '+q.items[q.order[oi]],CW-5);doc.text(ot[0],M+3,y);y+=3.5;}}
+      if(q.type==='match'&&!qok){chk(5);doc.setFontSize(6);doc.setFont('helvetica','bold');doc.setTextColor(39,174,96);doc.text('Correct matches:',M+2,y);y+=3.5;for(var pi=0;pi<q.pairs.length;pi++){chk(4);doc.setFont('helvetica','normal');doc.setTextColor(170,200,170);var pt=doc.splitTextToSize('- '+q.pairs[pi].left+' → '+q.pairs[pi].right,CW-5);doc.text(pt[0],M+3,y);y+=3.5;}}
+      chk(8);
+      var et=doc.splitTextToSize(q.explanation,CW-5),eh=Math.min(et.length,3)*3+4;
+      doc.setFillColor(12,28,52);doc.roundedRect(M,y,CW,eh,1,1,'F');
+      doc.setFontSize(5.5);doc.setFont('helvetica','italic');doc.setTextColor(100,140,170);
+      doc.text(et.slice(0,3),M+2,y+3.5);y+=eh+5;
+    }
+    var tp=doc.internal.getNumberOfPages();
+    for(var pg=1;pg<=tp;pg++){doc.setPage(pg);doc.setFontSize(6.5);doc.setTextColor(60,80,100);doc.text('Page '+pg+' of '+tp,W/2,PH-6,{align:'center'});doc.text('Paul D. Camp Community College | EMS Program',M,PH-6);doc.text(new Date().toLocaleDateString(),W-M,PH-6,{align:'right'});}
+    doc.save('ACS_ScoreReport_'+sName.replace(/\s+/g,'_')+'.pdf');
+  });
+}
+</script>
+</body>
+</html>
