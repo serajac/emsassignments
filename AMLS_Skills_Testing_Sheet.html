@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMLS Skills Testing Sheet – Assessment Pathway</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --accent: #00c8ff;
+    --accent2: #ff6b35;
+    --accent3: #39d353;
+    --warn: #f0c040;
+    --danger: #f85149;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --label: #Barlow Condensed, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: #fff; color: #000; font-size: 11px; }
+    .no-print { display: none !important; }
+    .page { box-shadow: none !important; border: 1px solid #ccc !important; background: #fff !important; }
+    :root {
+      --bg: #fff; --surface: #f5f5f5; --surface2: #ebebeb;
+      --border: #ccc; --accent: #0057b8; --accent2: #c0392b;
+      --accent3: #27ae60; --warn: #e67e22; --danger: #c0392b;
+      --text: #000; --muted: #555;
+    }
+    .step-row:nth-child(even) { background: #f9f9f9 !important; }
+    input[type="checkbox"] { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* ── LAYOUT ── */
+  .wrapper { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  .page {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 0 40px rgba(0,200,255,0.06);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2340 50%, #091520 100%);
+    border-bottom: 3px solid var(--accent);
+    padding: 20px 24px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,200,255,0.08);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,200,255,0.05);
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    opacity: 0.8;
+  }
+  .title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff;
+    line-height: 1;
+  }
+  .subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .logo-block {
+    text-align: right;
+  }
+  .logo-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .version-tag {
+    display: inline-block;
+    background: rgba(0,200,255,0.12);
+    border: 1px solid rgba(0,200,255,0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+
+  /* ── INFO GRID ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--border);
+  }
+  @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr 1fr; } }
+  .info-cell {
+    padding: 10px 14px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .info-cell:last-child { border-right: none; }
+  .info-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .info-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    width: 100%;
+    padding: 2px 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .info-input:focus { border-bottom-color: var(--accent); }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #000;
+    background: var(--accent);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+    flex: 1;
+  }
+  .section-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── STEP ROWS ── */
+  .steps-table { width: 100%; border-collapse: collapse; }
+  .steps-table thead tr {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .steps-table thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 6px 12px;
+    text-align: left;
+  }
+  .steps-table thead th.center { text-align: center; }
+  .step-row {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .step-row:hover { background: rgba(255,255,255,0.02); }
+  .step-row.critical td { border-left: 3px solid var(--danger); }
+  .step-row.critical .step-text { color: #f0a0a0; }
+  .step-row td {
+    padding: 7px 12px;
+    vertical-align: middle;
+  }
+  .step-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .step-text {
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .step-text .sub {
+    font-size: 11px;
+    color: var(--muted);
+    display: block;
+    margin-top: 1px;
+  }
+  .critical-tag {
+    display: inline-block;
+    background: rgba(248,81,73,0.15);
+    border: 1px solid rgba(248,81,73,0.4);
+    border-radius: 3px;
+    padding: 0px 5px;
+    font-size: 9px;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--danger);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .check-cell { text-align: center; width: 48px; }
+  .check-cell input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent3);
+    cursor: pointer;
+  }
+  .na-cell { text-align: center; width: 36px; }
+  .na-cell input[type="checkbox"] {
+    width: 14px; height: 14px;
+    accent-color: var(--muted);
+    cursor: pointer;
+  }
+  .note-cell { width: 30%; }
+  .note-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(48,54,61,0.7);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    width: 100%;
+    padding: 1px 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .note-input:focus { border-bottom-color: var(--accent); }
+
+  /* ── DIFFERENTIAL DX TABLE ── */
+  .dx-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  @media (max-width: 600px) { .dx-grid { grid-template-columns: 1fr 1fr; } }
+  .dx-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.1s;
+  }
+  .dx-item:hover { background: rgba(255,255,255,0.03); }
+  .dx-item input[type="checkbox"] {
+    width: 14px; height: 14px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .dx-item label {
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  /* ── SCORING BOX ── */
+  .scoring-section { padding: 14px 16px; }
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 600px) { .score-grid { grid-template-columns: 1fr 1fr; } }
+  .score-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .score-box .sb-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .score-box .sb-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    color: var(--accent);
+  }
+  .score-box input.sb-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    width: 100%;
+    text-align: center;
+    outline: none;
+  }
+
+  /* ── RESULT BANNER ── */
+  .result-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .result-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .result-btn input[type="radio"] { position: absolute; opacity: 0; }
+  .result-btn.pass-btn { border-color: rgba(57,211,83,0.3); }
+  .result-btn.pass-btn.selected,
+  .result-btn.pass-btn:has(input:checked) { background: rgba(57,211,83,0.12); border-color: var(--accent3); }
+  .result-btn.fail-btn { border-color: rgba(248,81,73,0.3); }
+  .result-btn.fail-btn.selected,
+  .result-btn.fail-btn:has(input:checked) { background: rgba(248,81,73,0.12); border-color: var(--danger); }
+  .result-btn .rb-icon { font-size: 26px; margin-bottom: 4px; }
+  .result-btn .rb-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+  .pass-btn .rb-label { color: var(--accent3); }
+  .fail-btn .rb-label { color: var(--danger); }
+  .result-btn .rb-sub { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+  /* ── COMMENTS ── */
+  .comments-area {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    width: 100%;
+    resize: vertical;
+    padding: 8px 10px;
+    outline: none;
+    margin-top: 12px;
+    transition: border-color 0.2s;
+    min-height: 64px;
+  }
+  .comments-area:focus { border-color: var(--accent); }
+
+  /* ── SIG LINE ── */
+  .sig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--border);
+  }
+  .sig-cell {
+    padding: 10px 14px;
+    border-right: 1px solid var(--border);
+  }
+  .sig-cell:last-child { border-right: none; }
+  .sig-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .sig-line {
+    border-top: 1px solid var(--border);
+    margin-top: 22px;
+    padding-top: 3px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border-radius: 4px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-print {
+    background: rgba(0,200,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-print:hover { background: rgba(0,200,255,0.2); }
+  .btn-reset {
+    background: rgba(248,81,73,0.08);
+    border-color: rgba(248,81,73,0.5);
+    color: var(--danger);
+  }
+  .btn-reset:hover { background: rgba(248,81,73,0.15); }
+
+  /* ── INLINE NOTE CALLOUT ── */
+  .callout {
+    background: rgba(240,192,64,0.07);
+    border-left: 3px solid var(--warn);
+    padding: 6px 12px;
+    margin: 0;
+    font-size: 11px;
+    color: var(--warn);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SEPARATOR ── */
+  .sep { height: 1px; background: var(--border); }
+
+  /* ── PATHWAY INDICATOR ── */
+  .pathway-bar {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    padding: 0 14px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: thin;
+  }
+  .pathway-step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    white-space: nowrap;
+  }
+  .pathway-step .ps-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .pathway-step .ps-label.active { color: var(--accent); }
+  .pathway-step .ps-arrow {
+    color: var(--border);
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- TOOLBAR -->
+  <div class="toolbar no-print">
+    <button class="btn btn-reset" onclick="resetForm()">↺ Reset Sheet</button>
+    <button class="btn btn-print" onclick="window.print()">⎙ Print / Save PDF</button>
+  </div>
+
+  <!-- PAGE 1 -->
+  <div class="page">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-top">
+        <div>
+          <div class="badge">Advanced Medical Life Support</div>
+          <div class="title">AMLS SKILLS TESTING SHEET</div>
+          <div class="subtitle">Assessment Pathway — Evaluator Scoring Form</div>
+        </div>
+        <div class="logo-block">
+          <div class="logo-text">NAEMSE / NAEMSP</div>
+          <div class="logo-text">2nd Edition</div>
+          <div class="version-tag">FORM REV 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATHWAY BAR -->
+    <div class="pathway-bar">
+      <div class="pathway-step"><span class="ps-label active">① Scene Size-Up</span><span class="ps-arrow">›</span></div>
+      <div class="pathway-step"><span class="ps-label">② Initial Obs.</span><span class="ps-arrow">›</span></div>
+      <div class="pathway-step"><span class="ps-label">③ 1° Survey</span><span class="ps-arrow">›</span></div>
+      <div class="pathway-step"><span class="ps-label">④ History</span><span class="ps-arrow">›</span></div>
+      <div class="pathway-step"><span class="ps-label">⑤ 2° Survey</span><span class="ps-arrow">›</span></div>
+      <div class="pathway-step"><span class="ps-label">⑥ Differential Dx</span><span class="ps-arrow">›</span></div>
+      <div class="pathway-step"><span class="ps-label">⑦ Reassessment</span></div>
+    </div>
+
+    <!-- STUDENT INFO -->
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-label">Student Name</div>
+        <input class="info-input" type="text" placeholder="Last, First MI">
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Student ID / Cohort</div>
+        <input class="info-input" type="text" placeholder="e.g. NF-2026-01">
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Date of Testing</div>
+        <input class="info-input" type="date">
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Evaluator Name</div>
+        <input class="info-input" type="text" placeholder="AMLS Evaluator">
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Scenario / Station</div>
+        <input class="info-input" type="text" placeholder="e.g. Scenario A – Chest Pain">
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Attempt # / Partner</div>
+        <input class="info-input" type="text" placeholder="1st  □  2nd  □   Partner: ___">
+      </div>
+    </div>
+
+    <!-- CALLOUT -->
+    <div class="callout">⚠ CRITICAL CRITERIA: Any item marked ★ CRITICAL — if failed — results in automatic overall failure regardless of total score.</div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 1: SCENE SIZE-UP -->
+    <!-- ══════════════════════════════════════ -->
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Scene Size-Up</div>
+      <div class="section-tag">BSI / SAFETY / MOI</div>
+    </div>
+    <table class="steps-table">
+      <thead><tr>
+        <th style="width:40px">#</th>
+        <th>Performance Criteria</th>
+        <th class="center">✔ Done</th>
+        <th class="center">N/A</th>
+        <th>Evaluator Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="step-row critical">
+          <td class="step-num">1.1</td>
+          <td class="step-text">Verbalizes BSI / Standard Precautions (gloves, PPE as indicated) <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">1.2</td>
+          <td class="step-text">Assesses scene safety (environmental hazards, violence risk, access/egress)</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">1.3</td>
+          <td class="step-text">Determines nature of illness / mechanism of injury
+            <span class="sub">Considers MOI; identifies potential for spinal involvement</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">1.4</td>
+          <td class="step-text">Determines number of patients; considers need for additional resources (ALS, MCI)</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">1.5</td>
+          <td class="step-text">Considers need for c-spine stabilization based on scene findings</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- STEP 2: INITIAL OBSERVATIONS -->
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Initial Observations (First Impression)</div>
+      <div class="section-tag">LOC / APPEARANCE / ACUITY</div>
+    </div>
+    <table class="steps-table">
+      <thead><tr>
+        <th style="width:40px">#</th>
+        <th>Performance Criteria</th>
+        <th class="center">✔ Done</th>
+        <th class="center">N/A</th>
+        <th>Evaluator Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="step-row critical">
+          <td class="step-num">2.1</td>
+          <td class="step-text">Forms general impression — verbalizes sick vs. not sick <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">2.2</td>
+          <td class="step-text">Assesses level of consciousness (AVPU scale)</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">2.3</td>
+          <td class="step-text">Identifies chief complaint; determines priority / life threats</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">2.4</td>
+          <td class="step-text">Positions patient appropriately based on presentation</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- STEP 3: PRIMARY SURVEY -->
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Primary Survey (1° Assessment)</div>
+      <div class="section-tag">A-B-C-D-E / LIFE THREATS</div>
+    </div>
+    <table class="steps-table">
+      <thead><tr>
+        <th style="width:40px">#</th>
+        <th>Performance Criteria</th>
+        <th class="center">✔ Done</th>
+        <th class="center">N/A</th>
+        <th>Evaluator Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="step-row critical">
+          <td class="step-num">3.1</td>
+          <td class="step-text"><strong>Airway:</strong> Opens and assesses airway patency; manages as indicated (positioning, suction, adjunct) <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row critical">
+          <td class="step-num">3.2</td>
+          <td class="step-text"><strong>Breathing:</strong> Assesses rate, depth, effort; applies O₂ / ventilatory support as indicated <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row critical">
+          <td class="step-num">3.3</td>
+          <td class="step-text"><strong>Circulation:</strong> Assesses pulse (rate, quality); controls major hemorrhage; evaluates skin CTC <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">3.4</td>
+          <td class="step-text"><strong>Disability:</strong> Assesses GCS (E/V/M) or AVPU; checks pupils (PERRL); blood glucose if indicated</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">3.5</td>
+          <td class="step-text"><strong>Expose:</strong> Exposes patient appropriately; identifies additional life threats; maintains warmth/dignity</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row critical">
+          <td class="step-num">3.6</td>
+          <td class="step-text">Identifies and manages all life-threatening conditions before proceeding <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">3.7</td>
+          <td class="step-text">Determines priority for transport; notifies receiving hospital as appropriate</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- STEP 4: HISTORY -->
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">History Taking</div>
+      <div class="section-tag">OPQRST / SAMPLER</div>
+    </div>
+    <table class="steps-table">
+      <thead><tr>
+        <th style="width:40px">#</th>
+        <th>Performance Criteria</th>
+        <th class="center">✔ Done</th>
+        <th class="center">N/A</th>
+        <th>Evaluator Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="step-row">
+          <td class="step-num">4.1</td>
+          <td class="step-text"><strong>OPQRST</strong> — Onset, Provocation/Palliation, Quality, Radiation, Severity, Time/Trend</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">4.2</td>
+          <td class="step-text"><strong>SAMPLER</strong> — Signs/Sx, Allergies, Medications, Pertinent Hx, Last oral intake, Events, Risk factors</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">4.3</td>
+          <td class="step-text">Obtains past medical/surgical history; identifies relevant comorbidities</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">4.4</td>
+          <td class="step-text">Reviews current medications and last dose; assesses compliance and OTC/herbal use</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">4.5</td>
+          <td class="step-text">Obtains collateral history from family, bystanders, medical alert devices, or documentation</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">4.6</td>
+          <td class="step-text">Investigates pertinent negatives relevant to the chief complaint</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div><!-- /page 1 -->
+
+  <!-- PAGE 2 -->
+  <div class="page">
+
+    <!-- STEP 5: SECONDARY SURVEY -->
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Secondary Survey (2° Physical Exam)</div>
+      <div class="section-tag">SYSTEMATIC HEAD-TO-TOE / FOCUSED</div>
+    </div>
+    <table class="steps-table">
+      <thead><tr>
+        <th style="width:40px">#</th>
+        <th>Performance Criteria</th>
+        <th class="center">✔ Done</th>
+        <th class="center">N/A</th>
+        <th>Evaluator Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="step-row">
+          <td class="step-num">5.1</td>
+          <td class="step-text"><strong>Vital Signs:</strong> BP, HR, RR, SpO₂, EtCO₂, Temperature, Pain scale (0–10); baseline documented</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.2</td>
+          <td class="step-text"><strong>Head/Neck:</strong> Inspects scalp/face; JVD; tracheal position; C-spine tenderness if indicated</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.3</td>
+          <td class="step-text"><strong>Chest:</strong> Inspects for symmetry/retractions/deformity; auscultates anterior/lateral lung fields bilaterally; percusses as needed</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.4</td>
+          <td class="step-text"><strong>Cardiovascular:</strong> Auscultates heart sounds; assesses peripheral pulses and CRT bilaterally; identifies dysrhythmias via ECG</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.5</td>
+          <td class="step-text"><strong>Abdomen:</strong> Inspects; auscultates bowel sounds; palpates all four quadrants for tenderness, rigidity, guarding, masses</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.6</td>
+          <td class="step-text"><strong>Pelvis/GU:</strong> Assesses pelvic stability; identifies bladder distension or incontinence as clinically relevant</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.7</td>
+          <td class="step-text"><strong>Extremities:</strong> Inspects for edema, cyanosis, clubbing, mottling; assesses motor/sensory/circulation distally</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.8</td>
+          <td class="step-text"><strong>Neuro:</strong> GCS documented; stroke screen (BE-FAST/CPSS); cranial nerve screen if indicated</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.9</td>
+          <td class="step-text"><strong>Diagnostics:</strong> 12-lead ECG acquired and interpreted; BGL checked; SpO₂/EtCO₂ waveform assessed as indicated</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">5.10</td>
+          <td class="step-text">IV/IO access obtained; appropriate fluid therapy initiated if indicated</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- STEP 6: DIFFERENTIAL DIAGNOSIS -->
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Differential Diagnosis Formation</div>
+      <div class="section-tag">ASSESSMENT-BASED REASONING</div>
+    </div>
+
+    <table class="steps-table">
+      <thead><tr>
+        <th style="width:40px">#</th>
+        <th>Performance Criteria</th>
+        <th class="center">✔ Done</th>
+        <th class="center">N/A</th>
+        <th>Evaluator Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="step-row critical">
+          <td class="step-num">6.1</td>
+          <td class="step-text">Verbalizes a reasonable working diagnosis based on history and physical exam findings <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row critical">
+          <td class="step-num">6.2</td>
+          <td class="step-text">Identifies at least 2 differential diagnoses consistent with presenting symptoms <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">6.3</td>
+          <td class="step-text">Prioritizes life-threatening differentials; rules out immediately reversible causes</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">6.4</td>
+          <td class="step-text">Treatment plan aligns logically with working diagnosis; anticipates deterioration</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">6.5</td>
+          <td class="step-text">Communicates diagnostic reasoning clearly to partner/evaluator (thinks out loud)</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- DDX CHECKLIST -->
+    <div class="section-header" style="border-top:none">
+      <div class="section-title" style="font-size:12px; color:var(--muted)">Differential Diagnosis Considered (check all applicable)</div>
+    </div>
+    <div class="dx-grid">
+      <div class="dx-item"><input type="checkbox" id="dx1"><label for="dx1">ACS / STEMI</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx2"><label for="dx2">Acute PE</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx3"><label for="dx3">Aortic Dissection</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx4"><label for="dx4">Tension Pneumothorax</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx5"><label for="dx5">Cardiac Tamponade</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx6"><label for="dx6">CHF / Flash Pulm. Edema</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx7"><label for="dx7">Asthma / COPD Exac.</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx8"><label for="dx8">Ischemic Stroke / CVA</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx9"><label for="dx9">Hemorrhagic Stroke</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx10"><label for="dx10">Hypoglycemia</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx11"><label for="dx11">DKA / HHS</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx12"><label for="dx12">Anaphylaxis</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx13"><label for="dx13">Sepsis / Septic Shock</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx14"><label for="dx14">Hypertensive Emergency</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx15"><label for="dx15">Seizure Disorder</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx16"><label for="dx16">Overdose / Toxidrome</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx17"><label for="dx17">GI Bleed / Perforation</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx18"><label for="dx18">Renal / Urologic Emergency</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx19"><label for="dx19">Psychiatric Illness</label></div>
+      <div class="dx-item"><input type="checkbox" id="dx20"><label for="dx20">Other: ____________</label></div>
+    </div>
+
+    <!-- STEP 7: REASSESSMENT -->
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Reassessment / Ongoing Management</div>
+      <div class="section-tag">RESPONSE TO TX / TRENDING</div>
+    </div>
+    <table class="steps-table">
+      <thead><tr>
+        <th style="width:40px">#</th>
+        <th>Performance Criteria</th>
+        <th class="center">✔ Done</th>
+        <th class="center">N/A</th>
+        <th>Evaluator Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="step-row critical">
+          <td class="step-num">7.1</td>
+          <td class="step-text">Reassesses primary survey (ABCDs) after each intervention <span class="critical-tag">★ CRITICAL</span></td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">7.2</td>
+          <td class="step-text">Obtains serial vital signs at appropriate intervals (q5 min critical, q15 min stable)</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">7.3</td>
+          <td class="step-text">Evaluates patient response to treatments/interventions; adjusts plan accordingly</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">7.4</td>
+          <td class="step-text">Identifies changes in condition; revises differential diagnosis if indicated</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">7.5</td>
+          <td class="step-text">Delivers organized patient report (SBAR or MIST format) to receiving facility</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">7.6</td>
+          <td class="step-text">Demonstrates effective team communication, leadership, and closed-loop acknowledgment throughout</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+        <tr class="step-row">
+          <td class="step-num">7.7</td>
+          <td class="step-text">Maintains patient dignity and appropriate communication throughout encounter</td>
+          <td class="check-cell"><input type="checkbox"></td>
+          <td class="na-cell"><input type="checkbox"></td>
+          <td class="note-cell"><input class="note-input" type="text"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SCORING -->
+    <div class="section-header">
+      <div class="section-num" style="background:var(--accent2)">★</div>
+      <div class="section-title">Scoring Summary</div>
+      <div class="section-tag">EVALUATOR ONLY</div>
+    </div>
+
+    <div class="scoring-section">
+      <!-- LIVE SCORE CARDS -->
+      <div class="score-grid">
+        <div class="score-box">
+          <div class="sb-label">Applicable Steps</div>
+          <div class="sb-value" id="sc-applicable" style="color:var(--muted)">—</div>
+        </div>
+        <div class="score-box">
+          <div class="sb-label">Steps Completed</div>
+          <div class="sb-value" id="sc-completed" style="color:var(--accent3)">—</div>
+        </div>
+        <div class="score-box">
+          <div class="sb-label">Critical Failed</div>
+          <div class="sb-value" id="sc-critical" style="color:var(--danger)">—</div>
+        </div>
+        <div class="score-box" id="sc-pct-box">
+          <div class="sb-label">Final Score</div>
+          <div class="sb-value" id="sc-pct" style="color:var(--accent)">—</div>
+        </div>
+      </div>
+
+      <!-- PROGRESS BAR -->
+      <div style="margin:4px 0 2px; display:flex; justify-content:space-between; font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--muted);">
+        <span>SCORE PROGRESS</span>
+        <span id="bar-label">Check steps above to calculate score</span>
+      </div>
+      <div style="background:var(--bg); border:1px solid var(--border); border-radius:20px; height:16px; overflow:hidden; margin-bottom:14px; position:relative;">
+        <div id="score-bar" style="height:100%; width:0%; background:var(--accent3); border-radius:20px; transition:width 0.5s cubic-bezier(.4,0,.2,1), background 0.4s ease;"></div>
+        <div style="position:absolute; top:0; left:80%; width:2px; height:100%; background:rgba(255,255,255,0.25); pointer-events:none;"></div>
+        <div style="position:absolute; top:50%; left:80%; transform:translate(-50%,-50%); font-family:'Share Tech Mono',monospace; font-size:8px; color:rgba(255,255,255,0.4); pointer-events:none;">80%</div>
+      </div>
+
+      <div style="margin-bottom:12px; font-size:11px; color:var(--muted)">
+        Passing threshold: <strong style="color:var(--accent3)">≥ 80%</strong> of applicable steps completed AND <strong style="color:var(--danger)">zero critical failures</strong>. Failing any critical criterion results in immediate overall FAIL.
+      </div>
+
+      <!-- AUTO RESULT DISPLAY -->
+      <div class="result-row">
+        <div class="result-btn pass-btn" id="result-pass">
+          <div class="rb-icon">✓</div>
+          <div class="rb-label">PASS</div>
+          <div class="rb-sub" id="pass-sub">Awaiting evaluation…</div>
+        </div>
+        <div class="result-btn fail-btn" id="result-fail">
+          <div class="rb-icon">✗</div>
+          <div class="rb-label">FAIL</div>
+          <div class="rb-sub" id="fail-sub">Awaiting evaluation…</div>
+        </div>
+      </div>
+
+      <textarea class="comments-area" placeholder="Evaluator comments / areas for improvement / specific skills to remediate…" rows="4"></textarea>
+    </div>
+
+    <!-- SIGNATURES -->
+    <div class="sig-grid">
+      <div class="sig-cell">
+        <div class="sig-label">Student Signature</div>
+        <div class="sig-line">Acknowledges receipt of evaluation</div>
+      </div>
+      <div class="sig-cell">
+        <div class="sig-label">Evaluator Signature</div>
+        <div class="sig-line">AMLS Certified Instructor / Evaluator</div>
+      </div>
+      <div class="sig-cell">
+        <div class="sig-label">Date / Time</div>
+        <div class="sig-line">mm/dd/yyyy  ·  HH:MM</div>
+      </div>
+    </div>
+
+  </div><!-- /page 2 -->
+
+</div><!-- /wrapper -->
+
+<script>
+// ── AUTO SCORING ENGINE ──────────────────────────────────────────────
+function calcScore() {
+  const rows = document.querySelectorAll('tr.step-row');
+  let applicable = 0, completed = 0, criticalFailed = 0;
+
+  rows.forEach(row => {
+    const doneBox = row.querySelector('.check-cell input[type="checkbox"]');
+    const naBox   = row.querySelector('.na-cell input[type="checkbox"]');
+    if (!doneBox || !naBox) return;
+
+    const isNA       = naBox.checked;
+    const isDone     = doneBox.checked;
+    const isCritical = row.classList.contains('critical');
+
+    if (!isNA) {
+      applicable++;
+      if (isDone)    completed++;
+      if (isCritical && !isDone) criticalFailed++;
+    }
+  });
+
+  // Compute percentage
+  const pct = applicable > 0 ? Math.round((completed / applicable) * 100) : null;
+  const passes = pct !== null && pct >= 80 && criticalFailed === 0;
+
+  // Update score cards
+  document.getElementById('sc-applicable').textContent = applicable || '—';
+  document.getElementById('sc-completed').textContent  = applicable > 0 ? completed : '—';
+  document.getElementById('sc-critical').textContent   = applicable > 0 ? criticalFailed : '—';
+  document.getElementById('sc-pct').textContent        = pct !== null ? pct + '%' : '—';
+
+  // Color final score
+  const pctEl = document.getElementById('sc-pct');
+  if (pct === null) pctEl.style.color = 'var(--muted)';
+  else if (pct >= 80) pctEl.style.color = 'var(--accent3)';
+  else if (pct >= 70) pctEl.style.color = 'var(--warn)';
+  else pctEl.style.color = 'var(--danger)';
+
+  // Progress bar
+  const bar = document.getElementById('score-bar');
+  const barLabel = document.getElementById('bar-label');
+  if (pct !== null) {
+    bar.style.width = Math.min(pct, 100) + '%';
+    bar.style.background = pct >= 80 ? 'var(--accent3)' : pct >= 70 ? 'var(--warn)' : 'var(--danger)';
+    barLabel.textContent = pct + '% — ' + completed + ' of ' + applicable + ' steps completed';
+  } else {
+    bar.style.width = '0%';
+    barLabel.textContent = 'Check steps above to calculate score';
+  }
+
+  // Pass / Fail banners
+  const passBtn = document.getElementById('result-pass');
+  const failBtn = document.getElementById('result-fail');
+  const passSub = document.getElementById('pass-sub');
+  const failSub = document.getElementById('fail-sub');
+
+  passBtn.classList.remove('selected');
+  failBtn.classList.remove('selected');
+
+  if (pct === null) {
+    passSub.textContent = 'Awaiting evaluation…';
+    failSub.textContent = 'Awaiting evaluation…';
+  } else if (passes) {
+    passBtn.classList.add('selected');
+    passSub.textContent = pct + '% — All criteria met';
+    failSub.textContent = 'Not applicable';
+  } else {
+    failBtn.classList.add('selected');
+    const reasons = [];
+    if (pct < 80) reasons.push(pct + '% score (need ≥80%)');
+    if (criticalFailed > 0) reasons.push(criticalFailed + ' critical failure' + (criticalFailed > 1 ? 's' : ''));
+    failSub.textContent = reasons.join(' + ');
+    passSub.textContent = 'Criteria not met';
+  }
+}
+
+// ── RESET ───────────────────────────────────────────────────────────
+function resetForm() {
+  if (!confirm('Reset all fields on this testing sheet?')) return;
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]').forEach(i => i.value = '');
+  document.querySelectorAll('textarea').forEach(t => t.value = '');
+  calcScore();
+}
+
+// ── ATTACH LISTENERS ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('tr.step-row input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', calcScore);
+  });
+  calcScore();
+});
+</script>
+
+</body>
+</html>
